@@ -2,10 +2,12 @@
 
 **Last updated:** 2026-07-04 00:45
 
-## ✅ GATE 0 ปิดแล้ว (PASS conditional — Engineer verdict, ดู TRELLIS-010 Progress Log)
-- **Clock bug ปิดเด็ดขาด:** v4f alignment 145/145 + 11/11 · p95|ΔR| = 0.00 · skip-set (mirror-cap@3000) ตรง 7/7+12/12 · 2025 gap −19.4 · 137 วันปกติ drift +0.17/ไม้
-- **ความรู้ใหม่ที่ผูกทุก stage ถัดไป:** (1) overnight-hold **asymmetric** sim vs EA ~12 วัน/ปี (Issue doc แก้แล้ว) (2) **sim-optimism ยุค high-vol ~−1.2/ไม้** — เลข sim ยุค 2026 ต้อง re-validate real-tick ก่อน quote (3) **RED FLAG: real-tick 2026 capped@3000 = −$9.3** — cap กลืน edge ปี vol สูง (survival-vs-edge tension = โจทย์ stage ถัดไป)
-- **Next: acid test `v4e_full` deposit 1000** (pred: 2025 n=75/+208.2/DD101 · 2026 n=0 โดยดีไซน์) → แล้วเริ่ม TRELLIS-010 Stage H0
+## ✅ STAGE 0 จบสมบูรณ์ (Gate 0 PASS + Acid 1000 PASS + Issue-1 sim fix) — พร้อมเริ่ม H0
+- **Gate 0:** v4f alignment 145/145+11/11 · p95|ΔR|=0.00 · skip-set mirror-cap ตรง 19/19 · 2025 gap −19.4
+- **Acid @1000 PASS:** 74 ไม้ +216.1 (จบ 1216) DD 64.5 ไม่มี HALT · alignment 73/73 · 2026 n=0 ตามดีไซน์ — **ทุนน้อยรอดเอง +21.6%**
+- **Issue-1 sim fix (`ea_catchup`):** sim ทำเหมือน EA จริงแล้ว (validated: v4f_25 common 149/149 flips 0 drift +0.14/ไม้) → **BASELINE H0 ใหม่: ปีแพ้ 7 ปีเดิม (2012/14/17/18/19/22/23) รวม −185.4 · TOTAL 15.5y +1,087.6 (WF config)** · EA-side ยังถือข้ามคืนจริง ~10 วัน/ปี = design question เปิดอยู่ (Issue doc)
+- **ความรู้ผูกพัน:** sim-optimism high-vol ~−1.2/ไม้ (tester=authority) · **RED FLAG: real-tick 2026 capped@3000 = −$9.3 — cap กลืน edge ปี vol สูง** (survival-vs-edge = โจทย์ H0/D)
+- **Next: TRELLIS-010 Stage H0** — regime เดี่ยว exogenous แก้กลุ่มปีแพ้ −185.4 · search 2012–2020 · budget 0/40
 
 ## 🔴 TRELLIS-010 Stage 0: เจอ CLOCK BUG — เลข tester 2025/2026 และ holdout เดิมถูก re-baseline
 - **Root cause (พิสูจน์ครบ ดู Plan/TRELLIS-010 Progress Log):** tick 2025+2026 ใน XAUUSD_BT เป็น **UTC+0 ดิบ** (generator `ticks_to_mt5ticks.py` ไม่ shift + rename `_eet_`) ขณะ 2011–24 ถูก → tester 2025/26 test คนละ session

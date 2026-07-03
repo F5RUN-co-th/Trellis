@@ -1,6 +1,11 @@
 # ISSUE 2026-07-03 — EOD 23:00 ไม่ fire ช่วง DST-shoulder/วันหยุด + Dukascopy data holes
 
-**สถานะ:** OPEN (out-of-scope ของ TRELLIS-010 Stage 0 — log ตามกฎ No Scope Creep, ไม่ลากเข้าแผนปัจจุบัน)
+**สถานะ:** Issue 1 = **PARTIALLY RESOLVED 2026-07-04** (sim-side fixed) · Issue 2 = OPEN (งาน Stage A)
+- ✅ **sim-side (C1):** `stage0_join.run_detailed(ea_catchup=True)` mirror `Trellis.mq5:279` แล้ว —
+  validated เทียบ EA จริง v4f_25: common 149/149, flips 0, drift +0.144/ไม้ · baseline H0 ใหม่รันจากสนามนี้
+- ⏳ **ยังเปิด (design question):** ตัว EA เอง**ยังถือข้ามคืนจริง** ~10+ วัน/ปี (catch-up ปิดวันถัดไป = กิน
+  overnight gap เต็มๆ ระหว่างนั้น) — จะแก้ EOD ให้ปิดก่อนตลาดปิดจริง (NY-anchored) หรือยอมรับ risk
+  = การเปลี่ยนระบบ ต้อง sim 15.5 ปี + WF ใหม่ · รอวินจัดคิว
 **พบโดย:** invariant check ใน `Scripts/stage0_join.py` (self_check) — Engineer review LOW-6 → Claude implement
 
 ## Issue 1 — "ไม่มีไม้ข้ามคืนโดยโครงสร้าง" (TRELLIS-009 §2) เป็นเท็จช่วง shoulder weeks + วันหยุด US

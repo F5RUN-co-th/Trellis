@@ -50,13 +50,18 @@ TESTER_FILES = [
 
 # ---------- instrumented sim (สำเนา run() + detail; พิสูจน์ equivalence ทุกครั้ง) ----------
 def run_detailed(m1, start, CAPR=1.0, A=1.0, D=0.75, SLOPE=0.001, EMA_P=2880, SLOPE_B=1440,
-                 allow_short=True, spread_mult=1.0, deposit=None, cap_frac=0.02):
+                 allow_short=True, spread_mult=1.0, deposit=None, cap_frac=0.02,
+                 ea_catchup=False):
     """เหมือน dual_asian_sim.run ทุกบรรทัด logic — เพิ่ม (1) บันทึก detail ต่อไม้
     (entry_time, exit_time, dir, entry_px, exit_px, pnl, reason, R)
     (2) mirror risk-cap ของ EA (Trellis.mq5:242) เมื่อ deposit ไม่ใช่ None:
         ข้ามวันที่ R > cap_frac*equity · equity = deposit + realized สะสม (EA เช็คตอน flat
         เสมอ — TryEntry เฉพาะ TRL_IDLE) · set traded ตอน skip = เทียบเท่า EA เพราะ R และ
-        equity คงที่ทั้งวัน (S4) — คืน (trades, skips) เสมอ; cap ปิด → skips ว่าง"""
+        equity คงที่ทั้งวัน (S4) — คืน (trades, skips) เสมอ; cap ปิด → skips ว่าง
+    (3) ea_catchup=True: mirror Trellis.mq5:279 — ไม้ค้างข้ามวัน (EOD ไม่ fire: วันหยุด/
+        DST-shoulder/data hole) ปิดที่ open ของ bar แรกวันใหม่ reason='catchup' ·
+        server-SL ชนะถ้า open ทะลุ stop (gap) · วันใหม่เข้าไม้ต่อได้ (Issue 1 asymmetry fix)
+        default ปิด = พฤติกรรมตรง canonical (S2 equivalence คงเดิม)"""
     c, h, l, o, sp, t = m1["c"], m1["h"], m1["l"], m1["o"], m1["sp"], m1["t"]
     e = ema(c, EMA_P)
     es = np.r_[np.full(SLOPE_B, np.nan), e[SLOPE_B:] - e[:-SLOPE_B]]
@@ -80,7 +85,22 @@ def run_detailed(m1, start, CAPR=1.0, A=1.0, D=0.75, SLOPE=0.001, EMA_P=2880, SL
             ash = h[i] if np.isnan(ash) else max(ash, h[i])
             asl = l[i] if np.isnan(asl) else min(asl, l[i])
         if pos is not None:
-            d, ent, stop, best, R, et = pos
+            d, ent, stop, best, R, et, edy = pos
+            # EA catch-up (Trellis.mq5:279): ข้ามวันแล้ว → ปิดที่ tick แรกของวันใหม่
+            if ea_catchup and day[i] != edy:
+                gap_hit = (o[i] <= stop) if d == 1 else (o[i] >= stop)
+                if gap_hit:   # server-side SL ชนะ: open ทะลุ stop → fill ที่ open
+                    px = o[i] - slip_stop * d
+                    ex = px if d == 1 else px + sp[i] * PT * spread_mult
+                    pnl = (ex - ent) * d if d == 1 else (ent - ex)
+                    trades.append((et, t[i], d, ent, ex, pnl, "stop", R))
+                else:
+                    ex = o[i] if d == 1 else o[i] + sp[i] * PT * spread_mult
+                    pnl = (ex - ent) if d == 1 else (ent - ex)
+                    trades.append((et, t[i], d, ent, ex, pnl, "catchup", R))
+                equity += pnl
+                pos = None
+                continue
             hit = l[i] <= stop if d == 1 else h[i] >= stop
             if hit:
                 px = (min(stop, o[i]) if d == 1 else max(stop, o[i])) - slip_stop * d
@@ -102,7 +122,7 @@ def run_detailed(m1, start, CAPR=1.0, A=1.0, D=0.75, SLOPE=0.001, EMA_P=2880, SL
             if fav >= A * R:
                 ns = best - D * R if d == 1 else best + D * R
                 stop = max(stop, ns) if d == 1 else min(stop, ns)
-            pos = (d, ent, stop, best, R, et)
+            pos = (d, ent, stop, best, R, et, edy)
             continue
         if cur_d in traded or not (8 <= hour[i - 1] < 20):
             continue
@@ -127,11 +147,11 @@ def run_detailed(m1, start, CAPR=1.0, A=1.0, D=0.75, SLOPE=0.001, EMA_P=2880, SL
         if long_sig:
             ent = o[i] + sp[i] * PT * spread_mult + SLIP_IN
             traded.add(cur_d)
-            pos = (1, ent, max(asl, ent - CAPR * R), ent, R, t[i])
+            pos = (1, ent, max(asl, ent - CAPR * R), ent, R, t[i], day[i])
         else:
             ent = o[i] - SLIP_IN
             traded.add(cur_d)
-            pos = (-1, ent, min(ash, ent + CAPR * R), ent, R, t[i])
+            pos = (-1, ent, min(ash, ent + CAPR * R), ent, R, t[i], day[i])
     return trades, skips
 
 
@@ -186,7 +206,7 @@ def load_diag(fname):
     return rows
 
 
-REASON_MAP = {"stop": "sl", "eod": "eod"}  # sim reason -> tester reason family
+REASON_MAP = {"stop": "sl", "eod": "eod", "catchup": "eod"}  # sim reason -> tester family (EA catch-up log เป็น eod)
 
 
 def tester_reason_family(reason):
