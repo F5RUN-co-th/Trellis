@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compile Trellis EA",
+      "type": "shell",
+      "command": "\"D:/workspace/Doc/T.me/R&D/MetaTrader 5/MetaEditor64.exe\"",
+      "args": [
+        "/compile:${workspaceFolder}/Experts/Trellis.mq5",
+        "/log:${workspaceFolder}/compile.log",
+        "/inc:C:/Users/itd_surachartt/AppData/Roaming/MetaQuotes/Terminal/D2FFA7C3BAACDDB0A9486309DC86D5C4/MQL5"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": {
+        "owner": "mql5",
+        "fileLocation": ["absolute"],
+        "pattern": {
+          "regexp": "^(.+?)\\((\\d+),(\\d+)\\)\\s*:\\s*(warning|error)\\s*(\\d+):\\s*(.+)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "code": 5,
+          "message": 6
+        }
+      }
+    },
+    {
+      "label": "Compile & Deploy Trellis EA",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/Scripts/deploy.sh"
+      ],
+      "group": "build",
+      "dependsOn": "Compile Trellis EA",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      }
+    }
+  ]
+}

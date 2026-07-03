@@ -1,0 +1,66 @@
+{
+  "config": {
+    "spacing": 1.5,
+    "lot": 0.01,
+    "contract": 100.0,
+    "max_levels": 20,
+    "tp_usd": 4.0,
+    "hardstop_usd": 40.0,
+    "commission_per_lot_side": 7.0,
+    "stop_slippage_usd": 0.2,
+    "entry_lookback": 5,
+    "entry_mode": "fade"
+  },
+  "spread": 0.3,
+  "seed": 7,
+  "n_steps": 300000,
+  "results": {
+    "gbm": {
+      "n_cycles": 2325,
+      "expectancy": -2.4664503915206373,
+      "total": -5734.497160285481,
+      "win_rate": 0.8679569892473118,
+      "stop_rate": 0.13204301075268818,
+      "avg_fills": 3.221935483870968,
+      "avg_win": 3.8166402378592665,
+      "avg_loss": -43.76702658073446
+    },
+    "trend_up": {
+      "n_cycles": 2319,
+      "expectancy": -23.17522001142401,
+      "total": -53743.33520649228,
+      "win_rate": 0.4320827943078913,
+      "stop_rate": 0.5679172056921087,
+      "avg_fills": 5.084950409659336,
+      "avg_win": 3.8354091816367264,
+      "avg_loss": -43.725448144641064
+    },
+    "trend_dn": {
+      "n_cycles": 2312,
+      "expectancy": -23.506468265349366,
+      "total": -54346.95462948774,
+      "win_rate": 0.42517301038062283,
+      "stop_rate": 0.5748269896193772,
+      "avg_fills": 5.125432525951557,
+      "avg_win": 3.8353611393692777,
+      "avg_loss": -43.72995833671011
+    },
+    "ou": {
+      "n_cycles": 2979,
+      "expectancy": 2.642597712729973,
+      "total": 7872.2985862225905,
+      "win_rate": 0.9751594494796911,
+      "stop_rate": 0.02484055052030883,
+      "avg_fills": 2.7166834508224236,
+      "avg_win": 3.8177590361445786,
+      "avg_loss": -43.49042451050553
+    }
+  },
+  "verdict": {
+    "gbm_neg": true,
+    "trend_neg": true,
+    "ou_pos": true,
+    "ordering": true,
+    "pass": true
+  }
+}

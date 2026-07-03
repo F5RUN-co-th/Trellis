@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "*.mq5": "cpp",
+    "*.mqh": "cpp",
+    "*.mq4": "cpp"
+  },
+  "editor.tabSize": 3,
+  "editor.detectIndentation": false
+}

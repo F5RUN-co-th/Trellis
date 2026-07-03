@@ -1,0 +1,41 @@
+{
+  "config": {
+    "spacing": 1.5,
+    "lot": 0.01,
+    "contract": 100.0,
+    "max_levels": 20,
+    "tp_usd": 4.0,
+    "hardstop_usd": 40.0,
+    "commission_per_lot_side": 0.0,
+    "stop_slippage_usd": 0.2,
+    "entry_lookback": 5,
+    "entry_mode": "fade"
+  },
+  "spread": 0.3,
+  "swap": 0,
+  "note": "Exness Standard swap-free; intra-bar=OHLC adverse-first approx (conservative)",
+  "blocks": [
+    {
+      "label": "YEAR-2024",
+      "years": [
+        2024,
+        2024
+      ],
+      "bars": 355833,
+      "pullback": {
+        "n_cycles": 7100,
+        "expectancy": 0.7609732394365241,
+        "total": 5402.9099999993205,
+        "win_rate": 0.936056338028169,
+        "stop_rate": 0.06394366197183099,
+        "avg_fills": 2.980281690140845,
+        "avg_win": 4.0,
+        "avg_loss": -46.654383259913395
+      },
+      "random_mean": 0.5988476977030596,
+      "random_sd": 0.073814482543873,
+      "edge_vs_random": 0.1621255417334645,
+      "beats_random_2sd": true
+    }
+  ]
+}

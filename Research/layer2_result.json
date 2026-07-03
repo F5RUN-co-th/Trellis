@@ -1,0 +1,87 @@
+{
+  "config": {
+    "spacing": 1.5,
+    "lot": 0.01,
+    "contract": 100.0,
+    "max_levels": 20,
+    "tp_usd": 4.0,
+    "hardstop_usd": 40.0,
+    "commission_per_lot_side": 0.0,
+    "stop_slippage_usd": 0.2,
+    "entry_lookback": 5,
+    "entry_mode": "fade"
+  },
+  "spread": 0.3,
+  "swap": 0,
+  "note": "Exness Standard swap-free; intra-bar=OHLC adverse-first approx (conservative)",
+  "blocks": [
+    {
+      "label": "IN-SAMPLE",
+      "years": [
+        2011,
+        2021
+      ],
+      "bars": 3870279,
+      "fade_optimistic": {
+        "n_cycles": 35123,
+        "expectancy": 0.9156606781879949,
+        "total": 32160.749999996944,
+        "win_rate": 0.9398115195171255,
+        "stop_rate": 0.06018848048287447,
+        "avg_fills": 2.956865871366341,
+        "avg_win": 4.0,
+        "avg_loss": -47.244678334911576
+      },
+      "fade_pessimistic": {
+        "n_cycles": 32450,
+        "expectancy": -0.25349460708794785,
+        "total": -8225.900000003909,
+        "win_rate": 0.9187981510015408,
+        "stop_rate": 0.08120184899845917,
+        "avg_fills": 3.1190446841294297,
+        "avg_win": 4.0,
+        "avg_loss": -48.38174573055177
+      },
+      "random_mean": 0.5182136325526119,
+      "bracket": [
+        -0.25349460708794785,
+        0.9156606781879949
+      ],
+      "straddle_zero": true
+    },
+    {
+      "label": "OUT-OF-SAMPLE",
+      "years": [
+        2022,
+        2026
+      ],
+      "bars": 1449117,
+      "fade_optimistic": {
+        "n_cycles": 58884,
+        "expectancy": 2.165944059506821,
+        "total": 127539.44999999963,
+        "win_rate": 0.9648461381699612,
+        "stop_rate": 0.03515386183003872,
+        "avg_fills": 2.9669010257455337,
+        "avg_win": 4.0,
+        "avg_loss": -48.17224637681178
+      },
+      "fade_pessimistic": {
+        "n_cycles": 48537,
+        "expectancy": 0.10358427591328999,
+        "total": 5027.670000003356,
+        "win_rate": 0.930939283433257,
+        "stop_rate": 0.0690607165667429,
+        "avg_fills": 3.2177720089828377,
+        "avg_win": 4.0,
+        "avg_loss": -52.420146181383245
+      },
+      "random_mean": 2.0440587339656813,
+      "bracket": [
+        0.10358427591328999,
+        2.165944059506821
+      ],
+      "straddle_zero": false
+    }
+  ]
+}

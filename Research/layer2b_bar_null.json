@@ -1,0 +1,88 @@
+{
+  "config": {
+    "spacing": 1.5,
+    "lot": 0.01,
+    "contract": 100.0,
+    "max_levels": 20,
+    "tp_usd": 4.0,
+    "hardstop_usd": 40.0,
+    "commission_per_lot_side": 0.0,
+    "stop_slippage_usd": 0.0,
+    "entry_lookback": 5,
+    "entry_mode": "fade"
+  },
+  "n_bars": 250000,
+  "vol_sub": 0.15,
+  "artifact_zero_cost_fade": 0.2510131149227281,
+  "results": {
+    "zero_cost": {
+      "fade": {
+        "n_cycles": 7059,
+        "expectancy": 0.2510131149227281,
+        "total": 1771.9015782395377,
+        "win_rate": 0.9192520186995325,
+        "stop_rate": 0.0807479813004675,
+        "avg_fills": 3.016291259385182,
+        "avg_win": 4.0,
+        "avg_loss": -42.42824284519379
+      },
+      "random": {
+        "n_cycles": 7027,
+        "expectancy": 0.10970563772191812,
+        "total": 770.9015162719186,
+        "win_rate": 0.9161804468478725,
+        "stop_rate": 0.08381955315212751,
+        "avg_fills": 3.041554005976946,
+        "avg_win": 4.0,
+        "avg_loss": -42.41273087220388
+      },
+      "spread": 0.0
+    },
+    "zero_cost_pess": {
+      "fade": {
+        "n_cycles": 7056,
+        "expectancy": 0.24306096793589285,
+        "total": 1715.03818975566,
+        "win_rate": 0.9190759637188208,
+        "stop_rate": 0.08092403628117914,
+        "avg_fills": 3.0168650793650795,
+        "avg_win": 4.0,
+        "avg_loss": -42.42550229464858
+      },
+      "random": {
+        "n_cycles": 7027,
+        "expectancy": 0.10881576602979758,
+        "total": 764.6483878913875,
+        "win_rate": 0.9161804468478725,
+        "stop_rate": 0.08381955315212751,
+        "avg_fills": 3.0424078554148286,
+        "avg_win": 4.0,
+        "avg_loss": -42.42334738897897
+      },
+      "spread": 0.0
+    },
+    "spread_030": {
+      "fade": {
+        "n_cycles": 6246,
+        "expectancy": -0.5954568151337233,
+        "total": -3719.2232673252356,
+        "win_rate": 0.9013768812039705,
+        "stop_rate": 0.09862311879602946,
+        "avg_fills": 3.1308037143772016,
+        "avg_win": 4.0,
+        "avg_loss": -42.59614166773577
+      },
+      "random": {
+        "n_cycles": 6208,
+        "expectancy": -0.8775182407483629,
+        "total": -5447.633238565837,
+        "win_rate": 0.8949742268041238,
+        "stop_rate": 0.10502577319587629,
+        "avg_fills": 3.1667203608247423,
+        "avg_win": 4.0,
+        "avg_loss": -42.44115527387399
+      },
+      "spread": 0.3
+    }
+  }
+}

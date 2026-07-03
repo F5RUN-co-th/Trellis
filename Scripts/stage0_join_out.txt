@@ -1,0 +1,137 @@
+﻿== TRELLIS-010 Stage 0.1 decomposition ==
+config (deploy/WF): {'CAPR': 1.0, 'A': 1.0, 'D': 1.0, 'SLOPE': 0.0005, 'EMA_P': 2880, 'SLOPE_B': 1440, 'allow_short': True, 'spread_mult': 1.0}
+
+-- sim 2023-2024 (warmup 2022) --
+  self-check PASS: instrumented == canonical (338 trades exact)
+-- sim 2025-2026 (warmup 2024) --
+  self-check PASS: instrumented == canonical (175 trades exact)
+
+tester files: Trellis_diag_770001_v4b_2324.csv n=340 · Trellis_diag_770001_v4c_2526.csv n=157 · Trellis_diag_770001_v4d_2601.csv n=22
+
+===== 2023 =====  [SIM=bar-M1 pessimistic | TESTER=MT5 real-tick authority]
+  coverage tester: 2023-01-03 .. 2023-12-29
+  n: sim=170 tester=171 · net: sim=-6.9 tester=-0.5 · GAP=+6.4
+  participation: common=170 sim-only=0 tester-only=1 · flip 1/171 วัน = 1%
+  DECOMP: (b) drift common     =    -32.9  (-0.19/ไม้, 170 ไม้)
+          (a) flips net        =    +39.4  (tester-only +39.4 - sim-only +0.0)
+          identity: gap = drift + flips_net  ✓ ปิดเป๊ะ
+  entry-time alignment (นาทีเดียวกัน?): same=170 (ΣΔ=-32.9, avg -0.19) · diff=0 (ΣΔ=+0.0, avg +0.00)
+  drift ตาม exit-reason pair (sim->tester):
+    eod->eod     n= 35  ΣΔ=   -50.6  avgΔ= -1.44
+    eod->sl      n=  4  ΣΔ=   -14.7  avgΔ= -3.68
+    sl->sl       n=124  ΣΔ=   +13.9  avgΔ= +0.11
+    sl->eod      n=  7  ΣΔ=   +18.5  avgΔ= +2.64
+  top-10 |drift| วัน common (sim_pnl -> tester_pnl, reason sim->tester):
+    2023-03-16    +48.6 ->    -3.9  Δ=  -52.5  [eod->eod] dir sim=+1/tst=+1
+    2023-11-23     +9.8 ->    -6.9  Δ=  -16.6  [stop->eod] dir sim=+1/tst=+1
+    2023-03-13     +7.4 ->   +23.7  Δ=  +16.3  [stop->eod] dir sim=+1/tst=+1
+    2023-11-15    +11.2 ->   +17.7  Δ=   +6.5  [stop->eod] dir sim=+1/tst=+1
+    2023-04-05     -6.1 ->    +0.0  Δ=   +6.1  [stop->sl-exit] dir sim=+1/tst=+1
+    2023-03-23     +6.2 ->   +11.7  Δ=   +5.5  [stop->eod] dir sim=+1/tst=+1
+    2023-02-24    +10.5 ->    +5.3  Δ=   -5.3  [eod->sl-exit] dir sim=-1/tst=-1
+    2023-08-03     -1.2 ->    -5.3  Δ=   -4.0  [eod->sl-exit] dir sim=-1/tst=-1
+    2023-02-20     -7.6 ->    -3.8  Δ=   +3.8  [stop->eod] dir sim=+1/tst=+1
+    2023-05-31     +3.9 ->    +0.8  Δ=   -3.1  [stop->sl-exit] dir sim=+1/tst=+1
+
+===== 2024 =====  [SIM=bar-M1 pessimistic | TESTER=MT5 real-tick authority]
+  coverage tester: 2024-01-03 .. 2024-12-30
+  n: sim=168 tester=169 · net: sim=+183.4 tester=+157.7 · GAP=-25.6
+  participation: common=168 sim-only=0 tester-only=1 · flip 1/169 วัน = 1%
+  DECOMP: (b) drift common     =    -41.4  (-0.25/ไม้, 168 ไม้)
+          (a) flips net        =    +15.8  (tester-only +15.8 - sim-only +0.0)
+          identity: gap = drift + flips_net  ✓ ปิดเป๊ะ
+  entry-time alignment (นาทีเดียวกัน?): same=167 (ΣΔ=-40.7, avg -0.24) · diff=1 (ΣΔ=-0.7, avg -0.66)
+    diff-entry 2024-10-30: sim 15:11 vs tester 08:11  Δ=-0.7
+  Δentry-minute histogram (tester-sim) top: -420min×1
+  ชั่วโมงกลมตามเดือน: 10:{-7: 1}
+  drift ตาม exit-reason pair (sim->tester):
+    sl->eod      n=  4  ΣΔ=   -35.9  avgΔ= -8.98
+    eod->sl      n=  1  ΣΔ=    -7.6  avgΔ= -7.65
+    sl->sl       n=112  ΣΔ=    -5.0  avgΔ= -0.04
+    eod->eod     n= 51  ΣΔ=    +7.2  avgΔ= +0.14
+  top-10 |drift| วัน common (sim_pnl -> tester_pnl, reason sim->tester):
+    2024-10-28    +31.9 ->    +0.3  Δ=  -31.6  [stop->eod] dir sim=+1/tst=+1
+    2024-03-28    +44.6 ->   +31.1  Δ=  -13.5  [stop->eod] dir sim=+1/tst=+1
+    2024-12-17     +0.7 ->    -9.4  Δ=  -10.2  [stop->sl-exit] dir sim=-1/tst=-1
+    2024-01-15    -12.3 ->    -4.5  Δ=   +7.9  [stop->eod] dir sim=+1/tst=+1
+    2024-08-06    +15.6 ->    +8.0  Δ=   -7.6  [eod->sl-exit] dir sim=-1/tst=-1
+    2024-02-16     -3.4 ->    -5.7  Δ=   -2.3  [stop->sl-exit] dir sim=+1/tst=+1
+    2024-09-11     -7.6 ->    -9.0  Δ=   -1.4  [stop->sl-exit] dir sim=+1/tst=+1
+    2024-01-29     +2.3 ->    +3.7  Δ=   +1.4  [eod->eod] dir sim=+1/tst=+1
+    2024-12-24     -9.1 ->    -7.8  Δ=   +1.3  [stop->eod] dir sim=-1/tst=-1
+    2024-11-29     -6.0 ->    -4.7  Δ=   +1.3  [eod->eod] dir sim=+1/tst=+1
+
+===== 2025 =====  [SIM=bar-M1 pessimistic | TESTER=MT5 real-tick authority]
+  coverage tester: 2025-01-02 .. 2025-12-26
+  n: sim=152 tester=157 · net: sim=+207.4 tester=-169.4 · GAP=-376.8
+  participation: common=132 sim-only=20 tester-only=25 · flip 45/177 วัน = 25%
+  DECOMP: (b) drift common     =   -467.4  (-3.54/ไม้, 132 ไม้)
+          (a) flips net        =    +90.6  (tester-only -194.2 - sim-only -284.8)
+          identity: gap = drift + flips_net  ✓ ปิดเป๊ะ
+  dir mismatch ในวัน common: 2 วัน: ['2025-06-06', '2025-12-08']
+  entry-time alignment (นาทีเดียวกัน?): same=1 (ΣΔ=-12.3, avg -12.32) · diff=131 (ΣΔ=-455.1, avg -3.47)
+    diff-entry 2025-10-20: sim 14:57 vs tester 11:57  Δ=+60.4
+    diff-entry 2025-06-06: sim 08:05 vs tester 12:31  Δ=+59.3
+    diff-entry 2025-04-25: sim 08:32 vs tester 13:02  Δ=-54.6
+    diff-entry 2025-05-06: sim 15:39 vs tester 12:39  Δ=-40.6
+    diff-entry 2025-03-27: sim 11:56 vs tester 09:56  Δ=-39.2
+  Δentry-minute histogram (tester-sim) top: -120min×21 -180min×20 -119min×3 -24min×3 +92min×2 -4min×2
+  ชั่วโมงกลมตามเดือน: 01:{-2: 4} 02:{-2: 5} 03:{-2: 4} 04:{-3: 4} 05:{-3: 4} 06:{-3: 5} 07:{-3: 1} 08:{-3: 2, -8: 1} 09:{-3: 2} 10:{-3: 2, -2: 1} 11:{-2: 3} 12:{-2: 4}
+  drift ตาม exit-reason pair (sim->tester):
+    eod->eod     n= 64  ΣΔ=  -308.9  avgΔ= -4.83
+    eod->sl      n= 12  ΣΔ=  -195.3  avgΔ=-16.27
+    sl->sl       n= 35  ΣΔ=   -51.9  avgΔ= -1.48
+    sl->eod      n= 21  ΣΔ=   +88.8  avgΔ= +4.23
+  top-10 |drift| วัน common (sim_pnl -> tester_pnl, reason sim->tester):
+    2025-10-20    +36.4 ->   +96.8  Δ=  +60.4  [stop->eod] dir sim=+1/tst=+1
+    2025-06-06    -21.7 ->   +37.6  Δ=  +59.3  [stop->eod] dir sim=+1/tst=-1
+    2025-04-25    +29.5 ->   -25.1  Δ=  -54.6  [eod->eod] dir sim=-1/tst=-1
+    2025-05-06    +32.4 ->    -8.2  Δ=  -40.6  [eod->eod] dir sim=+1/tst=+1
+    2025-03-27    +39.4 ->    +0.2  Δ=  -39.2  [eod->sl-exit] dir sim=+1/tst=+1
+    2025-08-29    +30.0 ->    -7.6  Δ=  -37.6  [eod->sl-exit] dir sim=+1/tst=+1
+    2025-05-12    +15.9 ->   -20.6  Δ=  -36.5  [stop->eod] dir sim=-1/tst=-1
+    2025-10-08    +15.4 ->   -18.6  Δ=  -33.9  [eod->eod] dir sim=+1/tst=+1
+    2025-04-23    +12.7 ->   -20.0  Δ=  -32.7  [eod->eod] dir sim=-1/tst=-1
+    2025-12-05     +8.3 ->   -24.1  Δ=  -32.4  [stop->eod] dir sim=+1/tst=+1
+
+===== 2026 =====  [SIM=bar-M1 pessimistic | TESTER=MT5 real-tick authority]
+  coverage tester: 2026-01-05 .. 2026-02-20
+  n: sim=23 tester=22 · net: sim=+160.0 tester=+329.7 · GAP=+169.7
+  participation: common=18 sim-only=5 tester-only=4 · flip 9/27 วัน = 33%
+  DECOMP: (b) drift common     =    -35.9  (-2.00/ไม้, 18 ไม้)
+          (a) flips net        =   +205.6  (tester-only -60.3 - sim-only -265.9)
+          identity: gap = drift + flips_net  ✓ ปิดเป๊ะ
+  entry-time alignment (นาทีเดียวกัน?): same=0 (ΣΔ=+0.0, avg +0.00) · diff=18 (ΣΔ=-35.9, avg -2.00)
+    diff-entry 2026-01-30: sim 13:10 vs tester 11:01  Δ=-75.0
+    diff-entry 2026-02-20: sim 08:02 vs tester 08:55  Δ=+35.0
+    diff-entry 2026-02-09: sim 17:34 vs tester 15:34  Δ=-33.6
+    diff-entry 2026-02-19: sim 08:01 vs tester 15:36  Δ=-32.8
+    diff-entry 2026-01-13: sim 15:31 vs tester 13:13  Δ=+31.5
+  Δentry-minute histogram (tester-sim) top: -120min×6 -10min×1 -213min×1 -378min×1 -138min×1 -64min×1
+  ชั่วโมงกลมตามเดือน: 01:{-2: 4} 02:{-2: 2}
+  drift ตาม exit-reason pair (sim->tester):
+    eod->eod     n= 11  ΣΔ=  -127.0  avgΔ=-11.54
+    eod->sl      n=  3  ΣΔ=   +22.0  avgΔ= +7.34
+    sl->sl       n=  3  ΣΔ=   +34.0  avgΔ=+11.33
+    sl->eod      n=  1  ΣΔ=   +35.0  avgΔ=+35.04
+  top-10 |drift| วัน common (sim_pnl -> tester_pnl, reason sim->tester):
+    2026-01-30   +252.1 ->  +177.2  Δ=  -75.0  [eod->eod] dir sim=-1/tst=-1
+    2026-02-20    +13.1 ->   +48.1  Δ=  +35.0  [stop->eod] dir sim=+1/tst=+1
+    2026-02-09    +32.7 ->    -0.9  Δ=  -33.6  [eod->eod] dir sim=+1/tst=+1
+    2026-02-19     +3.0 ->   -29.8  Δ=  -32.8  [eod->eod] dir sim=+1/tst=+1
+    2026-01-13    -31.9 ->    -0.3  Δ=  +31.5  [stop->sl-exit] dir sim=+1/tst=+1
+    2026-01-23     -2.5 ->    +9.8  Δ=  +12.2  [eod->eod] dir sim=+1/tst=+1
+    2026-01-22    +82.1 ->   +94.0  Δ=  +11.9  [eod->eod] dir sim=+1/tst=+1
+    2026-01-12     -9.9 ->    +0.0  Δ=   +9.9  [eod->sl-exit] dir sim=+1/tst=+1
+    2026-01-09     +2.1 ->   +11.9  Δ=   +9.8  [eod->sl-exit] dir sim=+1/tst=+1
+    2026-01-16     +6.9 ->    -2.1  Δ=   -9.0  [eod->eod] dir sim=-1/tst=-1
+
+===== SUMMARY ต่อปี (สนาม: gap = TESTER - SIM) =====
+year        gap  (b)drift  (a)flips  drift/ไม้  flip%
+2023       +6.4     -32.9     +39.4      -0.19     1%
+2024      -25.6     -41.4     +15.8      -0.25     1%
+2025     -376.8    -467.4     +90.6      -3.54    25%
+2026     +169.7     -35.9    +205.6      -2.00    33%
+TOTAL    -226.3    -577.6    +351.3
+
+องค์ประกอบที่ครอง |gap| รวม: (b) per-trade drift  (|drift|=578 vs |flips|=351)

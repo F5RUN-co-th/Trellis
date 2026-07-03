@@ -1,0 +1,23 @@
+# Tick data (very large files)
+Data/*.csv
+Data/*.bak
+
+# Compiled EA / Scripts (compiled artifacts)
+Experts/*.ex5
+Scripts/*.ex5
+
+# Logs
+compile.log
+*.log
+
+# MetaEditor temp files
+*.tmp
+*.bak
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+Thumbs.db
+.DS_Store
