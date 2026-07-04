@@ -43,7 +43,9 @@ FEAT_CSV = OUT_DIR / "h0_features_2012_2020.csv"
 FEAT_SHA = OUT_DIR / "h0_features_2012_2020.sha256"
 OUT_CSV = OUT_DIR / "h0_day_facts_2012_2020.csv"
 
-PNL_COLS = ["traded", "pnl", "reason", "dir", "R", "exit_date", "cross_day"]
+# entry_time เพิ่ม 2026-07-05 (Gate B C6-1/C7 infra): เวลา entry จาก trade tuple —
+# ไม่ใช่ P&L (เป็นข้อมูล timing ของ trade) ใช้คุม entry-hour confound + จับคู่ tick bar
+PNL_COLS = ["traded", "entry_time", "pnl", "reason", "dir", "R", "exit_date", "cross_day"]
 
 
 def main():
@@ -73,7 +75,7 @@ def main():
         k = str(et)[:10]
         assert k not in by_date, f"entry date ซ้ำ {k} — ผิด design 1 เทรด/วัน"
         by_date[k] = dict(pnl=float(pnl), reason=reason, dir=int(d), R=float(R),
-                          exit_date=str(xt)[:10],
+                          entry_time=str(et)[11:16], exit_date=str(xt)[:10],
                           cross_day=1 if str(xt)[:10] != k else 0)
 
     # อ่าน features (ข้าม header comment บรรทัดแรก)
@@ -100,14 +102,14 @@ def main():
             dr = abs(tr["R"] - aw)
             rmax = max(rmax, dr)
             assert dr < 1e-6, f"R mismatch {r['date']}: trade R={tr['R']} vs asian_width={aw}"
-            row = dict(r, traded=1, pnl=f"{tr['pnl']:.6g}", reason=tr["reason"],
-                       dir=tr["dir"], R=f"{tr['R']:.6g}", exit_date=tr["exit_date"],
-                       cross_day=tr["cross_day"])
+            row = dict(r, traded=1, entry_time=tr["entry_time"], pnl=f"{tr['pnl']:.6g}",
+                       reason=tr["reason"], dir=tr["dir"], R=f"{tr['R']:.6g}",
+                       exit_date=tr["exit_date"], cross_day=tr["cross_day"])
             joined_sum += tr["pnl"]
             n_traded += 1
         else:
-            row = dict(r, traded=0, pnl="", reason="", dir="", R="", exit_date="",
-                       cross_day="")
+            row = dict(r, traded=0, entry_time="", pnl="", reason="", dir="", R="",
+                       exit_date="", cross_day="")
         out_rows.append(row)
     assert n_traded == len(by_date) == len(trades)
     assert abs(joined_sum - total) < 1e-6, \

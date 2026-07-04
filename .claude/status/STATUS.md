@@ -14,7 +14,8 @@
 - **⭐ H0 CONCLUDED: ตัวแปรเดี่ยว 5 ตัวครบ space — ไม่มีตัวไหนแก้ปีแพ้ได้ตามเกณฑ์ · "brain ต้องชนะ −135.2" = พิสูจน์แล้ว** · ข้อค้นพบโครงสร้าง: gate สถิตย์พลิกปีแพ้เป็นบวกได้ (C3: −135→+228) แต่ฆ่าปีชนะเสมอ → ต้อง conditional behavior ไม่ใช่ filter สถิตย์
 - **STAGE B จบ (07-05):** pipeline แบบ EchoSeven (`Scripts/stageb_pipeline.py` — LLM ให้ evidence, script derive tier) · 26 claims → **T-CARD 16 / PARKED 9 / REJECTED 1** (จับ quote ตัดต่อได้จริง 1 ราย) · counter-evidence ติด claim ถาวร (overnight-drift ตาย 2021 · Osler=FX 90s หน่วย bp · practitioner เลข audit ไม่ได้) · `Research/STAGE_B_HARVEST.md`
 - **Gate B ผ่าน (07-05): Engineer PASS-with-changes ×3 ขอบเขต → fixes ครบ** (evidence-grade: T-STRONG 4/T-DIRECTIONAL 12 · ref-flags จับ dead refs 4 · provenance บังคับ) · **Wave-1 สรุป: C7 tick-participation > C6 poke/sweep > C9 DC-state (มี kill-gates) · C8 ตัด (lookahead)** — วินอนุมัติดำเนินการต่อ
-- **Next: Stage C prep** — (1) C7 infra: tick-count + entry_time เข้า day_facts (2) corr gates (3) freeze+review รายใบ (4) รัน · budget 5/40
+- **Card C7 (breakout participation) = FALSIFIED (07-05)** — Engineer จับ v1 lookahead (วัด bar i แทน signal bar j) ก่อนรัน → v2 · ผล: T ดิบ +0.27 หายเกลี้ยงใต้ joint/bar-size controls (−0.02/−0.08, p≈0.5) · P3 FAIL · **budget 6/40** · commits: 423ea87/9e35e65 + งาน C7
+- **Next: Card C6 (poke/sweep)** ตาม wave order + mandates · แล้ว C9 (มี kill-gates)
 
 ## 🔴 TRELLIS-010 Stage 0: เจอ CLOCK BUG — เลข tester 2025/2026 และ holdout เดิมถูก re-baseline
 - **Root cause (พิสูจน์ครบ ดู Plan/TRELLIS-010 Progress Log):** tick 2025+2026 ใน XAUUSD_BT เป็น **UTC+0 ดิบ** (generator `ticks_to_mt5ticks.py` ไม่ shift + rename `_eet_`) ขณะ 2011–24 ถูก → tester 2025/26 test คนละ session
