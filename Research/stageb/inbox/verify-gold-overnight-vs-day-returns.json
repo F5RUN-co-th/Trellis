@@ -1,0 +1,16 @@
+{
+  "id": "gold-overnight-vs-day-returns",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": false,
+    "biggest_finding": "ตัวเลข '~30 ปี' ใน claim ไม่มีอยู่ใน abstract ที่เข้าถึงได้เลย (abstract ไม่ระบุช่วงเวลา) — Springer เข้าไม่ได้ (timeout + auth-wall redirect) ต้อง verify ผ่าน mirror IDEAS/RePEc ซึ่งยืนยันประโยค sign-asymmetry verbatim แต่ยืนยันช่วงปีไม่ได้",
+    "note": "ประโยค 'Overnight returns are significantly positive while day returns are significantly negative' เป็นประโยคเปิด abstract จริง verbatim (Blose, Gondhalekar & Kort, Journal of Economics and Finance 2018) ครอบ COMEX gold futures, London Fix spot, gold mining stocks, CEFs, ETFs → sign asymmetry รองรับ claim ('ทุก asset' = เฉพาะ 5 กลุ่ม gold-related ใน paper ไม่ใช่ทุก asset ทั่วไป) · numbers_match ให้ false เพราะ '~30 ปี' ตรวจไม่ได้จากแหล่งที่ fetch ได้ · caveat ที่ harvester ไม่บอก: (1) overnight drift ที่วัดจาก OHLC เสี่ยง artifact จาก stale/auction open price (QuantPedia แสดงกรณี GDX) (2) งานหลัง 2017 ยังพบ night effect ในทอง (เช่น Chinese gold/silver futures 2025) แต่ชี้กลไก intraday reversal/anchoring มากกว่า risk premium — persistence ของ magnitude หลัง 2017 ยังไม่ถูกยืนยันโดย paper นี้",
+    "sources": [
+      "https://ideas.repec.org/a/spr/jecfin/v42y2018i3d10.1007_s12197-017-9403-0.html",
+      "https://link.springer.com/article/10.1007/s12197-017-9403-0",
+      "https://quantpedia.com/dangers-of-relying-on-ohlc-prices-the-case-of-overnight-drift-in-gdx-etf/",
+      "https://www.sciencedirect.com/science/article/abs/pii/S1044028325000110"
+    ]
+  }
+}

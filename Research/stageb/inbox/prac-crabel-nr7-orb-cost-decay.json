@@ -1,0 +1,22 @@
+{
+  "id": "prac-crabel-nr7-orb-cost-decay",
+  "track": "practitioner",
+  "title": "NR7 + Opening Range Breakout: edge does not survive trading costs (42 US futures, 1980-2016)",
+  "claim": "Crabel's NR7 setup traded via opening-range-breakout stretch entry, tested across 42 US futures 1980-2016, is not tradeable after transaction costs without additional filter rules; the pattern works better with NR_Length >= 6 and longer holding periods.",
+  "source": {
+    "label": "Oxford Capital Strategies — NR7 Pattern | Trading Strategy (Setup & Exit)",
+    "url": "https://oxfordstrat.com/trading-strategies/nr7/",
+    "quote": "The current daily range is narrower than the previous six days' daily ranges compared individually ... A buy stop is placed at [Open + Stretch] ... The NR7 pattern performs better when NR_Length >= 6 ... Once the cost of trading is applied, the pattern is not currently tradeable without some additional rules",
+    "access": "full"
+  },
+  "rule_formal": "NR7: Range(t) < min(Range(t-1..t-6)). Entry next day: buy stop = Open + Stretch, sell stop = Open - Stretch, Stretch = avg(10-day noise) * 2.0. Exits tested: (a) close on Nth day, (b) opposite stretch level, (c) stop = Entry -/+ ATR(20) * 6.",
+  "numbers": null,
+  "mechanism": "Range contraction compresses positioning; the first directional move from the open forces breakout entries in one direction — but per this test the per-trade edge is smaller than realistic costs.",
+  "relevance": "Q1 (breakout entry off a compression day = same family as Asian-range breakout; negative cost result is a prior against adding NR-style day filters expecting large edge), Q2 (NR7 as day-before trend-day antecedent)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — NR7 known at prior day close; stretch computable at day open"
+  },
+  "overlap_risk": "high overlap with rv percentile and asian width ratio (both are range-contraction measures already falsified on this system)"
+}

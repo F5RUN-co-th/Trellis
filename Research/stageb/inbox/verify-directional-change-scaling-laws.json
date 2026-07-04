@@ -1,0 +1,11 @@
+{
+  "id": "directional-change-scaling-laws",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "QUOTE ตรง verbatim ทุกคำบน arXiv abstract (Glattfelder, Dupuis, Olsen — 'Patterns in high-frequency FX data') · เลข 12 laws / ~3 orders of magnitude / 13 currency rates อยู่ในประโยคแรกของ abstract ครบ",
+    "note": "ส่วน '12 scaling laws ยืน ~3 orders, 13 คู่เงิน' ยืนยันได้ 100% จากหน้า abstract · แต่ส่วน 'นิยาม formal ของ trend continuation vs reversal' ไม่อยู่บนหน้า abstract — abstract พูดแค่ 'event-based approach' ลอยๆ นิยาม directional-change/overshoot อยู่ในตัว paper เต็มซึ่งหน้านี้ไม่แสดง · โดยรวมถือว่า claim ไม่บิด แต่ครึ่งหลังเป็นการสรุปจาก full text ไม่ใช่จากหน้าที่ fetch ได้",
+    "sources": ["https://arxiv.org/abs/0809.1040"]
+  }
+}

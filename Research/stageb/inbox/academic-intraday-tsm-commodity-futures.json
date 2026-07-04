@@ -1,0 +1,27 @@
+{
+  "id": "intraday-tsm-commodity-futures",
+  "track": "academic",
+  "title": "Intraday time-series momentum extends to commodity futures; stronger on high early volume/volatility (Jin-Kearney-Li-Yang)",
+  "claim": "In commodity futures (copper, steel, soybean, soybean meal), the first half-hour return positively predicts the last half-hour return; in metals the effect strengthens when the early session has elevated volume or volatility, and a strategy trading the last half-hour in the first half-hour's direction beats buy-and-hold.",
+  "source": {
+    "label": "Jin, Kearney, Li & Yang (2019), 'Intraday time-series momentum: Evidence from China', Journal of Futures Markets 40(4), 632-650",
+    "url": "https://pure.qub.ac.uk/en/publications/intraday-time-series-momentum-evidence-from-china",
+    "quote": "This study conducts an investigation of intraday time-series momentum across four Chinese commodity futures contracts: copper, steel, soybean, and soybean meal. Our results indicate that the first half-hour return positively predicts the last half-hour return across all four futures.",
+    "access": "abstract"
+  },
+  "rule_formal": "r_last = a + b*r_first + e per contract, b > 0 for all four; interaction: b larger conditional on high first-half-hour volume or volatility (metals). Trade rule: position in last half-hour = sign(r_first).",
+  "numbers": {
+    "effect": null,
+    "sample": "Four Chinese commodity futures (copper, steel, soybean, soybean meal); sample period not stated on landing page",
+    "market": "Chinese commodity futures (SHFE/DCE)",
+    "caveats": "Coefficients/R-squared in full text only; Chinese sessions have lunch breaks and (pre-2013 metals) no night session — session mapping to 23h gold differs materially"
+  },
+  "mechanism": "Day traders provide liquidity against the early informed move and must close positions before the session end to avoid overnight risk, forcing late-day flow in the direction of the early move — the same inventory-unwind channel proposed for equity ETFs, now shown in metals",
+  "relevance": "Q5/Q1: confirms intraday momentum is not an equity-only artifact — it survives in metal futures, the closest asset class to gold found with a fetchable academic test; the volume/volatility interaction repeats the Q2 'works when participation is abnormal' condition; supports testing early-window direction as EOD-continuation conditioner on XAUUSD",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "First-window return and its volume/volatility known in realtime; for gold must choose the analog windows ex ante (e.g. first hour after London or NY open vs final hour before 23:00 EOD close)"
+  },
+  "overlap_risk": "Volume/volatility interaction overlaps with dead rv variable at day level, but the conditioning here is same-day early-session (not prev-day) and the core signal (signed early return) was never among the five falsified variables"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "lbma-pmfix-downward-drift",
+  "verification": {
+    "quote_found": false,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ท่อนแรกของ quote ถูก splice โดยไม่ใส่ ellipsis: ข้อความจริงคือ 'On days when the authors identified large price moves during the fix, they were downwards at least two-thirds of the time...' — harvester ตัด 'On days when the authors identified' และ ', they' ทิ้งแล้วต่อประโยคใหม่ · และตัวเลขทั้งหมดเป็น second-hand: บทความ (Fertig) แค่ยก Bloomberg ที่รายงาน draft study ของ Abrantes-Metz มาเพื่อ 'หักล้าง'",
+    "note": "ตัวเลข ≥2/3 ใน 6 ปี (2004–2013) และ 92% ปี 2010 มีอยู่ในหน้าจริง (ประโยค 92% verbatim เป๊ะ) → numbers_match ผ่าน แต่ quote_found ให้ fail เพราะท่อน two-thirds ถูกเรียบเรียงใหม่โดยไม่ mark การตัด · context สำคัญ: บทความทั้งชิ้นเป็น rebuttal — Fertig ไม่เถียงตัวเลขแต่เถียงการตีความ โดยอธิบาย downward skew ด้วย flow composition (central banks/producers ขายที่ PM fix ส่วนผู้ซื้อไม่พึ่ง fix) + US econ data 10:00 NY ชนหน้าต่าง fix · regime เจ้าของ pattern จบแล้ว: PM fix แบบโทรศัพท์ถูกแทนด้วย LBMA Gold Price auction มี.ค. 2015 (บทความไม่กล่าวถึง) — drift 2004–2013 ห้าม extrapolate หลัง 2015 และถ้าคำอธิบายคือ flow composition pattern ก็ตายได้เมื่อ composition เปลี่ยน",
+    "sources": [
+      "https://www.lbma.org.uk/alchemist/issue-73/has-there-been-a-decade-of-london-pm-gold-fixing-manipulation"
+    ]
+  }
+}

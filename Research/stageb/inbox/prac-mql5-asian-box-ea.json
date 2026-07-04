@@ -1,0 +1,22 @@
+{
+  "id": "prac-mql5-asian-box-ea",
+  "track": "practitioner",
+  "title": "MQL5 Asian Breakout EA (article 17239): same strategy family as Trellis v4 — session box + MA filter + fixed RR; numbers only in screenshots",
+  "claim": "A published MQL5 EA implements the same architecture as our system — Asian session box (23:00-03:00 GMT high/low), stop orders beyond the box, 50-period MA trend filter, SL outside the box, TP at 1.3x risk, time exit 13:00 — and reports a 2023 backtest whose equity improved after adding a trailing stop; no numeric results appear in the article text (screenshots only).",
+  "source": {
+    "label": "MQL5.com — Automating Trading Strategies in MQL5 (Part 9): Building an Expert Advisor for the Asian Breakout Strategy",
+    "url": "https://www.mql5.com/en/articles/17239",
+    "quote": "place a Buy Stop order slightly above the top of the box ... a sell-stop order just below the bottom of the box ... [50-period MA trend filter; session 23:00-03:00 GMT; BreakoutOffsetPips = 10; TP multiplier 1.3; trade exit 13:00]",
+    "access": "full"
+  },
+  "rule_formal": "Box = [min(Low), max(High)] over 23:00-03:00 GMT. BuyStop = BoxHigh + 10 pips if Price > SMA(50); SellStop = BoxLow - 10 pips if Price < SMA(50). SL just outside opposite box boundary; TP = Entry + (Entry - SL) * 1.3. Force-exit 13:00 GMT.",
+  "numbers": null,
+  "mechanism": "Asian-session consolidation defines resting liquidity beyond both extremes; London/NY participation resolves the box directionally.",
+  "relevance": "Comparative design point for the whole system (their box window 23:00-03:00 GMT is narrower than our 01-08 EET; RR fixed 1.3 vs our 1xR trail; exit 13:00 vs our EOD 23:00) — differences are testable knobs; trailing-stop-improves claim touches Q3",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — box complete before entry window"
+  },
+  "overlap_risk": "not a new variable — an alternative parameterization of the existing system (window/RR/exit-time); no overlap with falsified day-selection variables"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "prac-mp-daytype-frequencies",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "เลขทุกตัว (2.43 / 41.77 / 30.21 / 6.81 / trend รวม 9.54) อยู่บนหน้าจริง และ trend 9.54% → non-trend ~90.5% สอดคล้อง '~90%' ของ claim แต่หน้าไม่ระบุ study/instrument/ช่วงปีใดๆ เลย และค้น cross-ref แล้วไม่พบแหล่งอิสระ (Dalton/CBOT/marketcalls/vtrender) ที่ให้เลขชุดนี้ — เลขปรากฏที่หน้านี้ที่เดียว",
+    "note": "provenance อ่อนจริงตามที่ claim flag ไว้: เป็นเลขลอยจาก single uncited source แหล่ง Market Profile อื่นให้แค่คำอธิบายเชิงคุณภาพของ day types ไม่ให้ frequency · ใช้ได้เฉพาะเชิง order-of-magnitude ว่า trend day เป็นส่วนน้อย (~10%) ห้ามใช้ทศนิยมสองตำแหน่งเหล่านี้เป็น parameter หรือ prior เชิงตัวเลข",
+    "sources": [
+      "https://www.trenddaytrading.com/market-profile-trading",
+      "https://www.marketcalls.in/market-profile/market-profile-different-types-of-profile-days.html",
+      "https://vtrender.com/posts/market-profile-day-types"
+    ]
+  }
+}

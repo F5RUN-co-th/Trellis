@@ -1,0 +1,27 @@
+{
+  "id": "osler-reversal-vs-continuation-duration",
+  "track": "microstructure",
+  "title": "Bounce at a level fades within ~30 minutes; post-crossing trend persists 2+ hours (Osler full text)",
+  "claim": "The reversal tendency after touching a salient level is statistically detectable for less than 30 minutes, whereas the extra trend speed after CROSSING the level stays statistically significant for at least two hours — i.e., false-break reversals are fast/short-lived and real breaks show persistent excess drift measurable on minute bars.",
+  "source": {
+    "label": "Osler, C.L., 'Stop-Loss Orders and Price Cascades in Currency Markets', FRBNY Staff Report 150 (full text PDF, Georgetown mirror)",
+    "url": "https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf",
+    "quote": "the tendency to reverse course at round numbers remains statistically significant less than thirty minutes (Table VIII). By contrast, the average exchange-rate movement upon crossing a round number remains statistically significant for at least two hours.",
+    "access": "full"
+  },
+  "rule_formal": "Event = price comes within 0.01% of level L. Split: (a) touch-no-cross -> excess reversal probability vs 10,000 arbitrary-level bootstrap, significant only at horizons < 30 min; (b) cross -> excess movement in crossing direction (Table VI.A: excess movement at 15 min = 1.12 (DEM), 1.30 (JPY), 0.77 (GBP), all p=0.000) significant up to ~2 h; sign flips negative at 1-2 day horizon.",
+  "numbers": {
+    "effect": "Post-crossing excess movement at 15 min: DEM 1.12, JPY 1.30, GBP 0.77 (bootstrap p=0.000 all three); still significant at 30-120 min; reversal effect at touched-but-not-crossed levels dies out <30 min; at 1-2 days excess movement turns negative (e.g. DEM -5.23 at 1 day)",
+    "sample": "Minute-by-minute quotes, DEM/JPY/GBP vs USD, 9am-4pm New York, 2 Jan 1996 - 30 Apr 1998; 58 non-overlapping 10-trading-day intervals vs 10,000 bootstrap sets of arbitrary levels",
+    "market": "Spot FX majors, NY hours",
+    "caveats": "Excess-movement units are relative to arbitrary-level baseline (ratio-like bootstrap statistic, not pips); FX 1996-98, not gold; NY-hours only; the 1-2 day sign flip warns that cascade drift is an intraday phenomenon, consistent with EOD-close design"
+  },
+  "mechanism": "After a crossing, stop-loss owners beyond the level are forced to trade with the move and are 'sometimes triggered in waves' (cascades) — sequential forced flow keeps the trend statistically alive for hours. A touch without crossing only activates voluntary take-profit flow, which exhausts quickly, so the bounce signature is short.",
+  "relevance": "Q1: gives a time-domain signature for real-vs-false break — measure excess drift persistence in the 15-120 min window after Asian-range breakout; a break that stalls within 30 min behaves like the touch/reversal population. Also supports holding winners through the session rather than scalping the first minutes.",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Persistence measured AFTER entry cannot gate the entry itself; usable for exit/management rules (e.g. time-stop at 30 min if no follow-through) or for delayed confirmation entries — must be encoded as management, not entry filter, to avoid lookahead"
+  },
+  "overlap_risk": "Same source family as academic-stop-loss-cascade-breakout (adds duration/horizon numbers absent there); a 30-min follow-through gauge will correlate with intraday rv on the same day but is event-anchored, not day-level; unrelated to slope/gap/aw"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "comex-settlement-vwap-window",
+  "track": "microstructure",
+  "title": "COMEX gold daily settlement = 60-second VWAP window 13:29-13:30 ET; benchmark-tied flow must execute there",
+  "claim": "The COMEX gold active-month settlement price is the VWAP of trades in a fixed 60-second window (13:29:00-13:30:00 ET; calendar spreads 13:15-13:30 ET). Any participant benchmarked to settlement (roll/spread traders, funds marking to settle, TAS counterparties) is forced to concentrate executions into that window, creating a predictable volume/participation spike at a fixed clock time (~20:29-20:30 server EET most of the year).",
+  "source": {
+    "label": "CME Group Client Systems Wiki — Gold, Daily Settlement Procedure",
+    "url": "https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457088147/Gold",
+    "quote": "13:29:00 to 13:30:00 ET for the active month and 13:15:00 to 13:30:00 ET for calendar spreads ... the active month settles to the volume-weighted average price (VWAP), rounded to the nearest tradable tick.",
+    "access": "full"
+  },
+  "rule_formal": "settle = VWAP(trades in [13:29:00, 13:30:00] ET) for active month; fallback tiers use last trade vs 13:30 bid/ask, then prior settle, then GCC discretion. Server mapping: ET+7h = EET most of year (both DST, different switch dates -> +6h for ~2-3 weeks/yr). Testable: M1 tick-count at 20:29-20:30 server vs neighboring minutes.",
+  "numbers": {
+    "effect": "Settlement window = 60 seconds (active month), 15 minutes (calendar spreads); no published effect-size study on gold intraday vol/volume around this window was found (searched — parked honestly)",
+    "sample": "Current CME settlement procedure (rule document, not an empirical sample)",
+    "market": "COMEX gold futures (GC)",
+    "caveats": "This is a mechanical rule fact, not a measured price effect; ET-EET offset is +7h except brief DST-mismatch weeks (+6h) — clock mapping must be handled per-date; window sits just AFTER the 20:00 server entry cutoff, inside the holding period"
+  },
+  "mechanism": "Traders whose PnL/obligations reference the daily settlement (calendar-spread rollers in the 13:15-13:30 window, TAS trades that settle at settlement price, margin/NAV marks) have no discretion over timing — they are forced to transact inside the fixed window, and the roll period each contract month multiplies this forced spread flow.",
+  "relevance": "Q3 (core): pins the exact settlement mechanics and clock time; for us it predicts a recurring liquidity/volatility event at ~20:29-20:30 server while positions are held to 23:00 EOD — testable whether adverse excursions of held positions cluster at this minute, and whether futures-roll weeks amplify it.",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Window time is known ex ante (clock-based, needs correct per-date ET->server conversion); roll-week calendar is known ex ante — no lookahead"
+  },
+  "overlap_risk": "Time-of-day event feature — orthogonal to rv/slope/range_exp/gap/aw; tick-count spike at the window will inflate same-day rv trivially (exclude the minute when computing day-level vol features)"
+}

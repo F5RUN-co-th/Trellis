@@ -1,0 +1,27 @@
+{
+  "id": "prac-mnq-ohlcv-falsification",
+  "track": "practitioner",
+  "title": "Systematic falsification: OHLCV-only intraday signals (ORB, gaps, liquidity grabs) leave 0.07-1.50 pts/trade gross on MNQ — none pass all criteria",
+  "claim": "On MNQ 5-minute data 2021-2025 (947 trading days), a systematic test of opening range breakouts, gap strategies, volume signals, cross-session momentum, liquidity grabs, and volatility-conditioned classifiers found gross next-bar-open edge of only ~0.07-1.50 points per trade, and no signal satisfied all robustness criteria simultaneously.",
+  "source": {
+    "label": "arXiv 2605.04004 — Structural Limits of OHLCV-Based Intraday Signals in MNQ Futures: A Systematic Falsification Study",
+    "url": "https://arxiv.org/abs/2605.04004",
+    "quote": "The gross edge available to next-bar-open execution is constrained to approximately 0.07-1.50 points per trade ... A gap-continuation signal achieves T = 3.23 and +14.52 points but fails minimum sample requirements (N = 22) ... No signal satisfies all criteria simultaneously",
+    "access": "abstract"
+  },
+  "rule_formal": "Falsification protocol: signal families (ORB, gap, volume, cross-session momentum, liquidity grab, vol-conditioned classifier) -> next-bar-open execution -> require min sample N + T-stat + net-of-cost expectancy simultaneously. Individual signal rules in full PDF (not extracted).",
+  "numbers": {
+    "effect": "gross edge 0.07-1.50 points/trade; best signal (gap continuation) +14.52 pts/trade, T=3.23, but N=22 fails sample minimum; zero signals pass all criteria",
+    "sample": "MNQ 5-minute, 2021-2025, 947 trading days",
+    "market": "Micro E-mini Nasdaq futures",
+    "caveats": "index futures, not gold — XAUUSD session structure (Asian range) differs; 5-min not M1; abstract-level extraction (full PDF is image-encoded, not text-extracted); falsification framing means absence of edge in THEIR rule variants, not all variants"
+  },
+  "mechanism": "Claim is structural: information content of OHLCV bars alone (without order-flow/DOM) is too small relative to spread+slippage at intraday horizons on a liquid index future.",
+  "relevance": "Q1 direct and adversarial (liquidity grabs and breakout signals from bars alone were tested and failed on MNQ — sets a hostile prior for any Q1/Q4 candidate: demand it clear cost-adjusted, minimum-sample bars), Q4 (their 'liquidity grab' family is the formalized sweep)",
+  "test_design": {
+    "computable_from": "dataset",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "their protocol (next-bar-open execution) is exactly the anti-lookahead discipline our sim uses — adoptable as-is"
+  },
+  "overlap_risk": "their volatility-conditioned classifier family overlaps rv percentile (falsified — consistent with their null result); gap family overlaps overnight gap ratio (falsified — again consistent)"
+}

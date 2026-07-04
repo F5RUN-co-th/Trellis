@@ -1,0 +1,15 @@
+{
+  "id": "overnight-drift-session-open",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "COUNTER-EVIDENCE ใหญ่ที่ harvester ไม่บอก: ผู้เขียนชุดเดียวกัน (Boyarchenko-Larsen-Whelan) ออก NY Fed Liberty Street blog ก.ค. 2026 'The Disappearing Overnight Drift' — หน้าต่าง 02:00-03:00 ที่เคยให้ ~3.7%/ปี 'averaged close to zero since 2021' เพราะ closing order imbalance บีบตัวจาก SD 6.5% เหลือ 2.9% — edge นี้ตายแล้วในข้อมูล 2021-2025",
+    "note": "QUOTE ตรง verbatim บนหน้า CBS Research Portal · asymmetry ยืนยัน: selloff ให้ 'robust positive overnight reversals' ส่วน rally ให้ reversal เบากว่ามาก · version สุดท้ายตีพิมพ์ Review of Financial Studies 36(9) 2023 pp.3502-3547 (หน้า CBS ที่ fetch เป็น CEPR DP 2020) เลขหลัก 'almost 100 percent...2:00-3:00 a.m.' ตรงกันทุก version ที่เช็ค · สำหรับ Trellis: อย่าใช้ effect นี้เป็น edge ปัจจุบัน — หลักฐานล่าสุดชี้ว่าหายไปตั้งแต่ 2021",
+    "sources": [
+      "https://research.cbs.dk/en/publications/the-overnight-drift-2/",
+      "https://academic.oup.com/rfs/article-abstract/36/9/3502/7076616",
+      "https://libertystreeteconomics.newyorkfed.org/2026/07/the-disappearing-overnight-drift/"
+    ]
+  }
+}

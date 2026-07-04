@@ -1,0 +1,27 @@
+{
+  "id": "tick-volume-proxy-conflict",
+  "track": "microstructure",
+  "title": "Tick volume as order-flow proxy: practitioner evidence claims 90%+ correlation with real spot FX volume, but is contested and non-peer-reviewed",
+  "claim": "The best-known evidence for tick volume validity (Marney 2011, practitioner research) claims 90%+ correlation between tick activity and actual traded spot-FX volume; a counter-source examining futures volume finds tick volume 'mostly uncorrelated'. Net: tick count is defensible only as a RELATIVE intra-day activity proxy, not as a magnitude measure — no peer-reviewed gold-specific validation was found.",
+  "source": {
+    "label": "Global Prime (Medium), 'Why Is Tick Volume Important To Monitor In The Forex Market?' (citing Caspar Marney, 2011)",
+    "url": "https://globalprime.medium.com/why-is-tick-volume-important-to-monitor-56a936eea70d",
+    "quote": "striking high levels of accuracy between tick activity and actual traded volume ... correlations of 90% plus",
+    "access": "full"
+  },
+  "rule_formal": "Use tick_count(minute) only as normalized relative measure: z-score vs same-minute-of-day baseline or fraction of day total; never cross-day absolute comparisons (broker-feed dependent).",
+  "numbers": {
+    "effect": "Claimed correlation 90%+ between tick activity and actual traded volume (spot FX, Marney 2011)",
+    "sample": "Marney 2011 practitioner research (webinar/paper, non-peer-reviewed); pairs not specified on fetched page",
+    "market": "Spot FX",
+    "caveats": "COUNTER-EVIDENCE fetched from EarnForex guide (https://www.earnforex.com/guides/tick-volume-in-forex/), verbatim: 'Tick volume seems to be mostly uncorrelated with real volume in the futures market' and 'One tick (price update) may be caused by either a small volume trade or a very large trade'. Neither source is peer-reviewed; no gold-specific validation found; Dukascopy col-6 tick-count usable relative-only per project F6 caveat"
+  },
+  "mechanism": "Not a forced-flow claim — a measurement-validity claim (Q5 explicitly asks this). Causal link: dealers refresh quotes more often when order flow hits them, so quote-update intensity co-moves with trading activity; but one update can represent any trade size, so intensity ≈ activity, not signed volume.",
+  "relevance": "Q5 (core): licenses using our M1 tick-count as a relative activity/participation feature in sweep-vs-break tests (e.g. tick-count z-score during the breakout minute), while blocking any design that needs true volume magnitude or signed order flow.",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Tick-count of the breakout minute and prior minutes is available at entry — no lookahead; same-minute-of-day normalization baseline must be computed from PAST days only"
+  },
+  "overlap_risk": "Day-aggregated tick count will correlate strongly with rv (dead variable) — value, if any, must come from event-level relative spikes (breakout-minute vs baseline), not day sums"
+}

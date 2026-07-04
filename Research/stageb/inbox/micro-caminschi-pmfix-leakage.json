@@ -1,0 +1,23 @@
+{
+  "id": "caminschi-pmfix-leakage",
+  "track": "microstructure",
+  "title": "PM gold fix leaked exploitable information to fixing members before publication (Caminschi-Heaney; primary paywalled)",
+  "claim": "During the 5-bank London PM gold fixing era (pre-2015), the fixing process leaked economically significant, tradable information: fixing members' advantage was 'significant and economic' and grew as electronic derivatives (GC futures, GLD) made it faster to exploit — i.e., early fix-window flow predicted the fix direction before publication.",
+  "source": {
+    "label": "University of Western Australia research-impact summary of Caminschi & Heaney (2014), 'Fixing a Leaky Fixing', Journal of Futures Markets 34, 1003-1039",
+    "url": "https://researchimpact.uwa.edu.au/research-impact-stories/fixing-a-leaky-fixing/",
+    "quote": "The trade advantage available to fixing members was significant and economic, and it increased with the transition of electronic derivatives trading.",
+    "access": "snippet"
+  },
+  "rule_formal": null,
+  "numbers": null,
+  "mechanism": "The five fixing banks saw the client order imbalance inside the fixing call before the fixed price was published; trading desks with that knowledge traded GC/GLD ahead of publication — the forced/adversely-selected side is everyone providing liquidity in GC/GLD during the fixing minutes without seeing the imbalance.",
+  "relevance": "Q2: mechanism behind systematic early-fix-window price moves (complements micro-lbma-pmfix-downward-drift which has the directional numbers); implies pre-2015 fix-window moves in the first minutes were informative continuations, and that this channel closed with the March 2015 electronic auction (regime split for backtests).",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "A 'first-minutes-of-fix direction' feature (e.g. 17:00-17:04 server move predicting 17:04-17:15 continuation, pre-2015 only) is computable in real time — no lookahead"
+  },
+  "overlap_risk": "Shares the fix-window clock anchor with micro-lbma-pmfix-downward-drift (test jointly, not as independent evidence); orthogonal to rv/slope/range_exp/gap/aw",
+  "harvest_note": "Primary paper paywalled (Wiley 402; SSRN/SemanticScholar/ResearchGate blocked or empty). The widely-cited numbers (return advantages in first 4 minutes; fix-direction prediction accuracy up to ~80-90%) could NOT be verbatim-verified from any fetched page and are deliberately EXCLUDED per anti-hallucination rules — parked as numbers: null."
+}

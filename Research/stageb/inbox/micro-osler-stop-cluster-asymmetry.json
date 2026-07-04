@@ -1,0 +1,28 @@
+{
+  "id": "osler-stop-cluster-asymmetry",
+  "track": "microstructure",
+  "title": "Stop-loss orders cluster just BEYOND round levels; take-profit orders cluster AT them (Osler full text, order-book data)",
+  "claim": "In dealer order books, stop-loss buy orders cluster just above round levels and stop-loss sell orders just below, while take-profit orders cluster exactly at the level. Therefore a touch of a salient level meets negative-feedback (reversal) flow first, and only a traverse PAST the level (into the [01,10]-style zone beyond) triggers the positive-feedback stop flow that fuels a real break.",
+  "source": {
+    "label": "Osler, C.L., 'Stop-Loss Orders and Price Cascades in Currency Markets', FRBNY Staff Report 150 (full text PDF, Georgetown mirror)",
+    "url": "https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf",
+    "quote": "stop-loss buy orders cluster just above round numbers (meaning specifically numbers ending in 00 or 50), and stop-loss sell orders tend to cluster at rates just below round numbers. For example, 14.3 percent of executed stop-loss buy orders have requested execution rates ending in the range [01,10], while only 6.9 percent of those orders have requested execution rates ending in the range [90,99].",
+    "access": "full"
+  },
+  "rule_formal": "Let L = salient level (round number; by extension a visible range extreme). Order mass: TP(L) > SL(L) at exactly L (TP 9.9% vs SL 3.8% at rates ending 00, value-weighted); SL mass peaks in zone (L, L+10pts] for buys / [L-10pts, L) for sells. Prediction: touch-without-traverse of L -> mean reversion; traverse beyond L by more than the TP-absorption zone -> positive-feedback continuation.",
+  "numbers": {
+    "effect": "14.3% of executed stop-loss buys sit in [01,10] beyond the round level vs 6.9% in [90,99] before it; take-profit orders exactly at 00: 9.9% vs stop-loss 3.8% (value-weighted); ~10% of all orders at rates ending 00",
+    "sample": "9,655 stop-loss/take-profit orders, >$55bn face value, complete order book of a major FX dealing bank, 1 Aug 1999 - 11 Apr 2000; USD/JPY, GBP/USD, EUR/USD",
+    "market": "Spot FX (major pairs), dealer order book",
+    "caveats": "FX not gold; 1999-2000 vintage; levels studied are round numbers ending 00/50 — mapping to Asian high/low is an extrapolation (both are salient reference levels, but Asian range extremes were not directly tested)",
+    "note_verbatim_secondary": "Very-large stops concentrate hardest near levels: 'Over 62 percent of the total face value of very-large stop-loss orders had requested execution rates ending in [90, 100] or [01,09]' vs 28% for very-large take-profits (p.26 of PDF)"
+  },
+  "mechanism": "Traders holding positions with stops just beyond the level are forced to buy (sell) at market the moment the level is traversed — positive feedback. Take-profit/limit holders AT the level voluntarily trade against the move — negative feedback. Who is forced: stop-order owners beyond the level (and dealers executing them), in waves, only after traverse; at the level itself nobody is forced and limit supply dominates.",
+  "relevance": "Q1 (core): gives an order-book-based reason why a marginal poke through the Asian high can reverse (TP/limit absorption zone AT the level) while a traverse deep enough to eat through the beyond-level stop cluster continues. Suggests a penetration-depth threshold variable, and a round-number-confluence variable (Asian high/low near $X.00/xx50 gold levels should carry bigger stop clusters).",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Penetration depth beyond Asian high/low and distance of the level to nearest round number are both computable at/before entry from M1 OHLC — no lookahead if entry waits for a fixed penetration threshold"
+  },
+  "overlap_risk": "Complementary to inbox claim academic-stop-loss-cascade-breakout (same Osler literature, abstract-level, numbers null) — this adds full-text cluster-location numbers; penetration-depth is event-level, weakly related to day-level range_exp; round-number distance orthogonal to rv/slope/range_exp/gap/aw"
+}

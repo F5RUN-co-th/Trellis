@@ -1,0 +1,27 @@
+{
+  "id": "intraday-momentum-first-half-hour",
+  "track": "academic",
+  "title": "Market intraday momentum: first half-hour return predicts last half-hour return (Gao-Han-Li-Zhou)",
+  "claim": "The return in the first half-hour of the session (measured from the previous day's close, i.e. including the overnight gap) positively predicts the return in the last half-hour of the same session; predictability is stronger on volatile, high-volume, recession, and macro-news days.",
+  "source": {
+    "label": "Gao, Han, Li & Zhou (2018), 'Market intraday momentum', Journal of Financial Economics 129(2), 394-414",
+    "url": "https://www.researchwithrutgers.org/en/publications/market-intraday-momentum/",
+    "quote": "Based on high frequency S & P 500 exchange-traded fund (ETF) data from 1993–2013, we show an intraday momentum pattern: the first half-hour return on the market as measured from the previous day's market close predicts the last half-hour return.",
+    "access": "abstract"
+  },
+  "rule_formal": "r_first = (P_10:00 - P_close_prev)/P_close_prev; r_last = (P_16:00 - P_15:30)/P_15:30; regression r_last = a + b*r_first, b > 0. Note r_first includes overnight gap by construction.",
+  "numbers": {
+    "effect": null,
+    "sample": "S&P 500 ETF (SPY) high-frequency data, 1993–2013; pattern also present in ten other actively traded ETFs",
+    "market": "US equity ETFs",
+    "caveats": "Predictive R-squared and strategy returns are in the full paper (SSRN/ScienceDirect both 403 in this mission); abstract confirms direction and conditioning states only: stronger on volatile, high-volume, recession, and major macro news days"
+  },
+  "mechanism": "Two proposed channels: infrequent portfolio rebalancing (investors who rebalance late in the day trade in the direction of the early move) and late-informed trading on morning news near the close — both force same-direction flow at end of day",
+  "relevance": "Q1/Q4: gives a realtime early-session signal (first half-hour direction, gap included) that predicts late-session continuation — a candidate 'follow-through vs false break' discriminator: breakout aligned with strong first-half-hour return should follow through into EOD; Q5: pattern amplifies exactly on high-vol/high-volume days",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "First half-hour return known at 30 min after session open, well before Trellis entry window closes at 20:00 — no lookahead; but must fix which 'session open' concept maps to 24h gold (e.g. 08:00 EET or COMEX open)"
+  },
+  "overlap_risk": "r_first includes the overnight gap, so it partially correlates with dead variable |overnight gap|/prev_range; distinction: this is signed early return with continuation direction, not unsigned gap magnitude as a day filter"
+}

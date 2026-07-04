@@ -1,0 +1,27 @@
+{
+  "id": "lbma-pmfix-downward-drift",
+  "track": "microstructure",
+  "title": "Large moves in the London PM gold fix window were overwhelmingly DOWN, 2004-2013 (LBMA Alchemist debate of Abrantes-Metz/Metz)",
+  "claim": "During 2004-2013, large price moves inside the London PM fixing window (15:00 London = 17:00 EET server) were downward at least two-thirds of the time in six different years, peaking at 92% downward in 2010 — a systematic directional pressure at a fixed clock time inside the strategy's breakout window.",
+  "source": {
+    "label": "LBMA Alchemist issue 73, 'Has There Been a Decade of London PM Gold Fixing Manipulation?' (discussing Abrantes-Metz & Metz study; rebuttal by Peter Fertig)",
+    "url": "https://www.lbma.org.uk/alchemist/issue-73/has-there-been-a-decade-of-london-pm-gold-fixing-manipulation",
+    "quote": "large price moves during the fix were downwards at least two-thirds of the time in six different years between 2004 and 2013 ... In 2010 ... large moves during the fix were negative 92 percent of the time.",
+    "access": "full"
+  },
+  "rule_formal": "Window W = PM fixing interval starting 15:00 London (17:00 server EET, constant offset since UK and EET share EU DST dates). Condition on |return in W| > threshold (large move): P(down) >= 2/3 in 6 of the years 2004-2013; 0.92 in 2010. Testable on M1: sign distribution of large 17:00-17:15 server moves by year.",
+  "numbers": {
+    "effect": "Large fix-window moves downward >= 2/3 of the time in six different years; 92% downward in 2010",
+    "sample": "Intraday data 2001-2013; anomalous pattern appears 'from 2004 until the end of the data sample'",
+    "market": "London gold PM fixing vs spot/futures intraday",
+    "caveats": "Fertig rebuttal in same article: patterns 'could be well explained and are not a valid proof of manipulations' (US data releases, commercial composition of fix participants). Regime-bound: the 5-bank fixing was replaced by the electronic LBMA Gold Price auction in March 2015 — effect may be dead after 2015. Both explanations (collusion vs producer-selling composition) still imply the same testable directional drift pre-2015."
+  },
+  "mechanism": "Clients transacting AT the fix (miners/producers hedging, refiners) are structurally net sellers at the PM benchmark; the fixing banks who absorb that imbalance hedge/pre-hedge during (or per the manipulation hypothesis, ahead of) the window — either way the forced side is fix-bank hedging of a seller-heavy client imbalance at a known clock time.",
+  "relevance": "Q2 directly (PM fix systematic direction with published numbers). Losing years 2012/2014 fall inside the documented 2004-2013/15 anomaly regime; 2017-2019 fall after the 2015 reform — testable whether short-side breakouts near 17:00 server behaved differently across the two regimes (also feeds Q4 era question).",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "down",
+    "lookahead_risk": "Fix time is clock-known ex ante; a '17:00-server proximity/direction' feature is computable at entry with zero lookahead; year-regime split (pre/post-2015) known ex ante"
+  },
+  "overlap_risk": "A fix-window drift feature is time-of-day anchored — orthogonal to day-level rv/slope/range_exp/gap/aw; mild interaction with rv because large-move conditioning selects volatile afternoons"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "gap-day-momentum-us-indices",
+  "track": "academic",
+  "title": "Prices continue in the gap direction on gap days; gaps do not systematically fill (Plastun et al.)",
+  "claim": "On days with an opening price gap, prices tend to continue moving in the direction of the gap during that day (intraday momentum after gaps); the momentum effect is temporary (same-day, not multi-day), there is no seasonality in gap occurrence, and the popular belief that gaps get filled is not supported.",
+  "source": {
+    "label": "Plastun, Sibande, Gupta & Wohar (2020), 'Price gap anomaly in the US stock market: The whole story', North American Journal of Economics and Finance 52",
+    "url": "https://ideas.repec.org/a/eee/ecofin/v52y2020ics1062940820300747.html",
+    "quote": "during a gap day prices tend to change in the direction of the gap",
+    "access": "abstract"
+  },
+  "rule_formal": "Gap day: Open_t != Close_{t-1} beyond a threshold; test H0: distribution of (Close_t - Open_t) sign/magnitude independent of sign(Open_t - Close_{t-1}); finding: E[Close_t - Open_t | gap up] > 0 and symmetric for gap down (continuation, not fill).",
+  "numbers": {
+    "effect": null,
+    "sample": "1928-2018, DJI, S&P 500 and NASDAQ (daily data)",
+    "market": "US stock indices",
+    "caveats": "Daily-frequency study on equity indices; abstract fetch gives direction of findings but no return magnitudes; does not state control for weekend/holiday gaps — the exact confound that killed the Trellis gap variable is not addressed in the abstract"
+  },
+  "mechanism": "Gaps embody overnight information whose incorporation is incomplete at the open (orders placed before open only partially absorb the news); remaining underreaction resolves as same-direction intraday drift — momentum is temporary because it is a within-day incorporation process",
+  "relevance": "Q3: supports SIGNED gap direction as an intraday directional conditioner (breakouts aligned with gap direction should follow through more) — distinct from the falsified unsigned |gap|/prev_range magnitude filter; also directly falsifies the gap-fill (fade) alternative, so the fade direction need not be tested",
+  "test_design": {
+    "computable_from": "dataset",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Gap sign known at day open (01:00 EET or first tick), hours before the 08:00-20:00 entry window — no lookahead"
+  },
+  "overlap_risk": "High measurement overlap with dead variable |overnight gap|/prev_range (p=0.035 raw, dies controlling days-since-prev/weekend) — BUT dead variable was unsigned day filter, this is signed direction-alignment; any test must inherit the weekend/days-since-prev control that killed the unsigned version"
+}

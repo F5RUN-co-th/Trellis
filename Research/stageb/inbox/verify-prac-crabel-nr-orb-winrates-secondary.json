@@ -1,0 +1,14 @@
+{
+  "id": "prac-crabel-nr-orb-winrates-secondary",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "เลข 60-76% มีอยู่จริงบนหน้า แต่หน้าไม่อ้าง table/หน้าไหนของหนังสือ Crabel เลย (secondary ไร้ citation) และประโยค 'Modern adaptations confirm the edge' ขัดกับ study อิสระ oxfordstrat: NR7 บน 42 futures markets, 36 ปีตั้งแต่ 1980 ถึง ม.ค. 2016 สรุปว่า 'Once the cost of trading is applied, the pattern is not currently tradeable without some additional rules' (rating C)",
+    "note": "QUOTE ตรง verbatim และ claim เรา frame เป็น secondary summary ถูกต้องแล้ว แต่ต้องย้ำ: oxfordstrat กับ Crabel เป็นคนละ metric (net expectancy หลัง costs vs raw win%) จึงไม่หักล้างเลข win% ตรงๆ ทว่ามันหักล้างนัยว่า edge ยังใช้ได้หลัง costs · win 60-76% pre-1990 ไม่มีทาง audit ได้จากหน้านี้ — ให้น้ำหนักเป็น 'เลขเล่าต่อ' เท่านั้น ห้ามใช้เป็น expectancy input ของ Trellis",
+    "sources": [
+      "https://tradingstrategiesdaily.com/p/nr7id-toby-crabel",
+      "https://oxfordstrat.com/coding/nr7/"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "orb-stocks-in-play-relative-volume",
+  "track": "academic",
+  "title": "ORB works when restricted to instruments with abnormal relative volume (Zarattini-Barbon-Aziz)",
+  "claim": "Opening range breakout profitability concentrates in 'stocks in play' — instruments with unusually high trading activity that day due to fundamental news; relative volume measured in the opening range positively correlates with subsequent breakout P&L, and restricting ORB trades to the highest relative-volume names is what makes the strategy profitable net of costs.",
+  "source": {
+    "label": "Zarattini, Barbon & Aziz (2024), 'A Profitable Day Trading Strategy For The U.S. Equity Market', SSRN 4729284 (authors' summary page)",
+    "url": "https://concretumgroup.com/a-profitable-day-trading-strategy-for-the-u-s-equity-market/",
+    "quote": "These are stocks experiencing unusually high trading activity due to company-specific news, earnings announcements, or other fundamental developments.",
+    "access": "abstract"
+  },
+  "rule_formal": "RelVol = volume in first 5 minutes today / average first-5-minute volume over prior days; rank universe by RelVol at open; trade 5-minute ORB (long above OR high / short below OR low) only on top-ranked names; stop and EOD exit per paper.",
+  "numbers": {
+    "effect": "Top-20 stocks-in-play portfolio: >1,600% total net return, Sharpe 2.81, annualized alpha 36% (vs S&P 500 ~198% same period); beta ~0",
+    "sample": "2016-2023, more than 7,000 US stocks",
+    "market": "US equities (day trading, 5-minute opening range)",
+    "caveats": "Equities cross-section with name-selection dimension gold does not have; numbers from authors' own summary page of the SSRN paper (SSRN itself 403); working paper, not peer-reviewed journal"
+  },
+  "mechanism": "A fundamental catalyst forces repricing: news-driven participants must build/liquidate positions within the day, generating persistent one-directional flow after the opening range resolves; without a catalyst (normal volume) the breakout has no forced flow behind it and mean-reverts",
+  "relevance": "Q2 directly: the condition under which ORB works is abnormal participation, measured as relative volume during range formation; for XAUUSD the analog is tick-count/volume of the Asian range or of the breakout bar relative to trailing same-hour average — a realtime Q1 discriminator candidate that is NOT among the five falsified day-level price variables",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Relative volume computable at range end (08:00) or at breakout bar from M1 tick-counts vs trailing same-hour baseline — fully known at entry"
+  },
+  "overlap_risk": "Volume proxies correlate with realized volatility, so partial overlap with dead rv (prev-day vol percentile); key difference: rv was previous-day price volatility, this is same-day participation measured before/at entry — untested dimension (tick-count never used in the five falsified variables)"
+}

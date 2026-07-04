@@ -1,0 +1,11 @@
+{
+  "id": "prac-sweep-close-back-inside-1to3bars",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ยืนยันว่าหน้าไม่มี methodology จริง — เลข 'Win rate 65–75% / R:R 2:1–4:1 / fail 25–35%' อยู่ใต้หัวข้อ 'Realistic stats' โดยไม่มี backtest, ไม่มี dataset, ไม่มี citation ใดๆ และหน้าจบด้วย promo 'Automate your liquidity sweep strategy with CrossTrade' + ปุ่ม Start free trial = vendor page เต็มรูปแบบ",
+    "note": "Quote ทั้ง 4 ท่อนพบตรงตามอ้าง (1-3 bars close back / long wick small body / classic rejection candle / sweep ใน strong uptrend มีแนวโน้มเป็น real breakout). Claim ของ harvester ตีกรอบถูกแล้วว่า 'no methodology' — ผ่าน. คุณค่าที่ใช้ได้จากหน้านี้ = นิยาม operational ของ sweep (close กลับใน 1-3 แท่ง + wick ยาว body เล็ก) ซึ่ง testable บน data ของเราเอง · ห้ามยกเลข win rate 65-75% ไปใช้เป็น prior ใดๆ เพราะเป็นเลขลอยจาก vendor ที่มี incentive ขาย automation",
+    "sources": ["https://crosstrade.io/learn/price-action/liquidity-sweeps"]
+  }
+}

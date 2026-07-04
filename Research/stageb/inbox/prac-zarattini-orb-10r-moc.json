@@ -1,0 +1,27 @@
+{
+  "id": "prac-zarattini-orb-10r-moc",
+  "track": "practitioner",
+  "title": "Zarattini/Aziz 5-min ORB: tiny stop + 10R target + market-on-close = 1,484% (leveraged) vs 169% buy-hold QQQ, 2016-2023",
+  "claim": "A first-5-minute-bar direction breakout on QQQ with stop at the first bar's extreme, profit target at 10x risk, 1%-of-equity risk sizing, and market-on-close exit if neither hits, returned 1,484% (with leverage via TQQQ) vs 169% for QQQ buy-and-hold over Jan 2016 - Feb 2023 — the payoff comes from letting rare expansion days run to an asymmetric target or the close.",
+  "source": {
+    "label": "Concretum Group (authors' site) — papers page for 'Can Day Trading Really Be Profitable?' (Zarattini & Aziz, SSRN 4416622)",
+    "url": "https://concretumgroup.com/papers/",
+    "quote": "Results show that the ORB strategy, even with leverage constraints, significantly outperformed passive investing, yielding a 1,484% return compared to 169% for QQQ",
+    "access": "abstract"
+  },
+  "rule_formal": "If Close(bar1_5min) > Open(bar1): buy at open of bar2; if lower: sell. Skip if flat. Stop = extreme of bar1 (low for long / high for short). Target = Entry + 10 * |Entry - Stop|. Size: risk 1% of equity to stop. If neither stop nor target hit: exit market-on-close. (Rules cross-checked verbatim on cxoadvisory.com review of same paper.)",
+  "numbers": {
+    "effect": "1,484% total return (leverage-constrained/TQQQ implementation) vs 169% QQQ buy-and-hold",
+    "sample": "QQQ 5-minute data, Jan 1 2016 - Feb 17 2023 (period per cxoadvisory.com review); includes two bear markets",
+    "market": "US equities (QQQ/TQQQ)",
+    "caveats": "not gold, not session-anchored; 33% annualized-alpha figure appears only in search snippets/paywalled review — not independently quoted, excluded; with 10R target the win rate is necessarily low, majority of days lose 1R — psychologically/structurally opposite to capping; later papers by same authors condition on 'stocks in play' (relative volume), suggesting raw version is weaker"
+  },
+  "mechanism": "Overnight-informed imbalance reveals itself in the first bar's direction; on the minority of days that trend (expansion days), the move extends many multiples of the first bar's range while risk stays capped at the first bar's extreme.",
+  "relevance": "Q3 direct (published-number template for 'dangerous but necessary EXPAND days': cap each day at small fixed R, let expansion days run to 10R or MOC — profits concentrate in tail days; contrast with our capped trail that RED-FLAG kills 2026 edge), Q2 (first-bar direction as earliest trend-day vote)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — signal complete at first-bar close, execution next bar open"
+  },
+  "overlap_risk": "target/exit asymmetry is a management change, orthogonal to the five falsified day-selection variables; first-bar-direction component overlaps our breakout trigger itself"
+}

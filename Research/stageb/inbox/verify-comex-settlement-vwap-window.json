@@ -1,0 +1,15 @@
+{
+  "id": "comex-settlement-vwap-window",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "หน้า CME wiki ไม่มีวันที่/ประวัติกติกาเลย — ยืนยัน VWAP 60 วิ ได้แน่แค่ยุคปัจจุบันย้อนถึง ~2016 (rule filing COMEX 16-574 แสดง methodology เดียวกัน) แต่ช่วงต้น sample 2012–2014 เป็นยุค floor/pit settlement — ไม่มีหลักฐานว่า Globex-VWAP 60 วิ ใช้บังคับตอนนั้น",
+    "note": "Quote verbatim ทั้งสองท่อน (settlement period 13:29–13:30 ET active / 13:15–13:30 ET spreads + VWAP rounded to nearest tradable tick) และหน้ารองรับ claim เรื่อง benchmark window เวลาตายตัวราว 13:30 ET · แต่ตามที่ claim เจาะไว้เอง: กติการายละเอียด (60-second Globex VWAP) ยืนยันย้อนหลังได้ถึงแค่ ~2015/2016 — ก่อนหน้านั้น settlement อิง pit trading แม้เวลาปิดจะอยู่ราว 13:30 ET เหมือนกัน · ใช้เป็น 'เวลา flow ตายตัว' ได้ทั้ง sample แต่ห้ามอ้างกลไก VWAP 60 วิ กับปี 2012–2014 · มี fallback tiers (last trade vs bid/ask, prior settle) เมื่อไม่มี trade ใน window",
+    "sources": [
+      "https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457088147/Gold",
+      "https://www.cmegroup.com/market-regulation/rule-filings/2016/12/16-574.pdf",
+      "https://www.cmegroup.com/markets/metals/precious/gold.settlements.html"
+    ]
+  }
+}

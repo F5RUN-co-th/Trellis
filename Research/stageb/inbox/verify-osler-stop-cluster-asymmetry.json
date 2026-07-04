@@ -1,0 +1,11 @@
+{
+  "id": "osler-stop-cluster-asymmetry",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "Dataset = order book ของ FX dealing bank รายใหญ่ 'แห่งเดียว' (paper ไม่ระบุชื่อ — คำถาม NatWest ยืนยันจากไฟล์นี้ไม่ได้) ช่วง 1 ส.ค. 1999–11 เม.ย. 2000 (8.5 เดือน) 9,655 orders มูลค่า $55B ใน dollar-yen/dollar-pound/euro-dollar — ไม่มีทองคำ ไม่มีปี 2012-2020 · และ '~10% ของ orders ลงท้าย 00' ที่ harvester เขียน จริงๆ เป็นเลขของ take-profit orders เท่านั้น (9.9% value-weighted; stop-loss แค่ 3.8%)",
+    "note": "Quote พบ verbatim ครบทั้งท่อน รวม 14.3% vs 6.9% ([01,10] vs [90,99]) และ TP-at-00 9.9% vs SL 3.8% ตรงตาม Table III. กลไกที่ claim สรุป (TP กองที่ level → reversal flow / SL กองเลย level → เร่ง break) ตรง thesis 'price cascades' ของ paper. Counter-nuance: significance ของ asymmetry รอบ 00 ไม่แข็งเท่ากันทุกฝั่ง — SL buy p=0.028 แต่ SL sell แค่ marginal p=0.063 (รอบ 50 แข็งกว่า: 0.002/0.005). การ generalize order-clustering ของ FX dealer ยุค 1999-2000 (ก่อน algo/retail-broker era) มาเป็นสมมติฐาน flow บนทองคำทศวรรษ 2010s ต้องถือเป็น analogy ไม่ใช่ evidence ตรง",
+    "sources": ["https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf"]
+  }
+}

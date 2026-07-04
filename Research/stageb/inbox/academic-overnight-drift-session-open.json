@@ -1,0 +1,27 @@
+{
+  "id": "overnight-drift-session-open",
+  "track": "academic",
+  "title": "Overnight drift: equity premium concentrates at European open, driven by prior-close order imbalance (Boyarchenko-Larsen-Whelan)",
+  "claim": "In 24h-traded equity index futures, nearly the entire unconditional risk premium accrues in the 2:00-3:00 a.m. EST hour (around the European open); the drift is predictable from the previous US close's order imbalance, with an asymmetry — selloffs at the prior close generate robust positive overnight reversals, rallies generate much weaker ones.",
+  "source": {
+    "label": "Boyarchenko, Larsen & Whelan (2020), 'The Overnight Drift', CEPR DP14462 / NY Fed Staff Report 917",
+    "url": "https://research.cbs.dk/en/publications/the-overnight-drift-2/",
+    "quote": "almost 100 percent of the U.S. equity premium is earned during a one-hour window between 2:00 a.m. and 3:00 a.m. (EST)",
+    "access": "abstract"
+  },
+  "rule_formal": "Partition the 24h day into hourly returns of S&P 500 futures; mean return of the 02:00-03:00 EST hour ≈ full-day unconditional mean; conditional version: overnight drift is negatively related to end-of-day order imbalance (stronger positive drift after sell-imbalance closes).",
+  "numbers": {
+    "effect": "~100% of the US equity premium earned in the single 02:00-03:00 EST hour",
+    "sample": "US equity index futures with round-the-clock electronic trading since the mid-1990s",
+    "market": "S&P 500 futures (US equity index futures)",
+    "caveats": "Documented on equities, not gold; a 2026 NY Fed follow-up notes the drift has weakened ('The Disappearing Overnight Drift', not fetched); daylight-saving shifts move the effect with the session clock, not the wall clock"
+  },
+  "mechanism": "Dealer/market-maker inventory absorbed at the prior US close is offloaded when liquidity next becomes available — at Asian and especially European opens; the compensation for holding that inventory is earned in the hour when the offsetting flow arrives (Grossman-Miller inventory risk framework)",
+  "relevance": "Q3: this is the cleanest academic template for 'overnight flow → predictable session-open move' with an explicit conditioning variable (prior-day closing imbalance/direction) instead of raw gap size — suggests testing prior-NY-close direction (last-hour return) as a directional conditioner for Asian-range breakout side; Q5: session-open hours are structurally special in 24h markets, supporting clock-anchored (EET) session logic",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Prior-day last-hour return and overnight hourly returns fully known before 08:00 EET entry window — no lookahead; DST handling must follow session clock (known Trellis EU-DST discipline)"
+  },
+  "overlap_risk": "Correlates with dead variable |overnight gap|/prev_range only weakly: that variable was unsigned magnitude with weekend confound; this claim is signed, hour-localized, and conditioned on prior-close imbalance direction, which was never tested"
+}

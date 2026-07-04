@@ -1,0 +1,27 @@
+{
+  "id": "prac-mp-daytype-frequencies",
+  "track": "practitioner",
+  "title": "Market Profile day-type frequencies: trending days only ~9.5% of all days",
+  "claim": "Under Market Profile classification, true trending structure (Trend Day + Double-Distribution Trend Day) occurs on about 9.54% of days; the rest are non-trending (Normal 2.43%, Normal Variation 41.77%, Neutral 30.21%, Non-trend 6.81%). A day-type filter must therefore be built to tolerate ~90% non-trend days.",
+  "source": {
+    "label": "TrendDayTrading.com — Market Profile Trading: Theory, Analysis and Practice",
+    "url": "https://www.trenddaytrading.com/market-profile-trading",
+    "quote": "Normal days ... 2.43% of the time ... [Normal Variation] 41.77% of the time ... [Neutral Day] 30.21% of the time ... [Non-trend Day] 6.81% ... Trend days are marked by a long skinny profile.",
+    "access": "full"
+  },
+  "rule_formal": "Trend day (structural): one-timeframing (consecutive 30-min periods making higher highs+higher lows, or inverse) sustained open-to-close; long thin profile. Frequencies: P(trend-type day) = 9.54%; P(neutral) = 30.21%; P(normal variation) = 41.77%. No realtime numeric trigger given on this page — classification is end-of-day structural.",
+  "numbers": {
+    "effect": "Trending days 9.54% of all days; Normal 2.43%, Normal Variation 41.77%, Neutral 30.21%, Non-trend 6.81%",
+    "sample": "population/instrument/period of the frequency study not stated on page",
+    "market": "unstated (Market Profile literature is CME futures-derived)",
+    "caveats": "classic MP frequencies circulate without primary attribution; page gives no instrument or years; classification is post-hoc (EOD) — realtime proxy (one-timeframing count, IB extension) must be constructed separately"
+  },
+  "mechanism": "Trend day = 'other-timeframe' participants in control from the open, continuously pulling in new participants; non-trend/neutral days = both sides near agreement on value, responsive trade dominates.",
+  "relevance": "Q2 direct (day-type taxonomy + base rates; realtime cue = one-timeframing on 30-min periods, countable before noon), Q3 (base rate: EXPAND days are structurally rare ~10%, so a filter that kills them kills the whole edge)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "day-type label itself is EOD (lookahead); one-timeframing count at hour N is computable realtime from M1 — test must use the realtime proxy, not the label"
+  },
+  "overlap_risk": "one-timeframing/IB-extension proxy likely correlates with range expansion (falsified); base-rate framing itself has no overlap"
+}

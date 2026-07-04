@@ -1,0 +1,11 @@
+{
+  "id": "osler-reversal-vs-continuation-duration",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "หน่วยที่ harvester ละไว้ = basis points ไม่ใช่ pips/percent — ข้อความใน paper เทียบเอง: 'dollar-yen moves by 0.0130 percent more after crossing a round number than after reversing course' = ค่า 1.30 ในตาราง VI.A → excess ทั้งหมดอยู่ระดับ ~1 bp/15 นาที เล็กมากเชิงเศรษฐศาสตร์ และตัวเลข 1.12/1.30/0.77 เป็น 'ส่วนต่าง crossing ลบ reversing' (MV_CR − MV_RV) ไม่ใช่ raw drift หลังทะลุ",
+    "note": "PDF จริงคือ 'Stop-Loss Orders and Price Cascades in Currency Markets' (Osler) — quote พบ verbatim และตาราง VI.A ตรงทุกตัว (15min: DEM 1.12/JPY 1.30/GBP 0.77 sig 0.000 ทั้งสาม · 1 วัน DEM −5.23). แต่ต้องติดป้าย: (1) significance จางเร็ว — 1 ชม. GBP หลุดแล้ว (p=0.179), 2 ชม. เหลือแค่ JPY (p=0.017); ประโยค 'at least two hours' มาจากบริบท Table VIII (stop-loss vs take-profit persistence) ไม่ใช่ทุกคู่เงินใน VI.A (2) ที่ 1 วัน JPY ยังบวก +1.27 — 'กลับเป็นลบที่ 1-2 วัน' ไม่ครบทุกคู่ และค่าลบเหล่านั้นส่วนใหญ่ไม่ significant (p 0.074–0.552) (3) สนามวัด = Reuters minute quotes ม.ค. 1996–เม.ย. 1998 เฉพาะ NY hours 9:00–16:00 สามคู่ FX — generalize มา gold 24 ชม. ยุค 2012-2020 คือ extrapolation ล้วนๆ",
+    "sources": ["https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf"]
+  }
+}

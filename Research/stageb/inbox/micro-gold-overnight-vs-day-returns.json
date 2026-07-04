@@ -1,0 +1,27 @@
+{
+  "id": "gold-overnight-vs-day-returns",
+  "track": "microstructure",
+  "title": "Gold: overnight returns significantly positive, day-session returns significantly negative (30-year sample)",
+  "claim": "Across COMEX front gold futures, London Fix spot, gold miners and gold ETFs, overnight (non-US-day) returns are significantly positive while day-session returns are significantly negative, over roughly 30 years and in both up and down gold markets — i.e., the Asia/overnight period systematically gains and the London/NY day session systematically bleeds.",
+  "source": {
+    "label": "'Overnight versus day returns in gold and gold related assets', Journal of Economics and Finance (2017), Springer",
+    "url": "https://link.springer.com/article/10.1007/s12197-017-9403-0",
+    "quote": "Overnight returns are significantly positive while day returns are significantly negative",
+    "access": "abstract"
+  },
+  "rule_formal": "r_overnight = close_prev_day_session -> open_next_day_session; r_day = open -> close of day session. E[r_overnight] > 0, E[r_day] < 0, both significant; asymmetry present in bull and bear subperiods and 'economically important even with transaction costs' (per abstract summary).",
+  "numbers": {
+    "effect": "Sign asymmetry only from abstract (positive overnight vs negative day); magnitudes are behind paywall",
+    "sample": "~30-year period; COMEX gold front futures, London Fix spot, gold mining stocks, gold closed-end funds and ETFs",
+    "market": "Gold futures/spot/equities (US day-session definition)",
+    "caveats": "Abstract-level access — effect sizes not extractable; 'day' is defined by US/COMEX session, which maps only partially onto our 08:00-20:00 server breakout window; sample ends ~2016, overlap with losing years 2017-2019 untested in this paper"
+  },
+  "mechanism": "Authors frame it as gold being '(too) high at the opening' of day markets. Candidate forced-flow reading (flagged as interpretation, not from the paper): commercial supply (producer hedging, fix-related selling) concentrates in London/NY business hours while Asian physical demand accumulates overnight — consistent with the PM-fix downward drift claim (micro-lbma-pmfix-downward-drift) but the paper itself does not identify who is forced.",
+  "relevance": "Q4/Q2: implies a structural long-bias overnight/Asia and short-bias during the day session — directly testable against our long vs short breakout PnL split by session and by era (did the day-session bleed weaken after 2015 fix reform / 2017-2019?)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "down",
+    "lookahead_risk": "Session boundaries are clock-based, known ex ante — a 'day-session short bias' prior needs no lookahead; but as an unconditional drift it is a weak per-trade signal"
+  },
+  "overlap_risk": "Day/overnight split partially overlaps gap (overnight return IS a gap-family variable — gap was tested dead at day level, so any value must come from session-conditional direction, not gap magnitude); orthogonal to rv/slope/range_exp/aw"
+}

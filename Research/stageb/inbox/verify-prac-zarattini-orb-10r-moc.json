@@ -1,0 +1,16 @@
+{
+  "id": "prac-zarattini-orb-10r-moc",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "เลข 1,484% vs 169% (2016-2023) ตรงกับ abstract บน concretumgroup และตรงกับ paper จริง Zarattini & Aziz 'Can Day Trading Really Be Profitable?' (SSRN 4416622) รวมถึงกลไก 5-min ORB + stop ที่ extreme bar แรก + target 10R + MOC · counter-evidence สำคัญ: paper สมมติ no bid-ask spread / no slippage / no execution uncertainty — return 1,484% มาจาก TQQQ leverage บน alpha ~33%/ปี net commissions เท่านั้น (ไม่ net spread)",
+    "note": "ตัวเลขจริงตามแหล่ง แต่เป็น pre-cost-realistic: กลยุทธ์ยิงเข้าออกทุกวันบน leveraged ETF โดยไม่คิด spread/slippage ซึ่งกับ Trellis doctrine (#5 backtest หลอกตา) ถือว่ายังไม่ผ่านเกณฑ์ cost realistic · ยังมี regime dependence: 2016-2023 เป็นช่วง QQQ bull + vol สูงผิดปกติ ไม่พบ independent replication ที่ยืนยันเลขนี้หลังใส่ costs เต็ม (reviewer เช่น CXO Advisory / substack ชี้จุด slippage เดียวกัน)",
+    "sources": [
+      "https://concretumgroup.com/papers/",
+      "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4416622",
+      "https://www.cxoadvisory.com/technical-trading/day-trading-with-an-opening-range-breakout-strategy/",
+      "https://therobusttrader.com/can-day-trading-really-be-profitable-rules-backtest-statistics-performance-analysis/"
+    ]
+  }
+}

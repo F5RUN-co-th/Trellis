@@ -1,0 +1,27 @@
+{
+  "id": "gold-session-informed-uninformed",
+  "track": "academic",
+  "title": "Gold intraday sessions differ: Tokyo uninformed vs New York informed trading (Iwatsubo-Watkins-Xu)",
+  "claim": "In gold futures, the Tokyo day session is dominated by uninformed trading while the New York day session is dominated by informed trading; microstructure character (efficiency, volatility, volume, liquidity) is session-specific across Tokyo/London/New York hours.",
+  "source": {
+    "label": "Iwatsubo, Kentaro; Watkins, Clinton; Xu, Tao (2017), 'Intraday Seasonality in Efficiency, Liquidity, Volatility and Volume: Platinum and gold futures in Tokyo and New York', Kobe University working paper 1722 (publ. Journal of Commodity Markets 2018)",
+    "url": "https://ideas.repec.org/p/koe/wpaper/1722.html",
+    "quote": "Separating global trading hours into Tokyo, London and New York day sessions, we also find that uninformed trading is more prevalent during the Tokyo day session while informed trading dominates the New York day session for both metals in both locations.",
+    "access": "abstract"
+  },
+  "rule_formal": null,
+  "numbers": {
+    "effect": null,
+    "sample": null,
+    "market": "Gold and platinum futures traded in Tokyo (TOCOM) and New York (COMEX)",
+    "caveats": "Abstract gives qualitative session ranking only; sample period and quantitative volatility/efficiency shapes are in full text (ScienceDirect 403; RIETI PDF not text-extractable in this mission)"
+  },
+  "mechanism": "Informed and uninformed traders self-select trading hours by venue characteristics: price-relevant information (US macro data, COMEX depth) arrives and is impounded during New York hours, while Asian-session flow is predominantly liquidity/hedging (uninformed), leaving Asian-hours price moves less informative about direction",
+  "relevance": "Q5 directly: supports the structural premise of Dual Asian BO — the Asian session (01:00–08:00 EET, overlapping Tokyo) is uninformed-flow range formation, and the breakout window (London/NY) is when informed flow sets direction; also cautions that late-NY moves may again be inefficient/noisy, relevant to holding until 23:00 EOD",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Session labels are clock-based, fully known ex ante — no lookahead; testable as session-conditional follow-through rates of breakouts"
+  },
+  "overlap_risk": "Low overlap with dead variables (rv/slope/range_exp/gap/aw are all day-level magnitudes); this is a session-structure claim, closest to existing entry-window design itself rather than any tested filter"
+}

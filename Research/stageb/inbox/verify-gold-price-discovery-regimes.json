@@ -1,0 +1,13 @@
+{
+  "id": "gold-price-discovery-regimes",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ข้อมูลของบทความจบที่ July 2012 (วิเคราะห์ Jan 1986–Jul 2012 แบบ rolling 100-day) — 'NY นำ' ยืนยันได้แค่ถึงกลางปี 2012 และประวัติในบทความเองแสดงว่า leadership สลับไปมาหลายรอบ ไม่มีหลักประกันว่า regime หลัง เม.ย. 2011 ถาวร",
+    "note": "ทั้ง 3 ท่อน quote ตรง verbatim (86% of business / ~90% spot / ruble crisis+LTCM switch / final switch April 2011) และหน้ารองรับ claim เรื่อง regime-switching ตาม crisis dates · counter-evidence ที่ harvester ไม่บอก: (1) บทความระบุเองว่า final switch เม.ย. 2011 'does not seem to have been triggered by any geopolitical or economic event' — จุดสลับไม่ได้ผูก crisis เสมอไป (2) 86% เป็นตัวเลข survey ครั้งเดียว (Table 1, LBMA loco-London survey) ไม่ใช่ค่าถาวร (3) บทความสรุปว่า dominance สลับซ้ำๆ ไม่ใช่ NY นำถาวร — ใช้ 'NY futures lead' เป็นสมมติฐานปัจจุบันต้องพึ่งงานหลัง 2012 (เช่น Hauptfleisch/Lucey/Putniņš 2016 ที่พบ COMEX นำ) ไม่ใช่หน้านี้",
+    "sources": [
+      "https://www.lbma.org.uk/alchemist/issue-68/london-or-new-york-where-does-the-gold-price-come-from"
+    ]
+  }
+}

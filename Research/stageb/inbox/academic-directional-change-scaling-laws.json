@@ -1,0 +1,27 @@
+{
+  "id": "directional-change-scaling-laws",
+  "track": "academic",
+  "title": "Directional-change event framework yields 12 stable scaling laws in FX (Glattfelder-Dupuis-Olsen)",
+  "claim": "Defining market structure by directional-change events (price reversals of threshold delta) instead of clock time yields 12 empirical scaling laws that hold across ~3 orders of magnitude of threshold size and across 13 currency pairs — e.g. average overshoot after a directional change scales lawfully with the threshold, giving a formal, parameter-stable definition of trend continuation vs reversal.",
+  "source": {
+    "label": "Glattfelder, Dupuis & Olsen (2008/2011), 'Patterns in high-frequency FX data: Discovery of 12 empirical scaling laws', Quantitative Finance 11(4), 599-614",
+    "url": "https://arxiv.org/abs/0809.1040",
+    "quote": "We have discovered 12 independent new empirical scaling laws in foreign exchange data-series that hold for close to three orders of magnitude and across 13 currency exchange rates. Our statistical analysis crucially depends on an event-based approach that measures the relationship between different types of events.",
+    "access": "abstract"
+  },
+  "rule_formal": "Directional change (DC) of threshold delta: price reverses by delta from the running extreme since the last DC; each DC is followed by an overshoot (OS) segment until the next DC. Scaling laws relate e.g. average OS size and durations to delta as power laws (exact coefficients in full text).",
+  "numbers": {
+    "effect": "12 independent scaling laws; validity across ~3 orders of magnitude of threshold",
+    "sample": "13 currency exchange rates, high-frequency FX data",
+    "market": "Spot FX (major pairs)",
+    "caveats": "Abstract does not give the individual law coefficients (e.g. the overshoot~threshold relation) — full text needed for exact constants; gold not in the 13 rates, transferability must be re-estimated"
+  },
+  "mechanism": "Not flow-based: statistical regularity of the price path itself across scales — implies the ratio of continuation (overshoot) to reversal (directional change) is stable and estimable, so deviation from the lawful overshoot is measurable in realtime",
+  "relevance": "Q4/Q1: gives a formal, clock-free definition of trend vs range that 'declares itself' during the day — a breakout that has already produced a DC+overshoot beyond the lawful average is statistically extended, while one that stalls before the average overshoot is failing; candidate replacement for the falsified day-level trend-state (EMA-slope percentile) with an event-level definition",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "DC/OS state is computable tick-by-tick (running extremes only, no future data) — fully realtime; threshold delta must be fixed ex ante"
+  },
+  "overlap_risk": "Overshoot magnitudes scale with volatility, so DC statistics computed per-day will correlate with dead rv variable; the event-level (within-trade) usage — has this breakout's overshoot exceeded its lawful expectation — is not captured by any of the five dead day-level variables"
+}

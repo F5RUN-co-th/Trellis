@@ -1,0 +1,13 @@
+{
+  "id": "prac-turtlesoup-whselfinvest-60pct",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "QUOTE ตรงทุกท่อน (5-period low/high, EMA filter, stop 3x ATR(20), win ~60% / GBPUSD 60.5%) แต่หน้าไม่เปิดเผยอะไรเลยที่ใช้ตัดสิน expectancy ได้: ไม่มีช่วง backtest, ไม่มีจำนวนเทรด, ไม่มี avg win/avg loss, ไม่มี profit factor — win 60% คู่กับ stop กว้าง 3xATR สามารถเป็น expectancy ติดลบได้ (ชนะบ่อย-แพ้หนัก) และหน้าไม่มีข้อมูลหักล้างความเป็นไปได้นี้",
+    "note": "conflict of interest ชัด: WH SelfInvest ขาย platform NanoTrader ที่รันกลยุทธ์นี้ — เลข 60% เป็น vendor marketing ที่ตรวจซ้ำไม่ได้ · claim เรา label 'ตาม vendor backtest' ไว้ถูกแล้ว แต่ควรถือ EFFECT นี้เป็น unverified จนกว่าจะ replicate เอง โดยเฉพาะฝั่ง payoff ratio ที่หน้าจงใจไม่โชว์",
+    "sources": [
+      "https://www.whselfinvest.com/en-lu/trading-platform/free-trading-strategies/tradingsystem/38-turtle-soup"
+    ]
+  }
+}

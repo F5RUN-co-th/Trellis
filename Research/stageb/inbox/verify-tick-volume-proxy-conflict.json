@@ -1,0 +1,11 @@
+{
+  "id": "tick-volume-proxy-conflict",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "สองฝั่งของ conflict มีจริงทั้งคู่ verbatim — ฝั่ง Medium/Global Prime: 'striking high levels of accuracy between tick activity and actual traded volume ... correlations of 90% plus' (อ้าง Caspar Marney 2011, spot FX, ข้อมูล eSignal/EBS/Hotspot ตาม secondary sources) · ฝั่ง earnforex: 'Tick volume seems to be mostly uncorrelated with real volume in the futures market.' และสรุปว่า tick volume ยัง 'unreliable for serious analysis'",
+    "note": "หา primary source ของ Marney 2011 ไม่เจอ (เป็นบทความ/presentation ยุค FX Trader Magazine ไม่ใช่ peer-reviewed — ทุกแหล่งที่พบเป็น secondary จาก broker/บทความ) และหน้า Medium เองก็เป็นบทความ broker (Global Prime) ที่ไม่แสดง methodology ของ Marney. สองฝั่งไม่ได้วัดสนามเดียวกัน: 90%+ วัด tick vs ECN volume ใน spot FX ส่วน 'mostly uncorrelated' วัด tick (broker) vs futures volume — conflict จึงไม่ใช่การหักล้างกันตรงๆ แต่ยืนยันข้อสรุปของ claim: ใช้ tick volume ได้แค่ relative/directional proxy ภายใน feed เดียวกัน ห้ามตีความเป็น absolute volume · หมายเหตุเพิ่ม: มี study อิสระของ Varianse (2022, PDF) ทำเรื่องเดียวกัน น่าเก็บเป็นแหล่งตรวจข้ามภายหลัง",
+    "sources": ["https://globalprime.medium.com/why-is-tick-volume-important-to-monitor-56a936eea70d", "https://www.earnforex.com/guides/tick-volume-in-forex/", "https://varianse.com/wp-content/uploads/2022/07/fxvolume-tick-volume-vs-real-volume-study-1.pdf"]
+  }
+}

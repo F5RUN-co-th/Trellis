@@ -1,0 +1,11 @@
+{
+  "id": "prac-mnq-ohlcv-falsification",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "arXiv 2605.04004 มีจริง (cross-check ทั้ง arxiv.org และ export.arxiv.org ให้ title/author/id ตรงกัน) — 'Structural Limits of OHLCV-Based Intraday Signals in MNQ Futures: A Systematic Falsification Study', Mathias Mesfin, submitted 5 May 2026, q-fin.TR · เลข 0.07-1.50 pts / T=3.23 / +14.52 pts / N=22 / 'No signal satisfies all criteria simultaneously' อยู่ใน abstract ครบ",
+    "note": "id เดือน 2605 = พ.ค. 2026 ถูกต้อง (วันนี้ 2026-07-04 จึงเป็นอดีต ไม่ใช่ id ปลอม — fetcher ตัวรองเคย flag ว่า 'future date' แต่นั่นเป็น artifact ของ knowledge cutoff ของ model ตัวเล็ก ตัวหน้าเว็บ return เนื้อหาจริงสองครั้งตรงกัน) · จุดต้องระวังที่ harvester ไม่เน้น: เป็น preprint ผู้เขียนคนเดียว ไม่มี peer review และผลเป็น null-result บน MNQ 5-min OHLCV เท่านั้น — generalize ไป XAUUSD/tick-level ต้องทำเอง ไม่ใช่ข้อสรุปสำเร็จรูป",
+    "sources": ["https://arxiv.org/abs/2605.04004", "https://export.arxiv.org/abs/2605.04004"]
+  }
+}

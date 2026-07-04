@@ -1,0 +1,909 @@
+{
+ "claims": {
+  "directional-change-scaling-laws": {
+   "id": "directional-change-scaling-laws",
+   "track": "academic",
+   "title": "Directional-change event framework yields 12 stable scaling laws in FX (Glattfelder-Dupuis-Olsen)",
+   "claim": "Defining market structure by directional-change events (price reversals of threshold delta) instead of clock time yields 12 empirical scaling laws that hold across ~3 orders of magnitude of threshold size and across 13 currency pairs — e.g. average overshoot after a directional change scales lawfully with the threshold, giving a formal, parameter-stable definition of trend continuation vs reversal.",
+   "source": {
+    "label": "Glattfelder, Dupuis & Olsen (2008/2011), 'Patterns in high-frequency FX data: Discovery of 12 empirical scaling laws', Quantitative Finance 11(4), 599-614",
+    "url": "https://arxiv.org/abs/0809.1040",
+    "quote": "We have discovered 12 independent new empirical scaling laws in foreign exchange data-series that hold for close to three orders of magnitude and across 13 currency exchange rates. Our statistical analysis crucially depends on an event-based approach that measures the relationship between different types of events.",
+    "access": "abstract"
+   },
+   "rule_formal": "Directional change (DC) of threshold delta: price reverses by delta from the running extreme since the last DC; each DC is followed by an overshoot (OS) segment until the next DC. Scaling laws relate e.g. average OS size and durations to delta as power laws (exact coefficients in full text).",
+   "numbers": {
+    "effect": "12 independent scaling laws; validity across ~3 orders of magnitude of threshold",
+    "sample": "13 currency exchange rates, high-frequency FX data",
+    "market": "Spot FX (major pairs)",
+    "caveats": "Abstract does not give the individual law coefficients (e.g. the overshoot~threshold relation) — full text needed for exact constants; gold not in the 13 rates, transferability must be re-estimated"
+   },
+   "mechanism": "Not flow-based: statistical regularity of the price path itself across scales — implies the ratio of continuation (overshoot) to reversal (directional change) is stable and estimable, so deviation from the lawful overshoot is measurable in realtime",
+   "relevance": "Q4/Q1: gives a formal, clock-free definition of trend vs range that 'declares itself' during the day — a breakout that has already produced a DC+overshoot beyond the lawful average is statistically extended, while one that stalls before the average overshoot is failing; candidate replacement for the falsified day-level trend-state (EMA-slope percentile) with an event-level definition",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "DC/OS state is computable tick-by-tick (running extremes only, no future data) — fully realtime; threshold delta must be fixed ex ante"
+   },
+   "overlap_risk": "Overshoot magnitudes scale with volatility, so DC statistics computed per-day will correlate with dead rv variable; the event-level (within-trade) usage — has this breakout's overshoot exceeded its lawful expectation — is not captured by any of the five dead day-level variables",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "QUOTE ตรง verbatim ทุกคำบน arXiv abstract (Glattfelder, Dupuis, Olsen — 'Patterns in high-frequency FX data') · เลข 12 laws / ~3 orders of magnitude / 13 currency rates อยู่ในประโยคแรกของ abstract ครบ",
+    "note": "ส่วน '12 scaling laws ยืน ~3 orders, 13 คู่เงิน' ยืนยันได้ 100% จากหน้า abstract · แต่ส่วน 'นิยาม formal ของ trend continuation vs reversal' ไม่อยู่บนหน้า abstract — abstract พูดแค่ 'event-based approach' ลอยๆ นิยาม directional-change/overshoot อยู่ในตัว paper เต็มซึ่งหน้านี้ไม่แสดง · โดยรวมถือว่า claim ไม่บิด แต่ครึ่งหลังเป็นการสรุปจาก full text ไม่ใช่จากหน้าที่ fetch ได้",
+    "sources": [
+     "https://arxiv.org/abs/0809.1040"
+    ]
+   }
+  },
+  "gap-day-momentum-us-indices": {
+   "id": "gap-day-momentum-us-indices",
+   "track": "academic",
+   "title": "Prices continue in the gap direction on gap days; gaps do not systematically fill (Plastun et al.)",
+   "claim": "On days with an opening price gap, prices tend to continue moving in the direction of the gap during that day (intraday momentum after gaps); the momentum effect is temporary (same-day, not multi-day), there is no seasonality in gap occurrence, and the popular belief that gaps get filled is not supported.",
+   "source": {
+    "label": "Plastun, Sibande, Gupta & Wohar (2020), 'Price gap anomaly in the US stock market: The whole story', North American Journal of Economics and Finance 52",
+    "url": "https://ideas.repec.org/a/eee/ecofin/v52y2020ics1062940820300747.html",
+    "quote": "during a gap day prices tend to change in the direction of the gap",
+    "access": "abstract"
+   },
+   "rule_formal": "Gap day: Open_t != Close_{t-1} beyond a threshold; test H0: distribution of (Close_t - Open_t) sign/magnitude independent of sign(Open_t - Close_{t-1}); finding: E[Close_t - Open_t | gap up] > 0 and symmetric for gap down (continuation, not fill).",
+   "numbers": {
+    "effect": null,
+    "sample": "1928-2018, DJI, S&P 500 and NASDAQ (daily data)",
+    "market": "US stock indices",
+    "caveats": "Daily-frequency study on equity indices; abstract fetch gives direction of findings but no return magnitudes; does not state control for weekend/holiday gaps — the exact confound that killed the Trellis gap variable is not addressed in the abstract"
+   },
+   "mechanism": "Gaps embody overnight information whose incorporation is incomplete at the open (orders placed before open only partially absorb the news); remaining underreaction resolves as same-direction intraday drift — momentum is temporary because it is a within-day incorporation process",
+   "relevance": "Q3: supports SIGNED gap direction as an intraday directional conditioner (breakouts aligned with gap direction should follow through more) — distinct from the falsified unsigned |gap|/prev_range magnitude filter; also directly falsifies the gap-fill (fade) alternative, so the fade direction need not be tested",
+   "test_design": {
+    "computable_from": "dataset",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Gap sign known at day open (01:00 EET or first tick), hours before the 08:00-20:00 entry window — no lookahead"
+   },
+   "overlap_risk": "High measurement overlap with dead variable |overnight gap|/prev_range (p=0.035 raw, dies controlling days-since-prev/weekend) — BUT dead variable was unsigned day filter, this is signed direction-alignment; any test must inherit the weekend/days-since-prev control that killed the unsigned version",
+   "applied": "2026-07-04"
+  },
+  "gold-session-informed-uninformed": {
+   "id": "gold-session-informed-uninformed",
+   "track": "academic",
+   "title": "Gold intraday sessions differ: Tokyo uninformed vs New York informed trading (Iwatsubo-Watkins-Xu)",
+   "claim": "In gold futures, the Tokyo day session is dominated by uninformed trading while the New York day session is dominated by informed trading; microstructure character (efficiency, volatility, volume, liquidity) is session-specific across Tokyo/London/New York hours.",
+   "source": {
+    "label": "Iwatsubo, Kentaro; Watkins, Clinton; Xu, Tao (2017), 'Intraday Seasonality in Efficiency, Liquidity, Volatility and Volume: Platinum and gold futures in Tokyo and New York', Kobe University working paper 1722 (publ. Journal of Commodity Markets 2018)",
+    "url": "https://ideas.repec.org/p/koe/wpaper/1722.html",
+    "quote": "Separating global trading hours into Tokyo, London and New York day sessions, we also find that uninformed trading is more prevalent during the Tokyo day session while informed trading dominates the New York day session for both metals in both locations.",
+    "access": "abstract"
+   },
+   "rule_formal": null,
+   "numbers": {
+    "effect": null,
+    "sample": null,
+    "market": "Gold and platinum futures traded in Tokyo (TOCOM) and New York (COMEX)",
+    "caveats": "Abstract gives qualitative session ranking only; sample period and quantitative volatility/efficiency shapes are in full text (ScienceDirect 403; RIETI PDF not text-extractable in this mission)"
+   },
+   "mechanism": "Informed and uninformed traders self-select trading hours by venue characteristics: price-relevant information (US macro data, COMEX depth) arrives and is impounded during New York hours, while Asian-session flow is predominantly liquidity/hedging (uninformed), leaving Asian-hours price moves less informative about direction",
+   "relevance": "Q5 directly: supports the structural premise of Dual Asian BO — the Asian session (01:00–08:00 EET, overlapping Tokyo) is uninformed-flow range formation, and the breakout window (London/NY) is when informed flow sets direction; also cautions that late-NY moves may again be inefficient/noisy, relevant to holding until 23:00 EOD",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Session labels are clock-based, fully known ex ante — no lookahead; testable as session-conditional follow-through rates of breakouts"
+   },
+   "overlap_risk": "Low overlap with dead variables (rv/slope/range_exp/gap/aw are all day-level magnitudes); this is a session-structure claim, closest to existing entry-window design itself rather than any tested filter",
+   "applied": "2026-07-04"
+  },
+  "intraday-momentum-first-half-hour": {
+   "id": "intraday-momentum-first-half-hour",
+   "track": "academic",
+   "title": "Market intraday momentum: first half-hour return predicts last half-hour return (Gao-Han-Li-Zhou)",
+   "claim": "The return in the first half-hour of the session (measured from the previous day's close, i.e. including the overnight gap) positively predicts the return in the last half-hour of the same session; predictability is stronger on volatile, high-volume, recession, and macro-news days.",
+   "source": {
+    "label": "Gao, Han, Li & Zhou (2018), 'Market intraday momentum', Journal of Financial Economics 129(2), 394-414",
+    "url": "https://www.researchwithrutgers.org/en/publications/market-intraday-momentum/",
+    "quote": "Based on high frequency S & P 500 exchange-traded fund (ETF) data from 1993–2013, we show an intraday momentum pattern: the first half-hour return on the market as measured from the previous day's market close predicts the last half-hour return.",
+    "access": "abstract"
+   },
+   "rule_formal": "r_first = (P_10:00 - P_close_prev)/P_close_prev; r_last = (P_16:00 - P_15:30)/P_15:30; regression r_last = a + b*r_first, b > 0. Note r_first includes overnight gap by construction.",
+   "numbers": {
+    "effect": null,
+    "sample": "S&P 500 ETF (SPY) high-frequency data, 1993–2013; pattern also present in ten other actively traded ETFs",
+    "market": "US equity ETFs",
+    "caveats": "Predictive R-squared and strategy returns are in the full paper (SSRN/ScienceDirect both 403 in this mission); abstract confirms direction and conditioning states only: stronger on volatile, high-volume, recession, and major macro news days"
+   },
+   "mechanism": "Two proposed channels: infrequent portfolio rebalancing (investors who rebalance late in the day trade in the direction of the early move) and late-informed trading on morning news near the close — both force same-direction flow at end of day",
+   "relevance": "Q1/Q4: gives a realtime early-session signal (first half-hour direction, gap included) that predicts late-session continuation — a candidate 'follow-through vs false break' discriminator: breakout aligned with strong first-half-hour return should follow through into EOD; Q5: pattern amplifies exactly on high-vol/high-volume days",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "First half-hour return known at 30 min after session open, well before Trellis entry window closes at 20:00 — no lookahead; but must fix which 'session open' concept maps to 24h gold (e.g. 08:00 EET or COMEX open)"
+   },
+   "overlap_risk": "r_first includes the overnight gap, so it partially correlates with dead variable |overnight gap|/prev_range; distinction: this is signed early return with continuation direction, not unsigned gap magnitude as a day filter",
+   "applied": "2026-07-04"
+  },
+  "intraday-tsm-commodity-futures": {
+   "id": "intraday-tsm-commodity-futures",
+   "track": "academic",
+   "title": "Intraday time-series momentum extends to commodity futures; stronger on high early volume/volatility (Jin-Kearney-Li-Yang)",
+   "claim": "In commodity futures (copper, steel, soybean, soybean meal), the first half-hour return positively predicts the last half-hour return; in metals the effect strengthens when the early session has elevated volume or volatility, and a strategy trading the last half-hour in the first half-hour's direction beats buy-and-hold.",
+   "source": {
+    "label": "Jin, Kearney, Li & Yang (2019), 'Intraday time-series momentum: Evidence from China', Journal of Futures Markets 40(4), 632-650",
+    "url": "https://pure.qub.ac.uk/en/publications/intraday-time-series-momentum-evidence-from-china",
+    "quote": "This study conducts an investigation of intraday time-series momentum across four Chinese commodity futures contracts: copper, steel, soybean, and soybean meal. Our results indicate that the first half-hour return positively predicts the last half-hour return across all four futures.",
+    "access": "abstract"
+   },
+   "rule_formal": "r_last = a + b*r_first + e per contract, b > 0 for all four; interaction: b larger conditional on high first-half-hour volume or volatility (metals). Trade rule: position in last half-hour = sign(r_first).",
+   "numbers": {
+    "effect": null,
+    "sample": "Four Chinese commodity futures (copper, steel, soybean, soybean meal); sample period not stated on landing page",
+    "market": "Chinese commodity futures (SHFE/DCE)",
+    "caveats": "Coefficients/R-squared in full text only; Chinese sessions have lunch breaks and (pre-2013 metals) no night session — session mapping to 23h gold differs materially"
+   },
+   "mechanism": "Day traders provide liquidity against the early informed move and must close positions before the session end to avoid overnight risk, forcing late-day flow in the direction of the early move — the same inventory-unwind channel proposed for equity ETFs, now shown in metals",
+   "relevance": "Q5/Q1: confirms intraday momentum is not an equity-only artifact — it survives in metal futures, the closest asset class to gold found with a fetchable academic test; the volume/volatility interaction repeats the Q2 'works when participation is abnormal' condition; supports testing early-window direction as EOD-continuation conditioner on XAUUSD",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "First-window return and its volume/volatility known in realtime; for gold must choose the analog windows ex ante (e.g. first hour after London or NY open vs final hour before 23:00 EOD close)"
+   },
+   "overlap_risk": "Volume/volatility interaction overlaps with dead rv variable at day level, but the conditioning here is same-day early-session (not prev-day) and the core signal (signed early return) was never among the five falsified variables",
+   "applied": "2026-07-04"
+  },
+  "orb-crude-oil-profitability": {
+   "id": "orb-crude-oil-profitability",
+   "track": "academic",
+   "title": "ORB on crude oil futures beats fair-game benchmark (Holmberg et al.)",
+   "claim": "An Opening Range Breakout strategy that trades only when price moves beyond a predetermined threshold (calibrated from the assumed return distribution) yields returns significantly above zero and a success rate above the fair-game benchmark on US crude oil futures.",
+   "source": {
+    "label": "Holmberg, Lönnbark & Lundström (2012), Umeå Economic Studies 845 / Finance Research Letters 2013, 'Assessing the profitability of intraday opening range breakout strategies'",
+    "url": "https://swopec.hhs.se/umnees/abs/umnees0845.htm",
+    "quote": "An investor that trades on the ORB strategy seeks to identify large intraday price movements and trades only when the price moves beyond some predetermined threshold. We present an ORB strategy based on normally distributed returns to identify such days and find that our ORB trading strategy result in significantly higher returns than zero as well as an increased success rate in relation to a fair game.",
+    "access": "abstract"
+   },
+   "rule_formal": "Enter long (short) when intraday price exceeds Open + k*sigma (Open - k*sigma), where k is a predetermined threshold derived from the assumed (normal) return distribution; hold to close. Exact k values not given in abstract.",
+   "numbers": {
+    "effect": null,
+    "sample": null,
+    "market": "US crude oil futures (per paper keywords; not stated in abstract text)",
+    "caveats": "Abstract provides no effect sizes, success-rate figures, or sample period; full text paywalled at Finance Research Letters"
+   },
+   "mechanism": "Days with large early moves beyond a distribution-based threshold identify conditional fat-tail days; once threshold is crossed, the day's return distribution is right-shifted in the breakout direction (joint distribution of Low/High/Open/Close, not independence of increments)",
+   "relevance": "Q2 directly: academic evidence that ORB works when the trigger threshold is scaled to the return distribution (volatility-normalized), not a fixed range — suggests testing Asian-range breakout with distribution-calibrated trigger distance rather than raw range edge",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Threshold computable from historical return distribution before session open; breakout observed realtime — no lookahead"
+   },
+   "overlap_risk": "Threshold scaling by recent volatility correlates with dead variable rv (prev-day realized-vol percentile); however the claim is about entry trigger geometry, not day filtering, so overlap is partial",
+   "applied": "2026-07-04"
+  },
+  "orb-stocks-in-play-relative-volume": {
+   "id": "orb-stocks-in-play-relative-volume",
+   "track": "academic",
+   "title": "ORB works when restricted to instruments with abnormal relative volume (Zarattini-Barbon-Aziz)",
+   "claim": "Opening range breakout profitability concentrates in 'stocks in play' — instruments with unusually high trading activity that day due to fundamental news; relative volume measured in the opening range positively correlates with subsequent breakout P&L, and restricting ORB trades to the highest relative-volume names is what makes the strategy profitable net of costs.",
+   "source": {
+    "label": "Zarattini, Barbon & Aziz (2024), 'A Profitable Day Trading Strategy For The U.S. Equity Market', SSRN 4729284 (authors' summary page)",
+    "url": "https://concretumgroup.com/a-profitable-day-trading-strategy-for-the-u-s-equity-market/",
+    "quote": "These are stocks experiencing unusually high trading activity due to company-specific news, earnings announcements, or other fundamental developments.",
+    "access": "abstract"
+   },
+   "rule_formal": "RelVol = volume in first 5 minutes today / average first-5-minute volume over prior days; rank universe by RelVol at open; trade 5-minute ORB (long above OR high / short below OR low) only on top-ranked names; stop and EOD exit per paper.",
+   "numbers": {
+    "effect": "Top-20 stocks-in-play portfolio: >1,600% total net return, Sharpe 2.81, annualized alpha 36% (vs S&P 500 ~198% same period); beta ~0",
+    "sample": "2016-2023, more than 7,000 US stocks",
+    "market": "US equities (day trading, 5-minute opening range)",
+    "caveats": "Equities cross-section with name-selection dimension gold does not have; numbers from authors' own summary page of the SSRN paper (SSRN itself 403); working paper, not peer-reviewed journal"
+   },
+   "mechanism": "A fundamental catalyst forces repricing: news-driven participants must build/liquidate positions within the day, generating persistent one-directional flow after the opening range resolves; without a catalyst (normal volume) the breakout has no forced flow behind it and mean-reverts",
+   "relevance": "Q2 directly: the condition under which ORB works is abnormal participation, measured as relative volume during range formation; for XAUUSD the analog is tick-count/volume of the Asian range or of the breakout bar relative to trailing same-hour average — a realtime Q1 discriminator candidate that is NOT among the five falsified day-level price variables",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Relative volume computable at range end (08:00) or at breakout bar from M1 tick-counts vs trailing same-hour baseline — fully known at entry"
+   },
+   "overlap_risk": "Volume proxies correlate with realized volatility, so partial overlap with dead rv (prev-day vol percentile); key difference: rv was previous-day price volatility, this is same-day participation measured before/at entry — untested dimension (tick-count never used in the five falsified variables)",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": false,
+    "biggest_finding": "เลข >1,600% net / Sharpe 2.81 / alpha 36%/ปี (Top-20 stocks in play, 2016-2023) อยู่บนหน้า Concretum จริง — แต่ 'beta ~0' ไม่ปรากฏบนหน้านี้เลย (คำว่า beta ไม่มีในหน้า) น่าจะมาจาก SSRN paper ต้นทาง ไม่ใช่หน้าที่อ้าง",
+    "note": "QUOTE ('These are stocks experiencing unusually high trading activity...') ตรง verbatim · หน้านี้คือ paper ของ Zarattini-Barbon-Aziz ชื่อ 'A Profitable Day Trading Strategy For The U.S. Equity Market' (ไม่ใช่ 'Beat the Market' ซึ่งเป็น paper QQQ คนละฉบับ) · จุดอ่อนที่ harvester ไม่บอก: หน้านี้ไม่แสดง baseline แบบไม่กรอง (ทั้ง 7,000 ตัว) เลย — ประโยคจริงคือ 'restricting trades...significantly improves performance even after transaction costs' = 'improve' ไม่ใช่หลักฐานตรงว่า filter 'คือสิ่งที่ทำให้ net กำไร' · และหน้าไม่ผูก 1,600% กับ timeframe 5-min อย่างชัดเจน (ศึกษา 5/15/30/60-min)",
+    "sources": [
+     "https://concretumgroup.com/a-profitable-day-trading-strategy-for-the-u-s-equity-market/"
+    ]
+   }
+  },
+  "overnight-drift-session-open": {
+   "id": "overnight-drift-session-open",
+   "track": "academic",
+   "title": "Overnight drift: equity premium concentrates at European open, driven by prior-close order imbalance (Boyarchenko-Larsen-Whelan)",
+   "claim": "In 24h-traded equity index futures, nearly the entire unconditional risk premium accrues in the 2:00-3:00 a.m. EST hour (around the European open); the drift is predictable from the previous US close's order imbalance, with an asymmetry — selloffs at the prior close generate robust positive overnight reversals, rallies generate much weaker ones.",
+   "source": {
+    "label": "Boyarchenko, Larsen & Whelan (2020), 'The Overnight Drift', CEPR DP14462 / NY Fed Staff Report 917",
+    "url": "https://research.cbs.dk/en/publications/the-overnight-drift-2/",
+    "quote": "almost 100 percent of the U.S. equity premium is earned during a one-hour window between 2:00 a.m. and 3:00 a.m. (EST)",
+    "access": "abstract"
+   },
+   "rule_formal": "Partition the 24h day into hourly returns of S&P 500 futures; mean return of the 02:00-03:00 EST hour ≈ full-day unconditional mean; conditional version: overnight drift is negatively related to end-of-day order imbalance (stronger positive drift after sell-imbalance closes).",
+   "numbers": {
+    "effect": "~100% of the US equity premium earned in the single 02:00-03:00 EST hour",
+    "sample": "US equity index futures with round-the-clock electronic trading since the mid-1990s",
+    "market": "S&P 500 futures (US equity index futures)",
+    "caveats": "Documented on equities, not gold; a 2026 NY Fed follow-up notes the drift has weakened ('The Disappearing Overnight Drift', not fetched); daylight-saving shifts move the effect with the session clock, not the wall clock"
+   },
+   "mechanism": "Dealer/market-maker inventory absorbed at the prior US close is offloaded when liquidity next becomes available — at Asian and especially European opens; the compensation for holding that inventory is earned in the hour when the offsetting flow arrives (Grossman-Miller inventory risk framework)",
+   "relevance": "Q3: this is the cleanest academic template for 'overnight flow → predictable session-open move' with an explicit conditioning variable (prior-day closing imbalance/direction) instead of raw gap size — suggests testing prior-NY-close direction (last-hour return) as a directional conditioner for Asian-range breakout side; Q5: session-open hours are structurally special in 24h markets, supporting clock-anchored (EET) session logic",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Prior-day last-hour return and overnight hourly returns fully known before 08:00 EET entry window — no lookahead; DST handling must follow session clock (known Trellis EU-DST discipline)"
+   },
+   "overlap_risk": "Correlates with dead variable |overnight gap|/prev_range only weakly: that variable was unsigned magnitude with weekend confound; this claim is signed, hour-localized, and conditioned on prior-close imbalance direction, which was never tested",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "COUNTER-EVIDENCE ใหญ่ที่ harvester ไม่บอก: ผู้เขียนชุดเดียวกัน (Boyarchenko-Larsen-Whelan) ออก NY Fed Liberty Street blog ก.ค. 2026 'The Disappearing Overnight Drift' — หน้าต่าง 02:00-03:00 ที่เคยให้ ~3.7%/ปี 'averaged close to zero since 2021' เพราะ closing order imbalance บีบตัวจาก SD 6.5% เหลือ 2.9% — edge นี้ตายแล้วในข้อมูล 2021-2025",
+    "note": "QUOTE ตรง verbatim บนหน้า CBS Research Portal · asymmetry ยืนยัน: selloff ให้ 'robust positive overnight reversals' ส่วน rally ให้ reversal เบากว่ามาก · version สุดท้ายตีพิมพ์ Review of Financial Studies 36(9) 2023 pp.3502-3547 (หน้า CBS ที่ fetch เป็น CEPR DP 2020) เลขหลัก 'almost 100 percent...2:00-3:00 a.m.' ตรงกันทุก version ที่เช็ค · สำหรับ Trellis: อย่าใช้ effect นี้เป็น edge ปัจจุบัน — หลักฐานล่าสุดชี้ว่าหายไปตั้งแต่ 2021",
+    "sources": [
+     "https://research.cbs.dk/en/publications/the-overnight-drift-2/",
+     "https://academic.oup.com/rfs/article-abstract/36/9/3502/7076616",
+     "https://libertystreeteconomics.newyorkfed.org/2026/07/the-disappearing-overnight-drift/"
+    ]
+   }
+  },
+  "stop-loss-cascade-breakout": {
+   "id": "stop-loss-cascade-breakout",
+   "track": "academic",
+   "title": "Stop-loss order clusters make trends unusually rapid past trigger levels (Osler)",
+   "claim": "Price trends accelerate abnormally when the rate reaches levels where stop-loss orders cluster (e.g. just beyond round numbers / technical levels); the response to stop-loss triggering is larger and lasts longer than the response to take-profit orders, producing self-reinforcing cascades in the breakout direction.",
+   "source": {
+    "label": "Osler, C.L. (2005), 'Stop-loss orders and price cascades in currency markets', Journal of International Money and Finance 24(2), 219-241",
+    "url": "https://ideas.repec.org/a/eee/jimfin/v24y2005i2p219-241.html",
+    "quote": "Exchange rate trends are unusually rapid when rates reach exchange rate levels at which stop-loss order have been documented to cluster.",
+    "access": "abstract"
+   },
+   "rule_formal": "Conditional on price crossing a level L where stop orders cluster (documented: round numbers; ends of recent ranges), E[|r_{t,t+h}| in crossing direction] is elevated vs unconditional; response(stop-loss crossing) > response(take-profit level touch) in size and duration.",
+   "numbers": {
+    "effect": null,
+    "sample": null,
+    "market": "Major currency pairs (high-frequency exchange rates); order data from a large FX dealer",
+    "caveats": "Abstract gives direction and ordering of effects, not magnitudes; effects documented at intraday horizons (hours), not days"
+   },
+   "mechanism": "Stop-loss orders are positive-feedback trades: crossing the level forces dealers to buy into a rising market / sell into a falling one; clustered stops at obvious levels (range extremes, round numbers) create a queue of forced same-direction flow — this is who is 'forced to buy' after a genuine range break",
+   "relevance": "Q1: gives the causal mechanism separating follow-through from false break — follow-through requires a populated stop cluster beyond the range edge; implies measurable proxies: proximity of Asian range edge to round numbers (e.g. $5/$10 gold grid), and speed of traverse immediately after the break (cascade signature = unusually rapid move in first minutes)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Round-number distance known at entry; post-break traverse speed measurable in first N minutes after signal — usable realtime only if entry is delayed or managed after trigger"
+   },
+   "overlap_risk": "Post-break speed correlates with day volatility (dead rv variable) at day level, but is measured at event level (minutes around the break), which none of the five dead day-level variables capture; round-number proximity is orthogonal to all five",
+   "applied": "2026-07-04"
+  },
+  "gold-overnight-vs-day-returns": {
+   "id": "gold-overnight-vs-day-returns",
+   "track": "microstructure",
+   "title": "Gold: overnight returns significantly positive, day-session returns significantly negative (30-year sample)",
+   "claim": "Across COMEX front gold futures, London Fix spot, gold miners and gold ETFs, overnight (non-US-day) returns are significantly positive while day-session returns are significantly negative, over roughly 30 years and in both up and down gold markets — i.e., the Asia/overnight period systematically gains and the London/NY day session systematically bleeds.",
+   "source": {
+    "label": "'Overnight versus day returns in gold and gold related assets', Journal of Economics and Finance (2017), Springer",
+    "url": "https://link.springer.com/article/10.1007/s12197-017-9403-0",
+    "quote": "Overnight returns are significantly positive while day returns are significantly negative",
+    "access": "abstract"
+   },
+   "rule_formal": "r_overnight = close_prev_day_session -> open_next_day_session; r_day = open -> close of day session. E[r_overnight] > 0, E[r_day] < 0, both significant; asymmetry present in bull and bear subperiods and 'economically important even with transaction costs' (per abstract summary).",
+   "numbers": {
+    "effect": "Sign asymmetry only from abstract (positive overnight vs negative day); magnitudes are behind paywall",
+    "sample": "~30-year period; COMEX gold front futures, London Fix spot, gold mining stocks, gold closed-end funds and ETFs",
+    "market": "Gold futures/spot/equities (US day-session definition)",
+    "caveats": "Abstract-level access — effect sizes not extractable; 'day' is defined by US/COMEX session, which maps only partially onto our 08:00-20:00 server breakout window; sample ends ~2016, overlap with losing years 2017-2019 untested in this paper"
+   },
+   "mechanism": "Authors frame it as gold being '(too) high at the opening' of day markets. Candidate forced-flow reading (flagged as interpretation, not from the paper): commercial supply (producer hedging, fix-related selling) concentrates in London/NY business hours while Asian physical demand accumulates overnight — consistent with the PM-fix downward drift claim (micro-lbma-pmfix-downward-drift) but the paper itself does not identify who is forced.",
+   "relevance": "Q4/Q2: implies a structural long-bias overnight/Asia and short-bias during the day session — directly testable against our long vs short breakout PnL split by session and by era (did the day-session bleed weaken after 2015 fix reform / 2017-2019?)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "down",
+    "lookahead_risk": "Session boundaries are clock-based, known ex ante — a 'day-session short bias' prior needs no lookahead; but as an unconditional drift it is a weak per-trade signal"
+   },
+   "overlap_risk": "Day/overnight split partially overlaps gap (overnight return IS a gap-family variable — gap was tested dead at day level, so any value must come from session-conditional direction, not gap magnitude); orthogonal to rv/slope/range_exp/aw",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": false,
+    "biggest_finding": "ตัวเลข '~30 ปี' ใน claim ไม่มีอยู่ใน abstract ที่เข้าถึงได้เลย (abstract ไม่ระบุช่วงเวลา) — Springer เข้าไม่ได้ (timeout + auth-wall redirect) ต้อง verify ผ่าน mirror IDEAS/RePEc ซึ่งยืนยันประโยค sign-asymmetry verbatim แต่ยืนยันช่วงปีไม่ได้",
+    "note": "ประโยค 'Overnight returns are significantly positive while day returns are significantly negative' เป็นประโยคเปิด abstract จริง verbatim (Blose, Gondhalekar & Kort, Journal of Economics and Finance 2018) ครอบ COMEX gold futures, London Fix spot, gold mining stocks, CEFs, ETFs → sign asymmetry รองรับ claim ('ทุก asset' = เฉพาะ 5 กลุ่ม gold-related ใน paper ไม่ใช่ทุก asset ทั่วไป) · numbers_match ให้ false เพราะ '~30 ปี' ตรวจไม่ได้จากแหล่งที่ fetch ได้ · caveat ที่ harvester ไม่บอก: (1) overnight drift ที่วัดจาก OHLC เสี่ยง artifact จาก stale/auction open price (QuantPedia แสดงกรณี GDX) (2) งานหลัง 2017 ยังพบ night effect ในทอง (เช่น Chinese gold/silver futures 2025) แต่ชี้กลไก intraday reversal/anchoring มากกว่า risk premium — persistence ของ magnitude หลัง 2017 ยังไม่ถูกยืนยันโดย paper นี้",
+    "sources": [
+     "https://ideas.repec.org/a/spr/jecfin/v42y2018i3d10.1007_s12197-017-9403-0.html",
+     "https://link.springer.com/article/10.1007/s12197-017-9403-0",
+     "https://quantpedia.com/dangers-of-relying-on-ohlc-prices-the-case-of-overnight-drift-in-gdx-etf/",
+     "https://www.sciencedirect.com/science/article/abs/pii/S1044028325000110"
+    ]
+   }
+  },
+  "lbma-pmfix-downward-drift": {
+   "id": "lbma-pmfix-downward-drift",
+   "track": "microstructure",
+   "title": "Large moves in the London PM gold fix window were overwhelmingly DOWN, 2004-2013 (LBMA Alchemist debate of Abrantes-Metz/Metz)",
+   "claim": "During 2004-2013, large price moves inside the London PM fixing window (15:00 London = 17:00 EET server) were downward at least two-thirds of the time in six different years, peaking at 92% downward in 2010 — a systematic directional pressure at a fixed clock time inside the strategy's breakout window.",
+   "source": {
+    "label": "LBMA Alchemist issue 73, 'Has There Been a Decade of London PM Gold Fixing Manipulation?' (discussing Abrantes-Metz & Metz study; rebuttal by Peter Fertig)",
+    "url": "https://www.lbma.org.uk/alchemist/issue-73/has-there-been-a-decade-of-london-pm-gold-fixing-manipulation",
+    "quote": "large price moves during the fix were downwards at least two-thirds of the time in six different years between 2004 and 2013 ... In 2010 ... large moves during the fix were negative 92 percent of the time.",
+    "access": "full"
+   },
+   "rule_formal": "Window W = PM fixing interval starting 15:00 London (17:00 server EET, constant offset since UK and EET share EU DST dates). Condition on |return in W| > threshold (large move): P(down) >= 2/3 in 6 of the years 2004-2013; 0.92 in 2010. Testable on M1: sign distribution of large 17:00-17:15 server moves by year.",
+   "numbers": {
+    "effect": "Large fix-window moves downward >= 2/3 of the time in six different years; 92% downward in 2010",
+    "sample": "Intraday data 2001-2013; anomalous pattern appears 'from 2004 until the end of the data sample'",
+    "market": "London gold PM fixing vs spot/futures intraday",
+    "caveats": "Fertig rebuttal in same article: patterns 'could be well explained and are not a valid proof of manipulations' (US data releases, commercial composition of fix participants). Regime-bound: the 5-bank fixing was replaced by the electronic LBMA Gold Price auction in March 2015 — effect may be dead after 2015. Both explanations (collusion vs producer-selling composition) still imply the same testable directional drift pre-2015."
+   },
+   "mechanism": "Clients transacting AT the fix (miners/producers hedging, refiners) are structurally net sellers at the PM benchmark; the fixing banks who absorb that imbalance hedge/pre-hedge during (or per the manipulation hypothesis, ahead of) the window — either way the forced side is fix-bank hedging of a seller-heavy client imbalance at a known clock time.",
+   "relevance": "Q2 directly (PM fix systematic direction with published numbers). Losing years 2012/2014 fall inside the documented 2004-2013/15 anomaly regime; 2017-2019 fall after the 2015 reform — testable whether short-side breakouts near 17:00 server behaved differently across the two regimes (also feeds Q4 era question).",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "down",
+    "lookahead_risk": "Fix time is clock-known ex ante; a '17:00-server proximity/direction' feature is computable at entry with zero lookahead; year-regime split (pre/post-2015) known ex ante"
+   },
+   "overlap_risk": "A fix-window drift feature is time-of-day anchored — orthogonal to day-level rv/slope/range_exp/gap/aw; mild interaction with rv because large-move conditioning selects volatile afternoons",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": false,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ท่อนแรกของ quote ถูก splice โดยไม่ใส่ ellipsis: ข้อความจริงคือ 'On days when the authors identified large price moves during the fix, they were downwards at least two-thirds of the time...' — harvester ตัด 'On days when the authors identified' และ ', they' ทิ้งแล้วต่อประโยคใหม่ · และตัวเลขทั้งหมดเป็น second-hand: บทความ (Fertig) แค่ยก Bloomberg ที่รายงาน draft study ของ Abrantes-Metz มาเพื่อ 'หักล้าง'",
+    "note": "ตัวเลข ≥2/3 ใน 6 ปี (2004–2013) และ 92% ปี 2010 มีอยู่ในหน้าจริง (ประโยค 92% verbatim เป๊ะ) → numbers_match ผ่าน แต่ quote_found ให้ fail เพราะท่อน two-thirds ถูกเรียบเรียงใหม่โดยไม่ mark การตัด · context สำคัญ: บทความทั้งชิ้นเป็น rebuttal — Fertig ไม่เถียงตัวเลขแต่เถียงการตีความ โดยอธิบาย downward skew ด้วย flow composition (central banks/producers ขายที่ PM fix ส่วนผู้ซื้อไม่พึ่ง fix) + US econ data 10:00 NY ชนหน้าต่าง fix · regime เจ้าของ pattern จบแล้ว: PM fix แบบโทรศัพท์ถูกแทนด้วย LBMA Gold Price auction มี.ค. 2015 (บทความไม่กล่าวถึง) — drift 2004–2013 ห้าม extrapolate หลัง 2015 และถ้าคำอธิบายคือ flow composition pattern ก็ตายได้เมื่อ composition เปลี่ยน",
+    "sources": [
+     "https://www.lbma.org.uk/alchemist/issue-73/has-there-been-a-decade-of-london-pm-gold-fixing-manipulation"
+    ]
+   }
+  },
+  "osler-reversal-vs-continuation-duration": {
+   "id": "osler-reversal-vs-continuation-duration",
+   "track": "microstructure",
+   "title": "Bounce at a level fades within ~30 minutes; post-crossing trend persists 2+ hours (Osler full text)",
+   "claim": "The reversal tendency after touching a salient level is statistically detectable for less than 30 minutes, whereas the extra trend speed after CROSSING the level stays statistically significant for at least two hours — i.e., false-break reversals are fast/short-lived and real breaks show persistent excess drift measurable on minute bars.",
+   "source": {
+    "label": "Osler, C.L., 'Stop-Loss Orders and Price Cascades in Currency Markets', FRBNY Staff Report 150 (full text PDF, Georgetown mirror)",
+    "url": "https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf",
+    "quote": "the tendency to reverse course at round numbers remains statistically significant less than thirty minutes (Table VIII). By contrast, the average exchange-rate movement upon crossing a round number remains statistically significant for at least two hours.",
+    "access": "full"
+   },
+   "rule_formal": "Event = price comes within 0.01% of level L. Split: (a) touch-no-cross -> excess reversal probability vs 10,000 arbitrary-level bootstrap, significant only at horizons < 30 min; (b) cross -> excess movement in crossing direction (Table VI.A: excess movement at 15 min = 1.12 (DEM), 1.30 (JPY), 0.77 (GBP), all p=0.000) significant up to ~2 h; sign flips negative at 1-2 day horizon.",
+   "numbers": {
+    "effect": "Post-crossing excess movement at 15 min: DEM 1.12, JPY 1.30, GBP 0.77 (bootstrap p=0.000 all three); still significant at 30-120 min; reversal effect at touched-but-not-crossed levels dies out <30 min; at 1-2 days excess movement turns negative (e.g. DEM -5.23 at 1 day)",
+    "sample": "Minute-by-minute quotes, DEM/JPY/GBP vs USD, 9am-4pm New York, 2 Jan 1996 - 30 Apr 1998; 58 non-overlapping 10-trading-day intervals vs 10,000 bootstrap sets of arbitrary levels",
+    "market": "Spot FX majors, NY hours",
+    "caveats": "Excess-movement units are relative to arbitrary-level baseline (ratio-like bootstrap statistic, not pips); FX 1996-98, not gold; NY-hours only; the 1-2 day sign flip warns that cascade drift is an intraday phenomenon, consistent with EOD-close design"
+   },
+   "mechanism": "After a crossing, stop-loss owners beyond the level are forced to trade with the move and are 'sometimes triggered in waves' (cascades) — sequential forced flow keeps the trend statistically alive for hours. A touch without crossing only activates voluntary take-profit flow, which exhausts quickly, so the bounce signature is short.",
+   "relevance": "Q1: gives a time-domain signature for real-vs-false break — measure excess drift persistence in the 15-120 min window after Asian-range breakout; a break that stalls within 30 min behaves like the touch/reversal population. Also supports holding winners through the session rather than scalping the first minutes.",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Persistence measured AFTER entry cannot gate the entry itself; usable for exit/management rules (e.g. time-stop at 30 min if no follow-through) or for delayed confirmation entries — must be encoded as management, not entry filter, to avoid lookahead"
+   },
+   "overlap_risk": "Same source family as academic-stop-loss-cascade-breakout (adds duration/horizon numbers absent there); a 30-min follow-through gauge will correlate with intraday rv on the same day but is event-anchored, not day-level; unrelated to slope/gap/aw",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "หน่วยที่ harvester ละไว้ = basis points ไม่ใช่ pips/percent — ข้อความใน paper เทียบเอง: 'dollar-yen moves by 0.0130 percent more after crossing a round number than after reversing course' = ค่า 1.30 ในตาราง VI.A → excess ทั้งหมดอยู่ระดับ ~1 bp/15 นาที เล็กมากเชิงเศรษฐศาสตร์ และตัวเลข 1.12/1.30/0.77 เป็น 'ส่วนต่าง crossing ลบ reversing' (MV_CR − MV_RV) ไม่ใช่ raw drift หลังทะลุ",
+    "note": "PDF จริงคือ 'Stop-Loss Orders and Price Cascades in Currency Markets' (Osler) — quote พบ verbatim และตาราง VI.A ตรงทุกตัว (15min: DEM 1.12/JPY 1.30/GBP 0.77 sig 0.000 ทั้งสาม · 1 วัน DEM −5.23). แต่ต้องติดป้าย: (1) significance จางเร็ว — 1 ชม. GBP หลุดแล้ว (p=0.179), 2 ชม. เหลือแค่ JPY (p=0.017); ประโยค 'at least two hours' มาจากบริบท Table VIII (stop-loss vs take-profit persistence) ไม่ใช่ทุกคู่เงินใน VI.A (2) ที่ 1 วัน JPY ยังบวก +1.27 — 'กลับเป็นลบที่ 1-2 วัน' ไม่ครบทุกคู่ และค่าลบเหล่านั้นส่วนใหญ่ไม่ significant (p 0.074–0.552) (3) สนามวัด = Reuters minute quotes ม.ค. 1996–เม.ย. 1998 เฉพาะ NY hours 9:00–16:00 สามคู่ FX — generalize มา gold 24 ชม. ยุค 2012-2020 คือ extrapolation ล้วนๆ",
+    "sources": [
+     "https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf"
+    ]
+   }
+  },
+  "osler-stop-cluster-asymmetry": {
+   "id": "osler-stop-cluster-asymmetry",
+   "track": "microstructure",
+   "title": "Stop-loss orders cluster just BEYOND round levels; take-profit orders cluster AT them (Osler full text, order-book data)",
+   "claim": "In dealer order books, stop-loss buy orders cluster just above round levels and stop-loss sell orders just below, while take-profit orders cluster exactly at the level. Therefore a touch of a salient level meets negative-feedback (reversal) flow first, and only a traverse PAST the level (into the [01,10]-style zone beyond) triggers the positive-feedback stop flow that fuels a real break.",
+   "source": {
+    "label": "Osler, C.L., 'Stop-Loss Orders and Price Cascades in Currency Markets', FRBNY Staff Report 150 (full text PDF, Georgetown mirror)",
+    "url": "https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf",
+    "quote": "stop-loss buy orders cluster just above round numbers (meaning specifically numbers ending in 00 or 50), and stop-loss sell orders tend to cluster at rates just below round numbers. For example, 14.3 percent of executed stop-loss buy orders have requested execution rates ending in the range [01,10], while only 6.9 percent of those orders have requested execution rates ending in the range [90,99].",
+    "access": "full"
+   },
+   "rule_formal": "Let L = salient level (round number; by extension a visible range extreme). Order mass: TP(L) > SL(L) at exactly L (TP 9.9% vs SL 3.8% at rates ending 00, value-weighted); SL mass peaks in zone (L, L+10pts] for buys / [L-10pts, L) for sells. Prediction: touch-without-traverse of L -> mean reversion; traverse beyond L by more than the TP-absorption zone -> positive-feedback continuation.",
+   "numbers": {
+    "effect": "14.3% of executed stop-loss buys sit in [01,10] beyond the round level vs 6.9% in [90,99] before it; take-profit orders exactly at 00: 9.9% vs stop-loss 3.8% (value-weighted); ~10% of all orders at rates ending 00",
+    "sample": "9,655 stop-loss/take-profit orders, >$55bn face value, complete order book of a major FX dealing bank, 1 Aug 1999 - 11 Apr 2000; USD/JPY, GBP/USD, EUR/USD",
+    "market": "Spot FX (major pairs), dealer order book",
+    "caveats": "FX not gold; 1999-2000 vintage; levels studied are round numbers ending 00/50 — mapping to Asian high/low is an extrapolation (both are salient reference levels, but Asian range extremes were not directly tested)",
+    "note_verbatim_secondary": "Very-large stops concentrate hardest near levels: 'Over 62 percent of the total face value of very-large stop-loss orders had requested execution rates ending in [90, 100] or [01,09]' vs 28% for very-large take-profits (p.26 of PDF)"
+   },
+   "mechanism": "Traders holding positions with stops just beyond the level are forced to buy (sell) at market the moment the level is traversed — positive feedback. Take-profit/limit holders AT the level voluntarily trade against the move — negative feedback. Who is forced: stop-order owners beyond the level (and dealers executing them), in waves, only after traverse; at the level itself nobody is forced and limit supply dominates.",
+   "relevance": "Q1 (core): gives an order-book-based reason why a marginal poke through the Asian high can reverse (TP/limit absorption zone AT the level) while a traverse deep enough to eat through the beyond-level stop cluster continues. Suggests a penetration-depth threshold variable, and a round-number-confluence variable (Asian high/low near $X.00/xx50 gold levels should carry bigger stop clusters).",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Penetration depth beyond Asian high/low and distance of the level to nearest round number are both computable at/before entry from M1 OHLC — no lookahead if entry waits for a fixed penetration threshold"
+   },
+   "overlap_risk": "Complementary to inbox claim academic-stop-loss-cascade-breakout (same Osler literature, abstract-level, numbers null) — this adds full-text cluster-location numbers; penetration-depth is event-level, weakly related to day-level range_exp; round-number distance orthogonal to rv/slope/range_exp/gap/aw",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "Dataset = order book ของ FX dealing bank รายใหญ่ 'แห่งเดียว' (paper ไม่ระบุชื่อ — คำถาม NatWest ยืนยันจากไฟล์นี้ไม่ได้) ช่วง 1 ส.ค. 1999–11 เม.ย. 2000 (8.5 เดือน) 9,655 orders มูลค่า $55B ใน dollar-yen/dollar-pound/euro-dollar — ไม่มีทองคำ ไม่มีปี 2012-2020 · และ '~10% ของ orders ลงท้าย 00' ที่ harvester เขียน จริงๆ เป็นเลขของ take-profit orders เท่านั้น (9.9% value-weighted; stop-loss แค่ 3.8%)",
+    "note": "Quote พบ verbatim ครบทั้งท่อน รวม 14.3% vs 6.9% ([01,10] vs [90,99]) และ TP-at-00 9.9% vs SL 3.8% ตรงตาม Table III. กลไกที่ claim สรุป (TP กองที่ level → reversal flow / SL กองเลย level → เร่ง break) ตรง thesis 'price cascades' ของ paper. Counter-nuance: significance ของ asymmetry รอบ 00 ไม่แข็งเท่ากันทุกฝั่ง — SL buy p=0.028 แต่ SL sell แค่ marginal p=0.063 (รอบ 50 แข็งกว่า: 0.002/0.005). การ generalize order-clustering ของ FX dealer ยุค 1999-2000 (ก่อน algo/retail-broker era) มาเป็นสมมติฐาน flow บนทองคำทศวรรษ 2010s ต้องถือเป็น analogy ไม่ใช่ evidence ตรง",
+    "sources": [
+     "https://faculty.georgetown.edu/evansm1/New%20Micro/osler1.pdf"
+    ]
+   }
+  },
+  "prac-crabel-nr7-orb-cost-decay": {
+   "id": "prac-crabel-nr7-orb-cost-decay",
+   "track": "practitioner",
+   "title": "NR7 + Opening Range Breakout: edge does not survive trading costs (42 US futures, 1980-2016)",
+   "claim": "Crabel's NR7 setup traded via opening-range-breakout stretch entry, tested across 42 US futures 1980-2016, is not tradeable after transaction costs without additional filter rules; the pattern works better with NR_Length >= 6 and longer holding periods.",
+   "source": {
+    "label": "Oxford Capital Strategies — NR7 Pattern | Trading Strategy (Setup & Exit)",
+    "url": "https://oxfordstrat.com/trading-strategies/nr7/",
+    "quote": "The current daily range is narrower than the previous six days' daily ranges compared individually ... A buy stop is placed at [Open + Stretch] ... The NR7 pattern performs better when NR_Length >= 6 ... Once the cost of trading is applied, the pattern is not currently tradeable without some additional rules",
+    "access": "full"
+   },
+   "rule_formal": "NR7: Range(t) < min(Range(t-1..t-6)). Entry next day: buy stop = Open + Stretch, sell stop = Open - Stretch, Stretch = avg(10-day noise) * 2.0. Exits tested: (a) close on Nth day, (b) opposite stretch level, (c) stop = Entry -/+ ATR(20) * 6.",
+   "numbers": null,
+   "mechanism": "Range contraction compresses positioning; the first directional move from the open forces breakout entries in one direction — but per this test the per-trade edge is smaller than realistic costs.",
+   "relevance": "Q1 (breakout entry off a compression day = same family as Asian-range breakout; negative cost result is a prior against adding NR-style day filters expecting large edge), Q2 (NR7 as day-before trend-day antecedent)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — NR7 known at prior day close; stretch computable at day open"
+   },
+   "overlap_risk": "high overlap with rv percentile and asian width ratio (both are range-contraction measures already falsified on this system)",
+   "applied": "2026-07-04"
+  },
+  "prac-crabel-nr-orb-winrates-secondary": {
+   "id": "prac-crabel-nr-orb-winrates-secondary",
+   "track": "practitioner",
+   "title": "Crabel (1990) NR4/NR7 -> ORB win rates 60-76% (secondary summary, primary tables not verified)",
+   "claim": "Per a secondary summary of Crabel's 1990 book, opening-range-breakout trades taken after NR4/NR7 compression days showed win rates of 60-76% in his pre-1990 futures backtests, with inside-day combinations (IDnr4, NR7ID) among the strongest variants.",
+   "source": {
+    "label": "TradingStrategiesDaily — The NR7ID: Toby Crabel's 'Double-Compression' Trading Setup",
+    "url": "https://tradingstrategiesdaily.com/p/nr7id-toby-crabel",
+    "quote": "NR patterns (NR4/NR7) improved ORB reliability, with win rates often 60-76% in tested setups.",
+    "access": "full"
+   },
+   "rule_formal": "NR4: Range(t) < min(Range(t-1..t-3)). NR7: Range(t) < min(Range(t-1..t-6)). IDnr4/NR7ID: additionally High(t) < High(t-1) AND Low(t) > Low(t-1). Trade: next-day ORB stop entry beyond open +/- stretch.",
+   "numbers": {
+    "effect": "win rates 60-76% for ORB after NR patterns",
+    "sample": "Crabel pre-1990 backtests on futures (S&P, bonds, currencies, commodities); per-setup n not given in this source",
+    "market": "US futures",
+    "caveats": "secondary paraphrase — primary per-table numbers from the book not independently verified online; pre-1990 markets; directly contradicted on net-of-cost basis by oxfordstrat 1980-2016 test (see prac-crabel-nr7-orb-cost-decay); win rate without avg win/loss says nothing about expectancy"
+   },
+   "mechanism": "Compression day = neither side committed; next-day directional move from open finds little resting opposition and forces re-positioning in one direction.",
+   "relevance": "Q2 (day-before compression as trend-day antecedent with a published-number lineage), Q1 (ORB stretch entry as breakout confirmation distance)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — pattern known at prior close"
+   },
+   "overlap_risk": "same family as asian width ratio / rv percentile (compression measures, falsified) — main incremental content is the day-boundary anchor (daily bars) instead of Asian-session anchor",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "เลข 60-76% มีอยู่จริงบนหน้า แต่หน้าไม่อ้าง table/หน้าไหนของหนังสือ Crabel เลย (secondary ไร้ citation) และประโยค 'Modern adaptations confirm the edge' ขัดกับ study อิสระ oxfordstrat: NR7 บน 42 futures markets, 36 ปีตั้งแต่ 1980 ถึง ม.ค. 2016 สรุปว่า 'Once the cost of trading is applied, the pattern is not currently tradeable without some additional rules' (rating C)",
+    "note": "QUOTE ตรง verbatim และ claim เรา frame เป็น secondary summary ถูกต้องแล้ว แต่ต้องย้ำ: oxfordstrat กับ Crabel เป็นคนละ metric (net expectancy หลัง costs vs raw win%) จึงไม่หักล้างเลข win% ตรงๆ ทว่ามันหักล้างนัยว่า edge ยังใช้ได้หลัง costs · win 60-76% pre-1990 ไม่มีทาง audit ได้จากหน้านี้ — ให้น้ำหนักเป็น 'เลขเล่าต่อ' เท่านั้น ห้ามใช้เป็น expectancy input ของ Trellis",
+    "sources": [
+     "https://tradingstrategiesdaily.com/p/nr7id-toby-crabel",
+     "https://oxfordstrat.com/coding/nr7/"
+    ]
+   }
+  },
+  "prac-mnq-ohlcv-falsification": {
+   "id": "prac-mnq-ohlcv-falsification",
+   "track": "practitioner",
+   "title": "Systematic falsification: OHLCV-only intraday signals (ORB, gaps, liquidity grabs) leave 0.07-1.50 pts/trade gross on MNQ — none pass all criteria",
+   "claim": "On MNQ 5-minute data 2021-2025 (947 trading days), a systematic test of opening range breakouts, gap strategies, volume signals, cross-session momentum, liquidity grabs, and volatility-conditioned classifiers found gross next-bar-open edge of only ~0.07-1.50 points per trade, and no signal satisfied all robustness criteria simultaneously.",
+   "source": {
+    "label": "arXiv 2605.04004 — Structural Limits of OHLCV-Based Intraday Signals in MNQ Futures: A Systematic Falsification Study",
+    "url": "https://arxiv.org/abs/2605.04004",
+    "quote": "The gross edge available to next-bar-open execution is constrained to approximately 0.07-1.50 points per trade ... A gap-continuation signal achieves T = 3.23 and +14.52 points but fails minimum sample requirements (N = 22) ... No signal satisfies all criteria simultaneously",
+    "access": "abstract"
+   },
+   "rule_formal": "Falsification protocol: signal families (ORB, gap, volume, cross-session momentum, liquidity grab, vol-conditioned classifier) -> next-bar-open execution -> require min sample N + T-stat + net-of-cost expectancy simultaneously. Individual signal rules in full PDF (not extracted).",
+   "numbers": {
+    "effect": "gross edge 0.07-1.50 points/trade; best signal (gap continuation) +14.52 pts/trade, T=3.23, but N=22 fails sample minimum; zero signals pass all criteria",
+    "sample": "MNQ 5-minute, 2021-2025, 947 trading days",
+    "market": "Micro E-mini Nasdaq futures",
+    "caveats": "index futures, not gold — XAUUSD session structure (Asian range) differs; 5-min not M1; abstract-level extraction (full PDF is image-encoded, not text-extracted); falsification framing means absence of edge in THEIR rule variants, not all variants"
+   },
+   "mechanism": "Claim is structural: information content of OHLCV bars alone (without order-flow/DOM) is too small relative to spread+slippage at intraday horizons on a liquid index future.",
+   "relevance": "Q1 direct and adversarial (liquidity grabs and breakout signals from bars alone were tested and failed on MNQ — sets a hostile prior for any Q1/Q4 candidate: demand it clear cost-adjusted, minimum-sample bars), Q4 (their 'liquidity grab' family is the formalized sweep)",
+   "test_design": {
+    "computable_from": "dataset",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "their protocol (next-bar-open execution) is exactly the anti-lookahead discipline our sim uses — adoptable as-is"
+   },
+   "overlap_risk": "their volatility-conditioned classifier family overlaps rv percentile (falsified — consistent with their null result); gap family overlaps overnight gap ratio (falsified — again consistent)",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "arXiv 2605.04004 มีจริง (cross-check ทั้ง arxiv.org และ export.arxiv.org ให้ title/author/id ตรงกัน) — 'Structural Limits of OHLCV-Based Intraday Signals in MNQ Futures: A Systematic Falsification Study', Mathias Mesfin, submitted 5 May 2026, q-fin.TR · เลข 0.07-1.50 pts / T=3.23 / +14.52 pts / N=22 / 'No signal satisfies all criteria simultaneously' อยู่ใน abstract ครบ",
+    "note": "id เดือน 2605 = พ.ค. 2026 ถูกต้อง (วันนี้ 2026-07-04 จึงเป็นอดีต ไม่ใช่ id ปลอม — fetcher ตัวรองเคย flag ว่า 'future date' แต่นั่นเป็น artifact ของ knowledge cutoff ของ model ตัวเล็ก ตัวหน้าเว็บ return เนื้อหาจริงสองครั้งตรงกัน) · จุดต้องระวังที่ harvester ไม่เน้น: เป็น preprint ผู้เขียนคนเดียว ไม่มี peer review และผลเป็น null-result บน MNQ 5-min OHLCV เท่านั้น — generalize ไป XAUUSD/tick-level ต้องทำเอง ไม่ใช่ข้อสรุปสำเร็จรูป",
+    "sources": [
+     "https://arxiv.org/abs/2605.04004",
+     "https://export.arxiv.org/abs/2605.04004"
+    ]
+   }
+  },
+  "prac-mp-daytype-frequencies": {
+   "id": "prac-mp-daytype-frequencies",
+   "track": "practitioner",
+   "title": "Market Profile day-type frequencies: trending days only ~9.5% of all days",
+   "claim": "Under Market Profile classification, true trending structure (Trend Day + Double-Distribution Trend Day) occurs on about 9.54% of days; the rest are non-trending (Normal 2.43%, Normal Variation 41.77%, Neutral 30.21%, Non-trend 6.81%). A day-type filter must therefore be built to tolerate ~90% non-trend days.",
+   "source": {
+    "label": "TrendDayTrading.com — Market Profile Trading: Theory, Analysis and Practice",
+    "url": "https://www.trenddaytrading.com/market-profile-trading",
+    "quote": "Normal days ... 2.43% of the time ... [Normal Variation] 41.77% of the time ... [Neutral Day] 30.21% of the time ... [Non-trend Day] 6.81% ... Trend days are marked by a long skinny profile.",
+    "access": "full"
+   },
+   "rule_formal": "Trend day (structural): one-timeframing (consecutive 30-min periods making higher highs+higher lows, or inverse) sustained open-to-close; long thin profile. Frequencies: P(trend-type day) = 9.54%; P(neutral) = 30.21%; P(normal variation) = 41.77%. No realtime numeric trigger given on this page — classification is end-of-day structural.",
+   "numbers": {
+    "effect": "Trending days 9.54% of all days; Normal 2.43%, Normal Variation 41.77%, Neutral 30.21%, Non-trend 6.81%",
+    "sample": "population/instrument/period of the frequency study not stated on page",
+    "market": "unstated (Market Profile literature is CME futures-derived)",
+    "caveats": "classic MP frequencies circulate without primary attribution; page gives no instrument or years; classification is post-hoc (EOD) — realtime proxy (one-timeframing count, IB extension) must be constructed separately"
+   },
+   "mechanism": "Trend day = 'other-timeframe' participants in control from the open, continuously pulling in new participants; non-trend/neutral days = both sides near agreement on value, responsive trade dominates.",
+   "relevance": "Q2 direct (day-type taxonomy + base rates; realtime cue = one-timeframing on 30-min periods, countable before noon), Q3 (base rate: EXPAND days are structurally rare ~10%, so a filter that kills them kills the whole edge)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "day-type label itself is EOD (lookahead); one-timeframing count at hour N is computable realtime from M1 — test must use the realtime proxy, not the label"
+   },
+   "overlap_risk": "one-timeframing/IB-extension proxy likely correlates with range expansion (falsified); base-rate framing itself has no overlap",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "เลขทุกตัว (2.43 / 41.77 / 30.21 / 6.81 / trend รวม 9.54) อยู่บนหน้าจริง และ trend 9.54% → non-trend ~90.5% สอดคล้อง '~90%' ของ claim แต่หน้าไม่ระบุ study/instrument/ช่วงปีใดๆ เลย และค้น cross-ref แล้วไม่พบแหล่งอิสระ (Dalton/CBOT/marketcalls/vtrender) ที่ให้เลขชุดนี้ — เลขปรากฏที่หน้านี้ที่เดียว",
+    "note": "provenance อ่อนจริงตามที่ claim flag ไว้: เป็นเลขลอยจาก single uncited source แหล่ง Market Profile อื่นให้แค่คำอธิบายเชิงคุณภาพของ day types ไม่ให้ frequency · ใช้ได้เฉพาะเชิง order-of-magnitude ว่า trend day เป็นส่วนน้อย (~10%) ห้ามใช้ทศนิยมสองตำแหน่งเหล่านี้เป็น parameter หรือ prior เชิงตัวเลข",
+    "sources": [
+     "https://www.trenddaytrading.com/market-profile-trading",
+     "https://www.marketcalls.in/market-profile/market-profile-different-types-of-profile-days.html",
+     "https://vtrender.com/posts/market-profile-day-types"
+    ]
+   }
+  },
+  "prac-mql5-asian-box-ea": {
+   "id": "prac-mql5-asian-box-ea",
+   "track": "practitioner",
+   "title": "MQL5 Asian Breakout EA (article 17239): same strategy family as Trellis v4 — session box + MA filter + fixed RR; numbers only in screenshots",
+   "claim": "A published MQL5 EA implements the same architecture as our system — Asian session box (23:00-03:00 GMT high/low), stop orders beyond the box, 50-period MA trend filter, SL outside the box, TP at 1.3x risk, time exit 13:00 — and reports a 2023 backtest whose equity improved after adding a trailing stop; no numeric results appear in the article text (screenshots only).",
+   "source": {
+    "label": "MQL5.com — Automating Trading Strategies in MQL5 (Part 9): Building an Expert Advisor for the Asian Breakout Strategy",
+    "url": "https://www.mql5.com/en/articles/17239",
+    "quote": "place a Buy Stop order slightly above the top of the box ... a sell-stop order just below the bottom of the box ... [50-period MA trend filter; session 23:00-03:00 GMT; BreakoutOffsetPips = 10; TP multiplier 1.3; trade exit 13:00]",
+    "access": "full"
+   },
+   "rule_formal": "Box = [min(Low), max(High)] over 23:00-03:00 GMT. BuyStop = BoxHigh + 10 pips if Price > SMA(50); SellStop = BoxLow - 10 pips if Price < SMA(50). SL just outside opposite box boundary; TP = Entry + (Entry - SL) * 1.3. Force-exit 13:00 GMT.",
+   "numbers": null,
+   "mechanism": "Asian-session consolidation defines resting liquidity beyond both extremes; London/NY participation resolves the box directionally.",
+   "relevance": "Comparative design point for the whole system (their box window 23:00-03:00 GMT is narrower than our 01-08 EET; RR fixed 1.3 vs our 1xR trail; exit 13:00 vs our EOD 23:00) — differences are testable knobs; trailing-stop-improves claim touches Q3",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — box complete before entry window"
+   },
+   "overlap_risk": "not a new variable — an alternative parameterization of the existing system (window/RR/exit-time); no overlap with falsified day-selection variables",
+   "applied": "2026-07-04"
+  },
+  "prac-raschke-trendday-firsthalfhour": {
+   "id": "prac-raschke-trendday-firsthalfhour",
+   "track": "practitioner",
+   "title": "Raschke: trend day announces itself — first half-hour < 10% of day's total range, open/close at opposite extremes",
+   "claim": "On trend days the first half-hour of trading comprises less than 10% of the day's eventual total range, with minimal intraday retracement and momentum accelerating into the close; trend days are preceded by range contraction (NR7, 2-3 small-range cluster), hook days, or opening gaps, and the correct management is breakout-style entry held to market-on-close.",
+   "source": {
+    "label": "TradersLog — Capturing Trend Days (Linda Bradford Raschke)",
+    "url": "https://www.traderslog.com/capturing-trend-days",
+    "quote": "A trend day occurs when there is an expansion in the daily trading range and the open and close are near opposite extremes. ... The first half-hour of trading often comprises less than 10% of the day's total range. ... One of the easiest and more popular ways to exit a breakout trade is simply to exit 'Market-On-Close.'",
+    "access": "full"
+   },
+   "rule_formal": "TrendDay (EOD): dayRange >> recent avg AND |Open-Close| ~ dayRange. Realtime cue: firstHalfHourRange / E[dayRange] < 0.10 (small early range = coiling, not chop). Antecedents (day-1): NR7 = narrowest range of last 7 days; cluster of 2-3 small daily ranges; hook day (open beyond prior day's high/low then reverse); opening gap. Management: breakout entry, no fading, exit MOC.",
+   "numbers": {
+    "effect": "first half-hour < 10% of day's total range on trend days",
+    "sample": "descriptive practitioner article; no n, no win rate, no backtest",
+    "market": "US futures (S&P-era, 1990s context)",
+    "caveats": "the <10% figure is a characterization of trend days, not a tested predictor; no false-positive rate given; 'expected day range' denominator must be estimated realtime (e.g. ATR), introducing its own noise"
+   },
+   "mechanism": "Range contraction leaves both sides under-positioned; an early directional imbalance (gap or one-sided open) forces the losing side and latecomers to chase all day — momentum builds into the close as trapped traders capitulate.",
+   "relevance": "Q2 direct (numeric before-noon cue: small first-hour range relative to expected day range + one-directional tape), Q3 (management of EXPAND days: hold to close, do not fade, do not tighten), Q1 (opening gap/hook-day context distinguishes real breakout energy)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "first-half-hour range known by 08:30 EET at breakout window start; denominator (day's total range) is lookahead — must replace with ATR-based expectation at entry"
+   },
+   "overlap_risk": "antecedent leg (NR/small-range cluster) overlaps asian width ratio + rv percentile (falsified); the intraday first-hour-vs-expected-range cue is NOT among the five falsified variables — nearest neighbor is range expansion but measured at a different time anchor",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ทุก QUOTE ตรง verbatim และหน้า traderslog ระบุผู้เขียนเป็น Linda Bradford Raschke จริง · attribution ยืนยันข้ามแหล่ง: บทความเดียวกัน mirror บน Forex Factory, investpost, blog อื่นๆ ในชื่อ 'Capturing Trend Days, by Linda Bradford Raschke' (LBR Group) — ไม่พบข้อขัดแย้งเรื่องผู้เขียน",
+    "note": "จุดอ่อนที่ต้อง flag: เลข '<10% ของ range ทั้งวัน' เป็น practitioner observation เชิงคุณภาพ (คำว่า 'often') ไม่มี dataset/sample size/ช่วงปีแนบใดๆ ในทุก mirror ที่เจอ — เป็น heuristic จากประสบการณ์ ไม่ใช่สถิติที่วัดได้ · ถ้าจะใช้ใน Trellis ต้อง re-measure บน XAUUSD tick data เองก่อน ห้ามยกเลข 10% ไปใช้ตรงๆ",
+    "sources": [
+     "https://www.traderslog.com/capturing-trend-days",
+     "https://www.forexfactory.com/thread/5874-capturing-trend-days-by-linda-bradford-raschke"
+    ]
+   }
+  },
+  "prac-sweep-close-back-inside-1to3bars": {
+   "id": "prac-sweep-close-back-inside-1to3bars",
+   "track": "practitioner",
+   "title": "Sweep vs genuine breakout: measurable rule = close back inside the swept level within 1-3 bars",
+   "claim": "A liquidity sweep is distinguished from a genuine breakout by whether price closes back inside the swept level within 1-3 bars (with a long wick beyond the level and small body); vendor claims 65-75% win rate and 25-35% failure rate for confirmed sweep-and-reverse setups, but discloses no methodology.",
+   "source": {
+    "label": "CrossTrade — Liquidity Sweeps (price action education)",
+    "url": "https://crosstrade.io/learn/price-action/liquidity-sweeps",
+    "quote": "Within 1-3 bars, price closes back below (above) the swept level ... a very long wick in the swept direction and a small body — a classic rejection candle. ... A sweep of a swing high in a strong uptrend is more likely to be a real breakout than a sweep-and-reverse.",
+    "access": "full"
+   },
+   "rule_formal": "Sweep(level L, up-side): High(t) > L AND Close(t+k) < L for some k in {0,1,2} (close back inside within 1-3 bars); else Break. Confirmation quality: wick beyond L >> body. Context veto: strong pre-existing trend in sweep direction -> treat as breakout, not sweep.",
+   "numbers": {
+    "effect": "claimed win rate 65-75%, avg RR 2:1 to 4:1, failure rate 25-35% for confirmed sweep-and-reverse",
+    "sample": "not disclosed — no n, no period, no instrument",
+    "market": "unspecified (futures/forex education page)",
+    "caveats": "numbers are unattributed vendor claims with zero methodology — capture value is the operational 1-3 bar close-back-inside definition, not the win rate; the trend-context veto is consistent with our EMA-slope filter"
+   },
+   "mechanism": "Stops resting beyond equal highs / obvious levels get filled into the hands of larger sellers; once that liquidity is consumed and price re-enters the range, the swept breakout entrants are trapped and must exit back through the level.",
+   "relevance": "Q4 direct (first measurable sweep-vs-break rule: penetration + close-back-inside window at Asian high/low), Q1 (the same rule inverted = breakout confirmation: entry only if no close back inside within k bars)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "waiting 1-3 bars after penetration delays entry by k bars — measurable at entry but shifts entry price; must test cost of delayed fill vs false-break avoided"
+   },
+   "overlap_risk": "none of the five falsified variables measure post-penetration behavior; nearest system component is the breakout entry itself — this modifies entry timing rather than day selection",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ยืนยันว่าหน้าไม่มี methodology จริง — เลข 'Win rate 65–75% / R:R 2:1–4:1 / fail 25–35%' อยู่ใต้หัวข้อ 'Realistic stats' โดยไม่มี backtest, ไม่มี dataset, ไม่มี citation ใดๆ และหน้าจบด้วย promo 'Automate your liquidity sweep strategy with CrossTrade' + ปุ่ม Start free trial = vendor page เต็มรูปแบบ",
+    "note": "Quote ทั้ง 4 ท่อนพบตรงตามอ้าง (1-3 bars close back / long wick small body / classic rejection candle / sweep ใน strong uptrend มีแนวโน้มเป็น real breakout). Claim ของ harvester ตีกรอบถูกแล้วว่า 'no methodology' — ผ่าน. คุณค่าที่ใช้ได้จากหน้านี้ = นิยาม operational ของ sweep (close กลับใน 1-3 แท่ง + wick ยาว body เล็ก) ซึ่ง testable บน data ของเราเอง · ห้ามยกเลข win rate 65-75% ไปใช้เป็น prior ใดๆ เพราะเป็นเลขลอยจาก vendor ที่มี incentive ขาย automation",
+    "sources": [
+     "https://crosstrade.io/learn/price-action/liquidity-sweeps"
+    ]
+   }
+  },
+  "prac-turtlesoup-whselfinvest-60pct": {
+   "id": "prac-turtlesoup-whselfinvest-60pct",
+   "track": "practitioner",
+   "title": "Turtle Soup (false-break fade) platform implementation: ~60% winners across FX pairs, GBP/USD 60.5%",
+   "claim": "Fading an N-period extreme touch (buy at 5-period low, sell at 5-period high) with an EMA trend-direction filter and 3x ATR(20) stop produces around 60% winning trades on major FX pairs (GBP/USD 60.5%) in the vendor's backtests.",
+   "source": {
+    "label": "WH SelfInvest — free trading strategy no. 38: Turtle Soup",
+    "url": "https://www.whselfinvest.com/en-lu/trading-platform/free-trading-strategies/tradingsystem/38-turtle-soup",
+    "quote": "A buy signal is given when the market price hits a 5-period low. A short sell signal is given when the market price hits a 5-period high. ... The stop is calculated by NanoTrader as 3x the 20-period ATR ... The percentage of winning trades is around 60% for all currency pairs. For the forex pair GBP/USD the percentage is, for example, 60,5%.",
+    "access": "full"
+   },
+   "rule_formal": "Long: price touches min(low, 5 periods) AND fastEMA > slowEMA. Short: price touches max(high, 5 periods) AND fastEMA < slowEMA. Time filter: signals only 06:00-22:00. Stop: 3 * ATR(20). Target: long exits at 5-period high (short at 5-period low).",
+   "numbers": {
+    "effect": "win rate ~60% across currency pairs; GBP/USD 60.5%",
+    "sample": "vendor backtests on EUR/USD, EUR/GBP, EUR/CHF, EUR/JPY, GBP/USD; n trades and period not stated in text",
+    "market": "FX majors",
+    "caveats": "vendor/platform marketing page; net return and profit factor not text-disclosed; wide stop (3x ATR20) vs near target (5-period extreme) means 60% win says nothing about expectancy; original Raschke Turtle Soup uses 20-day extremes, this is a 5-period variant"
+   },
+   "mechanism": "Breakout traders' stops cluster just beyond the N-period extreme; a touch-and-fail forces the freshly entered breakout crowd to liquidate back through the level, fueling the fade.",
+   "relevance": "Q1 + Q4 direct (formalizes sweep-vs-break as: extreme touched but trend filter opposes continuation -> fade; gives a concrete counter-hypothesis to test against our breakout entries at Asian high/low)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — N-period extreme and EMA state known at touch"
+   },
+   "overlap_risk": "EMA direction filter overlaps our slope filter (slope percentile falsified, but slope sign is in the live system); extreme-touch component is orthogonal to all five falsified variables",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "QUOTE ตรงทุกท่อน (5-period low/high, EMA filter, stop 3x ATR(20), win ~60% / GBPUSD 60.5%) แต่หน้าไม่เปิดเผยอะไรเลยที่ใช้ตัดสิน expectancy ได้: ไม่มีช่วง backtest, ไม่มีจำนวนเทรด, ไม่มี avg win/avg loss, ไม่มี profit factor — win 60% คู่กับ stop กว้าง 3xATR สามารถเป็น expectancy ติดลบได้ (ชนะบ่อย-แพ้หนัก) และหน้าไม่มีข้อมูลหักล้างความเป็นไปได้นี้",
+    "note": "conflict of interest ชัด: WH SelfInvest ขาย platform NanoTrader ที่รันกลยุทธ์นี้ — เลข 60% เป็น vendor marketing ที่ตรวจซ้ำไม่ได้ · claim เรา label 'ตาม vendor backtest' ไว้ถูกแล้ว แต่ควรถือ EFFECT นี้เป็น unverified จนกว่าจะ replicate เอง โดยเฉพาะฝั่ง payoff ratio ที่หน้าจงใจไม่โชว์",
+    "sources": [
+     "https://www.whselfinvest.com/en-lu/trading-platform/free-trading-strategies/tradingsystem/38-turtle-soup"
+    ]
+   }
+  },
+  "prac-zarattini-orb-10r-moc": {
+   "id": "prac-zarattini-orb-10r-moc",
+   "track": "practitioner",
+   "title": "Zarattini/Aziz 5-min ORB: tiny stop + 10R target + market-on-close = 1,484% (leveraged) vs 169% buy-hold QQQ, 2016-2023",
+   "claim": "A first-5-minute-bar direction breakout on QQQ with stop at the first bar's extreme, profit target at 10x risk, 1%-of-equity risk sizing, and market-on-close exit if neither hits, returned 1,484% (with leverage via TQQQ) vs 169% for QQQ buy-and-hold over Jan 2016 - Feb 2023 — the payoff comes from letting rare expansion days run to an asymmetric target or the close.",
+   "source": {
+    "label": "Concretum Group (authors' site) — papers page for 'Can Day Trading Really Be Profitable?' (Zarattini & Aziz, SSRN 4416622)",
+    "url": "https://concretumgroup.com/papers/",
+    "quote": "Results show that the ORB strategy, even with leverage constraints, significantly outperformed passive investing, yielding a 1,484% return compared to 169% for QQQ",
+    "access": "abstract"
+   },
+   "rule_formal": "If Close(bar1_5min) > Open(bar1): buy at open of bar2; if lower: sell. Skip if flat. Stop = extreme of bar1 (low for long / high for short). Target = Entry + 10 * |Entry - Stop|. Size: risk 1% of equity to stop. If neither stop nor target hit: exit market-on-close. (Rules cross-checked verbatim on cxoadvisory.com review of same paper.)",
+   "numbers": {
+    "effect": "1,484% total return (leverage-constrained/TQQQ implementation) vs 169% QQQ buy-and-hold",
+    "sample": "QQQ 5-minute data, Jan 1 2016 - Feb 17 2023 (period per cxoadvisory.com review); includes two bear markets",
+    "market": "US equities (QQQ/TQQQ)",
+    "caveats": "not gold, not session-anchored; 33% annualized-alpha figure appears only in search snippets/paywalled review — not independently quoted, excluded; with 10R target the win rate is necessarily low, majority of days lose 1R — psychologically/structurally opposite to capping; later papers by same authors condition on 'stocks in play' (relative volume), suggesting raw version is weaker"
+   },
+   "mechanism": "Overnight-informed imbalance reveals itself in the first bar's direction; on the minority of days that trend (expansion days), the move extends many multiples of the first bar's range while risk stays capped at the first bar's extreme.",
+   "relevance": "Q3 direct (published-number template for 'dangerous but necessary EXPAND days': cap each day at small fixed R, let expansion days run to 10R or MOC — profits concentrate in tail days; contrast with our capped trail that RED-FLAG kills 2026 edge), Q2 (first-bar direction as earliest trend-day vote)",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — signal complete at first-bar close, execution next bar open"
+   },
+   "overlap_risk": "target/exit asymmetry is a management change, orthogonal to the five falsified day-selection variables; first-bar-direction component overlaps our breakout trigger itself",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "เลข 1,484% vs 169% (2016-2023) ตรงกับ abstract บน concretumgroup และตรงกับ paper จริง Zarattini & Aziz 'Can Day Trading Really Be Profitable?' (SSRN 4416622) รวมถึงกลไก 5-min ORB + stop ที่ extreme bar แรก + target 10R + MOC · counter-evidence สำคัญ: paper สมมติ no bid-ask spread / no slippage / no execution uncertainty — return 1,484% มาจาก TQQQ leverage บน alpha ~33%/ปี net commissions เท่านั้น (ไม่ net spread)",
+    "note": "ตัวเลขจริงตามแหล่ง แต่เป็น pre-cost-realistic: กลยุทธ์ยิงเข้าออกทุกวันบน leveraged ETF โดยไม่คิด spread/slippage ซึ่งกับ Trellis doctrine (#5 backtest หลอกตา) ถือว่ายังไม่ผ่านเกณฑ์ cost realistic · ยังมี regime dependence: 2016-2023 เป็นช่วง QQQ bull + vol สูงผิดปกติ ไม่พบ independent replication ที่ยืนยันเลขนี้หลังใส่ costs เต็ม (reviewer เช่น CXO Advisory / substack ชี้จุด slippage เดียวกัน)",
+    "sources": [
+     "https://concretumgroup.com/papers/",
+     "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4416622",
+     "https://www.cxoadvisory.com/technical-trading/day-trading-with-an-opening-range-breakout-strategy/",
+     "https://therobusttrader.com/can-day-trading-really-be-profitable-rules-backtest-statistics-performance-analysis/"
+    ]
+   }
+  },
+  "caminschi-pmfix-leakage": {
+   "id": "caminschi-pmfix-leakage",
+   "track": "microstructure",
+   "title": "PM gold fix leaked exploitable information to fixing members before publication (Caminschi-Heaney; primary paywalled)",
+   "claim": "During the 5-bank London PM gold fixing era (pre-2015), the fixing process leaked economically significant, tradable information: fixing members' advantage was 'significant and economic' and grew as electronic derivatives (GC futures, GLD) made it faster to exploit — i.e., early fix-window flow predicted the fix direction before publication.",
+   "source": {
+    "label": "University of Western Australia research-impact summary of Caminschi & Heaney (2014), 'Fixing a Leaky Fixing', Journal of Futures Markets 34, 1003-1039",
+    "url": "https://researchimpact.uwa.edu.au/research-impact-stories/fixing-a-leaky-fixing/",
+    "quote": "The trade advantage available to fixing members was significant and economic, and it increased with the transition of electronic derivatives trading.",
+    "access": "snippet"
+   },
+   "rule_formal": null,
+   "numbers": null,
+   "mechanism": "The five fixing banks saw the client order imbalance inside the fixing call before the fixed price was published; trading desks with that knowledge traded GC/GLD ahead of publication — the forced/adversely-selected side is everyone providing liquidity in GC/GLD during the fixing minutes without seeing the imbalance.",
+   "relevance": "Q2: mechanism behind systematic early-fix-window price moves (complements micro-lbma-pmfix-downward-drift which has the directional numbers); implies pre-2015 fix-window moves in the first minutes were informative continuations, and that this channel closed with the March 2015 electronic auction (regime split for backtests).",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "A 'first-minutes-of-fix direction' feature (e.g. 17:00-17:04 server move predicting 17:04-17:15 continuation, pre-2015 only) is computable in real time — no lookahead"
+   },
+   "overlap_risk": "Shares the fix-window clock anchor with micro-lbma-pmfix-downward-drift (test jointly, not as independent evidence); orthogonal to rv/slope/range_exp/gap/aw",
+   "harvest_note": "Primary paper paywalled (Wiley 402; SSRN/SemanticScholar/ResearchGate blocked or empty). The widely-cited numbers (return advantages in first 4 minutes; fix-direction prediction accuracy up to ~80-90%) could NOT be verbatim-verified from any fetched page and are deliberately EXCLUDED per anti-hallucination rules — parked as numbers: null.",
+   "applied": "2026-07-04"
+  },
+  "gold-price-discovery-regimes": {
+   "id": "gold-price-discovery-regimes",
+   "track": "microstructure",
+   "title": "Gold price discovery leadership flips between London and New York in crisis-anchored regimes; final switch to NY in April 2011 (Lucey et al., LBMA Alchemist)",
+   "claim": "Which market SETS the gold price is regime-dependent: leadership switched between London spot and New York futures at macro-crisis dates (1990 Eastern Bloc, 1992 ERM, 1998 LTCM, post-9/11, 2008 GFC), with a final documented switch to New York dominance in April 2011 — despite London hosting 86% of trading volume. The liquidity structure our breakout trades into is not stationary across eras.",
+   "source": {
+    "label": "LBMA Alchemist issue 68, 'London or New York: Where Does the Gold Price Come From?' (summary of Hauptfleisch, Putnins & Lucey, Journal of Futures Markets 2016)",
+    "url": "https://www.lbma.org.uk/alchemist/issue-68/london-or-new-york-where-does-the-gold-price-come-from",
+    "quote": "London as a trading centre for gold with 86% of business occurring there, approximately 90% of which are spot transactions ... switch from the London markets to the New York markets occurs at the start of the ruble crisis and the bailout of Long-Term Capital Management ... final switch to New York in April 2011",
+    "access": "full"
+   },
+   "rule_formal": "Information-share / price-discovery metrics (Hasbrouck-family) computed on London spot vs COMEX futures, January 1986 - end July 2012 (>6,500 obs): leadership is regime-switching with break dates 1990, 1992, 1998, 2001, 2008, Apr-2011; NY futures lead on average despite <1/10 of London volume.",
+   "numbers": {
+    "effect": "86% of gold business transacted in London (~90% of that spot), yet NY futures lead price discovery on average; last leadership switch dated April 2011",
+    "sample": "January 1986 - end of July 2012, >6,500 daily observations",
+    "market": "London OTC spot vs COMEX gold futures",
+    "caveats": "Sample ends July 2012 — says nothing directly about 2014/2017-2019 losing years; leadership metric is daily-frequency, not intraday-causal; Alchemist article is the authors' own popular summary of the JFM paper"
+   },
+   "mechanism": "Leveraged futures traders impound information first (cheap, transparent venue); OTC spot dealers are then forced to re-quote off COMEX to avoid being arbitraged — the forced side is London dealers hedging adverse-selection against futures-led moves. Regime flips at crises show the forced/leading roles swap when funding or risk conditions change venue economics.",
+   "relevance": "Q4 (core): documents that gold's liquidity/price-formation structure shifts in discrete eras at datable break points — the same class of structural non-stationarity suspected behind losing-year clusters 2012-14 vs 2017-19. Suggests testing strategy PnL against price-discovery-era dummies (pre/post Apr-2011 in-sample; motivates locating analogous later breaks, e.g. 2015 fix reform, with our own data).",
+   "test_design": {
+    "computable_from": "dataset",
+    "prediction_direction": "unknown",
+    "lookahead_risk": "Era dummies with historically datable break points are known ex ante going forward, but IN-SAMPLE era-splitting of our backtest is descriptive/diagnostic, not a tradable per-entry signal — lookahead-safe only as regime research, not as an entry filter"
+   },
+   "overlap_risk": "Era/regime variable — orthogonal to per-day rv/slope/range_exp/gap/aw by construction, but any era split will mechanically correlate with multi-year vol regimes (rv era means); guard against re-discovering 'high-vol years' under a new name",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ข้อมูลของบทความจบที่ July 2012 (วิเคราะห์ Jan 1986–Jul 2012 แบบ rolling 100-day) — 'NY นำ' ยืนยันได้แค่ถึงกลางปี 2012 และประวัติในบทความเองแสดงว่า leadership สลับไปมาหลายรอบ ไม่มีหลักประกันว่า regime หลัง เม.ย. 2011 ถาวร",
+    "note": "ทั้ง 3 ท่อน quote ตรง verbatim (86% of business / ~90% spot / ruble crisis+LTCM switch / final switch April 2011) และหน้ารองรับ claim เรื่อง regime-switching ตาม crisis dates · counter-evidence ที่ harvester ไม่บอก: (1) บทความระบุเองว่า final switch เม.ย. 2011 'does not seem to have been triggered by any geopolitical or economic event' — จุดสลับไม่ได้ผูก crisis เสมอไป (2) 86% เป็นตัวเลข survey ครั้งเดียว (Table 1, LBMA loco-London survey) ไม่ใช่ค่าถาวร (3) บทความสรุปว่า dominance สลับซ้ำๆ ไม่ใช่ NY นำถาวร — ใช้ 'NY futures lead' เป็นสมมติฐานปัจจุบันต้องพึ่งงานหลัง 2012 (เช่น Hauptfleisch/Lucey/Putniņš 2016 ที่พบ COMEX นำ) ไม่ใช่หน้านี้",
+    "sources": [
+     "https://www.lbma.org.uk/alchemist/issue-68/london-or-new-york-where-does-the-gold-price-come-from"
+    ]
+   }
+  },
+  "comex-settlement-vwap-window": {
+   "id": "comex-settlement-vwap-window",
+   "track": "microstructure",
+   "title": "COMEX gold daily settlement = 60-second VWAP window 13:29-13:30 ET; benchmark-tied flow must execute there",
+   "claim": "The COMEX gold active-month settlement price is the VWAP of trades in a fixed 60-second window (13:29:00-13:30:00 ET; calendar spreads 13:15-13:30 ET). Any participant benchmarked to settlement (roll/spread traders, funds marking to settle, TAS counterparties) is forced to concentrate executions into that window, creating a predictable volume/participation spike at a fixed clock time (~20:29-20:30 server EET most of the year).",
+   "source": {
+    "label": "CME Group Client Systems Wiki — Gold, Daily Settlement Procedure",
+    "url": "https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457088147/Gold",
+    "quote": "13:29:00 to 13:30:00 ET for the active month and 13:15:00 to 13:30:00 ET for calendar spreads ... the active month settles to the volume-weighted average price (VWAP), rounded to the nearest tradable tick.",
+    "access": "full"
+   },
+   "rule_formal": "settle = VWAP(trades in [13:29:00, 13:30:00] ET) for active month; fallback tiers use last trade vs 13:30 bid/ask, then prior settle, then GCC discretion. Server mapping: ET+7h = EET most of year (both DST, different switch dates -> +6h for ~2-3 weeks/yr). Testable: M1 tick-count at 20:29-20:30 server vs neighboring minutes.",
+   "numbers": {
+    "effect": "Settlement window = 60 seconds (active month), 15 minutes (calendar spreads); no published effect-size study on gold intraday vol/volume around this window was found (searched — parked honestly)",
+    "sample": "Current CME settlement procedure (rule document, not an empirical sample)",
+    "market": "COMEX gold futures (GC)",
+    "caveats": "This is a mechanical rule fact, not a measured price effect; ET-EET offset is +7h except brief DST-mismatch weeks (+6h) — clock mapping must be handled per-date; window sits just AFTER the 20:00 server entry cutoff, inside the holding period"
+   },
+   "mechanism": "Traders whose PnL/obligations reference the daily settlement (calendar-spread rollers in the 13:15-13:30 window, TAS trades that settle at settlement price, margin/NAV marks) have no discretion over timing — they are forced to transact inside the fixed window, and the roll period each contract month multiplies this forced spread flow.",
+   "relevance": "Q3 (core): pins the exact settlement mechanics and clock time; for us it predicts a recurring liquidity/volatility event at ~20:29-20:30 server while positions are held to 23:00 EOD — testable whether adverse excursions of held positions cluster at this minute, and whether futures-roll weeks amplify it.",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Window time is known ex ante (clock-based, needs correct per-date ET->server conversion); roll-week calendar is known ex ante — no lookahead"
+   },
+   "overlap_risk": "Time-of-day event feature — orthogonal to rv/slope/range_exp/gap/aw; tick-count spike at the window will inflate same-day rv trivially (exclude the minute when computing day-level vol features)",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "หน้า CME wiki ไม่มีวันที่/ประวัติกติกาเลย — ยืนยัน VWAP 60 วิ ได้แน่แค่ยุคปัจจุบันย้อนถึง ~2016 (rule filing COMEX 16-574 แสดง methodology เดียวกัน) แต่ช่วงต้น sample 2012–2014 เป็นยุค floor/pit settlement — ไม่มีหลักฐานว่า Globex-VWAP 60 วิ ใช้บังคับตอนนั้น",
+    "note": "Quote verbatim ทั้งสองท่อน (settlement period 13:29–13:30 ET active / 13:15–13:30 ET spreads + VWAP rounded to nearest tradable tick) และหน้ารองรับ claim เรื่อง benchmark window เวลาตายตัวราว 13:30 ET · แต่ตามที่ claim เจาะไว้เอง: กติการายละเอียด (60-second Globex VWAP) ยืนยันย้อนหลังได้ถึงแค่ ~2015/2016 — ก่อนหน้านั้น settlement อิง pit trading แม้เวลาปิดจะอยู่ราว 13:30 ET เหมือนกัน · ใช้เป็น 'เวลา flow ตายตัว' ได้ทั้ง sample แต่ห้ามอ้างกลไก VWAP 60 วิ กับปี 2012–2014 · มี fallback tiers (last trade vs bid/ask, prior settle) เมื่อไม่มี trade ใน window",
+    "sources": [
+     "https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457088147/Gold",
+     "https://www.cmegroup.com/market-regulation/rule-filings/2016/12/16-574.pdf",
+     "https://www.cmegroup.com/markets/metals/precious/gold.settlements.html"
+    ]
+   }
+  },
+  "tick-volume-proxy-conflict": {
+   "id": "tick-volume-proxy-conflict",
+   "track": "microstructure",
+   "title": "Tick volume as order-flow proxy: practitioner evidence claims 90%+ correlation with real spot FX volume, but is contested and non-peer-reviewed",
+   "claim": "The best-known evidence for tick volume validity (Marney 2011, practitioner research) claims 90%+ correlation between tick activity and actual traded spot-FX volume; a counter-source examining futures volume finds tick volume 'mostly uncorrelated'. Net: tick count is defensible only as a RELATIVE intra-day activity proxy, not as a magnitude measure — no peer-reviewed gold-specific validation was found.",
+   "source": {
+    "label": "Global Prime (Medium), 'Why Is Tick Volume Important To Monitor In The Forex Market?' (citing Caspar Marney, 2011)",
+    "url": "https://globalprime.medium.com/why-is-tick-volume-important-to-monitor-56a936eea70d",
+    "quote": "striking high levels of accuracy between tick activity and actual traded volume ... correlations of 90% plus",
+    "access": "full"
+   },
+   "rule_formal": "Use tick_count(minute) only as normalized relative measure: z-score vs same-minute-of-day baseline or fraction of day total; never cross-day absolute comparisons (broker-feed dependent).",
+   "numbers": {
+    "effect": "Claimed correlation 90%+ between tick activity and actual traded volume (spot FX, Marney 2011)",
+    "sample": "Marney 2011 practitioner research (webinar/paper, non-peer-reviewed); pairs not specified on fetched page",
+    "market": "Spot FX",
+    "caveats": "COUNTER-EVIDENCE fetched from EarnForex guide (https://www.earnforex.com/guides/tick-volume-in-forex/), verbatim: 'Tick volume seems to be mostly uncorrelated with real volume in the futures market' and 'One tick (price update) may be caused by either a small volume trade or a very large trade'. Neither source is peer-reviewed; no gold-specific validation found; Dukascopy col-6 tick-count usable relative-only per project F6 caveat"
+   },
+   "mechanism": "Not a forced-flow claim — a measurement-validity claim (Q5 explicitly asks this). Causal link: dealers refresh quotes more often when order flow hits them, so quote-update intensity co-moves with trading activity; but one update can represent any trade size, so intensity ≈ activity, not signed volume.",
+   "relevance": "Q5 (core): licenses using our M1 tick-count as a relative activity/participation feature in sweep-vs-break tests (e.g. tick-count z-score during the breakout minute), while blocking any design that needs true volume magnitude or signed order flow.",
+   "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Tick-count of the breakout minute and prior minutes is available at entry — no lookahead; same-minute-of-day normalization baseline must be computed from PAST days only"
+   },
+   "overlap_risk": "Day-aggregated tick count will correlate strongly with rv (dead variable) — value, if any, must come from event-level relative spikes (breakout-minute vs baseline), not day sums",
+   "applied": "2026-07-04",
+   "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "สองฝั่งของ conflict มีจริงทั้งคู่ verbatim — ฝั่ง Medium/Global Prime: 'striking high levels of accuracy between tick activity and actual traded volume ... correlations of 90% plus' (อ้าง Caspar Marney 2011, spot FX, ข้อมูล eSignal/EBS/Hotspot ตาม secondary sources) · ฝั่ง earnforex: 'Tick volume seems to be mostly uncorrelated with real volume in the futures market.' และสรุปว่า tick volume ยัง 'unreliable for serious analysis'",
+    "note": "หา primary source ของ Marney 2011 ไม่เจอ (เป็นบทความ/presentation ยุค FX Trader Magazine ไม่ใช่ peer-reviewed — ทุกแหล่งที่พบเป็น secondary จาก broker/บทความ) และหน้า Medium เองก็เป็นบทความ broker (Global Prime) ที่ไม่แสดง methodology ของ Marney. สองฝั่งไม่ได้วัดสนามเดียวกัน: 90%+ วัด tick vs ECN volume ใน spot FX ส่วน 'mostly uncorrelated' วัด tick (broker) vs futures volume — conflict จึงไม่ใช่การหักล้างกันตรงๆ แต่ยืนยันข้อสรุปของ claim: ใช้ tick volume ได้แค่ relative/directional proxy ภายใน feed เดียวกัน ห้ามตีความเป็น absolute volume · หมายเหตุเพิ่ม: มี study อิสระของ Varianse (2022, PDF) ทำเรื่องเดียวกัน น่าเก็บเป็นแหล่งตรวจข้ามภายหลัง",
+    "sources": [
+     "https://globalprime.medium.com/why-is-tick-volume-important-to-monitor-56a936eea70d",
+     "https://www.earnforex.com/guides/tick-volume-in-forex/",
+     "https://varianse.com/wp-content/uploads/2022/07/fxvolume-tick-volume-vs-real-volume-study-1.pdf"
+    ]
+   }
+  }
+ },
+ "meta": {
+  "created": "2026-07-04"
+ }
+}

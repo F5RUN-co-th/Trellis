@@ -1,0 +1,27 @@
+{
+  "id": "prac-turtlesoup-whselfinvest-60pct",
+  "track": "practitioner",
+  "title": "Turtle Soup (false-break fade) platform implementation: ~60% winners across FX pairs, GBP/USD 60.5%",
+  "claim": "Fading an N-period extreme touch (buy at 5-period low, sell at 5-period high) with an EMA trend-direction filter and 3x ATR(20) stop produces around 60% winning trades on major FX pairs (GBP/USD 60.5%) in the vendor's backtests.",
+  "source": {
+    "label": "WH SelfInvest — free trading strategy no. 38: Turtle Soup",
+    "url": "https://www.whselfinvest.com/en-lu/trading-platform/free-trading-strategies/tradingsystem/38-turtle-soup",
+    "quote": "A buy signal is given when the market price hits a 5-period low. A short sell signal is given when the market price hits a 5-period high. ... The stop is calculated by NanoTrader as 3x the 20-period ATR ... The percentage of winning trades is around 60% for all currency pairs. For the forex pair GBP/USD the percentage is, for example, 60,5%.",
+    "access": "full"
+  },
+  "rule_formal": "Long: price touches min(low, 5 periods) AND fastEMA > slowEMA. Short: price touches max(high, 5 periods) AND fastEMA < slowEMA. Time filter: signals only 06:00-22:00. Stop: 3 * ATR(20). Target: long exits at 5-period high (short at 5-period low).",
+  "numbers": {
+    "effect": "win rate ~60% across currency pairs; GBP/USD 60.5%",
+    "sample": "vendor backtests on EUR/USD, EUR/GBP, EUR/CHF, EUR/JPY, GBP/USD; n trades and period not stated in text",
+    "market": "FX majors",
+    "caveats": "vendor/platform marketing page; net return and profit factor not text-disclosed; wide stop (3x ATR20) vs near target (5-period extreme) means 60% win says nothing about expectancy; original Raschke Turtle Soup uses 20-day extremes, this is a 5-period variant"
+  },
+  "mechanism": "Breakout traders' stops cluster just beyond the N-period extreme; a touch-and-fail forces the freshly entered breakout crowd to liquidate back through the level, fueling the fade.",
+  "relevance": "Q1 + Q4 direct (formalizes sweep-vs-break as: extreme touched but trend filter opposes continuation -> fade; gives a concrete counter-hypothesis to test against our breakout entries at Asian high/low)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — N-period extreme and EMA state known at touch"
+  },
+  "overlap_risk": "EMA direction filter overlaps our slope filter (slope percentile falsified, but slope sign is in the live system); extreme-touch component is orthogonal to all five falsified variables"
+}

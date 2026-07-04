@@ -1,0 +1,14 @@
+{
+  "id": "prac-raschke-trendday-firsthalfhour",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": true,
+    "biggest_finding": "ทุก QUOTE ตรง verbatim และหน้า traderslog ระบุผู้เขียนเป็น Linda Bradford Raschke จริง · attribution ยืนยันข้ามแหล่ง: บทความเดียวกัน mirror บน Forex Factory, investpost, blog อื่นๆ ในชื่อ 'Capturing Trend Days, by Linda Bradford Raschke' (LBR Group) — ไม่พบข้อขัดแย้งเรื่องผู้เขียน",
+    "note": "จุดอ่อนที่ต้อง flag: เลข '<10% ของ range ทั้งวัน' เป็น practitioner observation เชิงคุณภาพ (คำว่า 'often') ไม่มี dataset/sample size/ช่วงปีแนบใดๆ ในทุก mirror ที่เจอ — เป็น heuristic จากประสบการณ์ ไม่ใช่สถิติที่วัดได้ · ถ้าจะใช้ใน Trellis ต้อง re-measure บน XAUUSD tick data เองก่อน ห้ามยกเลข 10% ไปใช้ตรงๆ",
+    "sources": [
+      "https://www.traderslog.com/capturing-trend-days",
+      "https://www.forexfactory.com/thread/5874-capturing-trend-days-by-linda-bradford-raschke"
+    ]
+  }
+}

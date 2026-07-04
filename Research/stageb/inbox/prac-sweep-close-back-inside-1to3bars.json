@@ -1,0 +1,27 @@
+{
+  "id": "prac-sweep-close-back-inside-1to3bars",
+  "track": "practitioner",
+  "title": "Sweep vs genuine breakout: measurable rule = close back inside the swept level within 1-3 bars",
+  "claim": "A liquidity sweep is distinguished from a genuine breakout by whether price closes back inside the swept level within 1-3 bars (with a long wick beyond the level and small body); vendor claims 65-75% win rate and 25-35% failure rate for confirmed sweep-and-reverse setups, but discloses no methodology.",
+  "source": {
+    "label": "CrossTrade — Liquidity Sweeps (price action education)",
+    "url": "https://crosstrade.io/learn/price-action/liquidity-sweeps",
+    "quote": "Within 1-3 bars, price closes back below (above) the swept level ... a very long wick in the swept direction and a small body — a classic rejection candle. ... A sweep of a swing high in a strong uptrend is more likely to be a real breakout than a sweep-and-reverse.",
+    "access": "full"
+  },
+  "rule_formal": "Sweep(level L, up-side): High(t) > L AND Close(t+k) < L for some k in {0,1,2} (close back inside within 1-3 bars); else Break. Confirmation quality: wick beyond L >> body. Context veto: strong pre-existing trend in sweep direction -> treat as breakout, not sweep.",
+  "numbers": {
+    "effect": "claimed win rate 65-75%, avg RR 2:1 to 4:1, failure rate 25-35% for confirmed sweep-and-reverse",
+    "sample": "not disclosed — no n, no period, no instrument",
+    "market": "unspecified (futures/forex education page)",
+    "caveats": "numbers are unattributed vendor claims with zero methodology — capture value is the operational 1-3 bar close-back-inside definition, not the win rate; the trend-context veto is consistent with our EMA-slope filter"
+  },
+  "mechanism": "Stops resting beyond equal highs / obvious levels get filled into the hands of larger sellers; once that liquidity is consumed and price re-enters the range, the swept breakout entrants are trapped and must exit back through the level.",
+  "relevance": "Q4 direct (first measurable sweep-vs-break rule: penetration + close-back-inside window at Asian high/low), Q1 (the same rule inverted = breakout confirmation: entry only if no close back inside within k bars)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "waiting 1-3 bars after penetration delays entry by k bars — measurable at entry but shifts entry price; must test cost of delayed fill vs false-break avoided"
+  },
+  "overlap_risk": "none of the five falsified variables measure post-penetration behavior; nearest system component is the breakout entry itself — this modifies entry timing rather than day selection"
+}

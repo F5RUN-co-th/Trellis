@@ -1,0 +1,27 @@
+{
+  "id": "prac-raschke-trendday-firsthalfhour",
+  "track": "practitioner",
+  "title": "Raschke: trend day announces itself — first half-hour < 10% of day's total range, open/close at opposite extremes",
+  "claim": "On trend days the first half-hour of trading comprises less than 10% of the day's eventual total range, with minimal intraday retracement and momentum accelerating into the close; trend days are preceded by range contraction (NR7, 2-3 small-range cluster), hook days, or opening gaps, and the correct management is breakout-style entry held to market-on-close.",
+  "source": {
+    "label": "TradersLog — Capturing Trend Days (Linda Bradford Raschke)",
+    "url": "https://www.traderslog.com/capturing-trend-days",
+    "quote": "A trend day occurs when there is an expansion in the daily trading range and the open and close are near opposite extremes. ... The first half-hour of trading often comprises less than 10% of the day's total range. ... One of the easiest and more popular ways to exit a breakout trade is simply to exit 'Market-On-Close.'",
+    "access": "full"
+  },
+  "rule_formal": "TrendDay (EOD): dayRange >> recent avg AND |Open-Close| ~ dayRange. Realtime cue: firstHalfHourRange / E[dayRange] < 0.10 (small early range = coiling, not chop). Antecedents (day-1): NR7 = narrowest range of last 7 days; cluster of 2-3 small daily ranges; hook day (open beyond prior day's high/low then reverse); opening gap. Management: breakout entry, no fading, exit MOC.",
+  "numbers": {
+    "effect": "first half-hour < 10% of day's total range on trend days",
+    "sample": "descriptive practitioner article; no n, no win rate, no backtest",
+    "market": "US futures (S&P-era, 1990s context)",
+    "caveats": "the <10% figure is a characterization of trend days, not a tested predictor; no false-positive rate given; 'expected day range' denominator must be estimated realtime (e.g. ATR), introducing its own noise"
+  },
+  "mechanism": "Range contraction leaves both sides under-positioned; an early directional imbalance (gap or one-sided open) forces the losing side and latecomers to chase all day — momentum builds into the close as trapped traders capitulate.",
+  "relevance": "Q2 direct (numeric before-noon cue: small first-hour range relative to expected day range + one-directional tape), Q3 (management of EXPAND days: hold to close, do not fade, do not tighten), Q1 (opening gap/hook-day context distinguishes real breakout energy)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "first-half-hour range known by 08:30 EET at breakout window start; denominator (day's total range) is lookahead — must replace with ATR-based expectation at entry"
+  },
+  "overlap_risk": "antecedent leg (NR/small-range cluster) overlaps asian width ratio + rv percentile (falsified); the intraday first-hour-vs-expected-range cue is NOT among the five falsified variables — nearest neighbor is range expansion but measured at a different time anchor"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "orb-stocks-in-play-relative-volume",
+  "verification": {
+    "quote_found": true,
+    "supports_claim": true,
+    "numbers_match": false,
+    "biggest_finding": "เลข >1,600% net / Sharpe 2.81 / alpha 36%/ปี (Top-20 stocks in play, 2016-2023) อยู่บนหน้า Concretum จริง — แต่ 'beta ~0' ไม่ปรากฏบนหน้านี้เลย (คำว่า beta ไม่มีในหน้า) น่าจะมาจาก SSRN paper ต้นทาง ไม่ใช่หน้าที่อ้าง",
+    "note": "QUOTE ('These are stocks experiencing unusually high trading activity...') ตรง verbatim · หน้านี้คือ paper ของ Zarattini-Barbon-Aziz ชื่อ 'A Profitable Day Trading Strategy For The U.S. Equity Market' (ไม่ใช่ 'Beat the Market' ซึ่งเป็น paper QQQ คนละฉบับ) · จุดอ่อนที่ harvester ไม่บอก: หน้านี้ไม่แสดง baseline แบบไม่กรอง (ทั้ง 7,000 ตัว) เลย — ประโยคจริงคือ 'restricting trades...significantly improves performance even after transaction costs' = 'improve' ไม่ใช่หลักฐานตรงว่า filter 'คือสิ่งที่ทำให้ net กำไร' · และหน้าไม่ผูก 1,600% กับ timeframe 5-min อย่างชัดเจน (ศึกษา 5/15/30/60-min)",
+    "sources": ["https://concretumgroup.com/a-profitable-day-trading-strategy-for-the-u-s-equity-market/"]
+  }
+}

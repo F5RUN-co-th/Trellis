@@ -1,0 +1,27 @@
+{
+  "id": "stop-loss-cascade-breakout",
+  "track": "academic",
+  "title": "Stop-loss order clusters make trends unusually rapid past trigger levels (Osler)",
+  "claim": "Price trends accelerate abnormally when the rate reaches levels where stop-loss orders cluster (e.g. just beyond round numbers / technical levels); the response to stop-loss triggering is larger and lasts longer than the response to take-profit orders, producing self-reinforcing cascades in the breakout direction.",
+  "source": {
+    "label": "Osler, C.L. (2005), 'Stop-loss orders and price cascades in currency markets', Journal of International Money and Finance 24(2), 219-241",
+    "url": "https://ideas.repec.org/a/eee/jimfin/v24y2005i2p219-241.html",
+    "quote": "Exchange rate trends are unusually rapid when rates reach exchange rate levels at which stop-loss order have been documented to cluster.",
+    "access": "abstract"
+  },
+  "rule_formal": "Conditional on price crossing a level L where stop orders cluster (documented: round numbers; ends of recent ranges), E[|r_{t,t+h}| in crossing direction] is elevated vs unconditional; response(stop-loss crossing) > response(take-profit level touch) in size and duration.",
+  "numbers": {
+    "effect": null,
+    "sample": null,
+    "market": "Major currency pairs (high-frequency exchange rates); order data from a large FX dealer",
+    "caveats": "Abstract gives direction and ordering of effects, not magnitudes; effects documented at intraday horizons (hours), not days"
+  },
+  "mechanism": "Stop-loss orders are positive-feedback trades: crossing the level forces dealers to buy into a rising market / sell into a falling one; clustered stops at obvious levels (range extremes, round numbers) create a queue of forced same-direction flow — this is who is 'forced to buy' after a genuine range break",
+  "relevance": "Q1: gives the causal mechanism separating follow-through from false break — follow-through requires a populated stop cluster beyond the range edge; implies measurable proxies: proximity of Asian range edge to round numbers (e.g. $5/$10 gold grid), and speed of traverse immediately after the break (cascade signature = unusually rapid move in first minutes)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Round-number distance known at entry; post-break traverse speed measurable in first N minutes after signal — usable realtime only if entry is delayed or managed after trigger"
+  },
+  "overlap_risk": "Post-break speed correlates with day volatility (dead rv variable) at day level, but is measured at event level (minutes around the break), which none of the five dead day-level variables capture; round-number proximity is orthogonal to all five"
+}

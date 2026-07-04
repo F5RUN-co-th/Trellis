@@ -1,0 +1,27 @@
+{
+  "id": "prac-crabel-nr-orb-winrates-secondary",
+  "track": "practitioner",
+  "title": "Crabel (1990) NR4/NR7 -> ORB win rates 60-76% (secondary summary, primary tables not verified)",
+  "claim": "Per a secondary summary of Crabel's 1990 book, opening-range-breakout trades taken after NR4/NR7 compression days showed win rates of 60-76% in his pre-1990 futures backtests, with inside-day combinations (IDnr4, NR7ID) among the strongest variants.",
+  "source": {
+    "label": "TradingStrategiesDaily — The NR7ID: Toby Crabel's 'Double-Compression' Trading Setup",
+    "url": "https://tradingstrategiesdaily.com/p/nr7id-toby-crabel",
+    "quote": "NR patterns (NR4/NR7) improved ORB reliability, with win rates often 60-76% in tested setups.",
+    "access": "full"
+  },
+  "rule_formal": "NR4: Range(t) < min(Range(t-1..t-3)). NR7: Range(t) < min(Range(t-1..t-6)). IDnr4/NR7ID: additionally High(t) < High(t-1) AND Low(t) > Low(t-1). Trade: next-day ORB stop entry beyond open +/- stretch.",
+  "numbers": {
+    "effect": "win rates 60-76% for ORB after NR patterns",
+    "sample": "Crabel pre-1990 backtests on futures (S&P, bonds, currencies, commodities); per-setup n not given in this source",
+    "market": "US futures",
+    "caveats": "secondary paraphrase — primary per-table numbers from the book not independently verified online; pre-1990 markets; directly contradicted on net-of-cost basis by oxfordstrat 1980-2016 test (see prac-crabel-nr7-orb-cost-decay); win rate without avg win/loss says nothing about expectancy"
+  },
+  "mechanism": "Compression day = neither side committed; next-day directional move from open finds little resting opposition and forces re-positioning in one direction.",
+  "relevance": "Q2 (day-before compression as trend-day antecedent with a published-number lineage), Q1 (ORB stretch entry as breakout confirmation distance)",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "none — pattern known at prior close"
+  },
+  "overlap_risk": "same family as asian width ratio / rv percentile (compression measures, falsified) — main incremental content is the day-boundary anchor (daily bars) instead of Asian-session anchor"
+}

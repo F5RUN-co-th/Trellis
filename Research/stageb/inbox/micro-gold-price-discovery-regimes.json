@@ -1,0 +1,27 @@
+{
+  "id": "gold-price-discovery-regimes",
+  "track": "microstructure",
+  "title": "Gold price discovery leadership flips between London and New York in crisis-anchored regimes; final switch to NY in April 2011 (Lucey et al., LBMA Alchemist)",
+  "claim": "Which market SETS the gold price is regime-dependent: leadership switched between London spot and New York futures at macro-crisis dates (1990 Eastern Bloc, 1992 ERM, 1998 LTCM, post-9/11, 2008 GFC), with a final documented switch to New York dominance in April 2011 — despite London hosting 86% of trading volume. The liquidity structure our breakout trades into is not stationary across eras.",
+  "source": {
+    "label": "LBMA Alchemist issue 68, 'London or New York: Where Does the Gold Price Come From?' (summary of Hauptfleisch, Putnins & Lucey, Journal of Futures Markets 2016)",
+    "url": "https://www.lbma.org.uk/alchemist/issue-68/london-or-new-york-where-does-the-gold-price-come-from",
+    "quote": "London as a trading centre for gold with 86% of business occurring there, approximately 90% of which are spot transactions ... switch from the London markets to the New York markets occurs at the start of the ruble crisis and the bailout of Long-Term Capital Management ... final switch to New York in April 2011",
+    "access": "full"
+  },
+  "rule_formal": "Information-share / price-discovery metrics (Hasbrouck-family) computed on London spot vs COMEX futures, January 1986 - end July 2012 (>6,500 obs): leadership is regime-switching with break dates 1990, 1992, 1998, 2001, 2008, Apr-2011; NY futures lead on average despite <1/10 of London volume.",
+  "numbers": {
+    "effect": "86% of gold business transacted in London (~90% of that spot), yet NY futures lead price discovery on average; last leadership switch dated April 2011",
+    "sample": "January 1986 - end of July 2012, >6,500 daily observations",
+    "market": "London OTC spot vs COMEX gold futures",
+    "caveats": "Sample ends July 2012 — says nothing directly about 2014/2017-2019 losing years; leadership metric is daily-frequency, not intraday-causal; Alchemist article is the authors' own popular summary of the JFM paper"
+  },
+  "mechanism": "Leveraged futures traders impound information first (cheap, transparent venue); OTC spot dealers are then forced to re-quote off COMEX to avoid being arbitraged — the forced side is London dealers hedging adverse-selection against futures-led moves. Regime flips at crises show the forced/leading roles swap when funding or risk conditions change venue economics.",
+  "relevance": "Q4 (core): documents that gold's liquidity/price-formation structure shifts in discrete eras at datable break points — the same class of structural non-stationarity suspected behind losing-year clusters 2012-14 vs 2017-19. Suggests testing strategy PnL against price-discovery-era dummies (pre/post Apr-2011 in-sample; motivates locating analogous later breaks, e.g. 2015 fix reform, with our own data).",
+  "test_design": {
+    "computable_from": "dataset",
+    "prediction_direction": "unknown",
+    "lookahead_risk": "Era dummies with historically datable break points are known ex ante going forward, but IN-SAMPLE era-splitting of our backtest is descriptive/diagnostic, not a tradable per-entry signal — lookahead-safe only as regime research, not as an entry filter"
+  },
+  "overlap_risk": "Era/regime variable — orthogonal to per-day rv/slope/range_exp/gap/aw by construction, but any era split will mechanically correlate with multi-year vol regimes (rv era means); guard against re-discovering 'high-vol years' under a new name"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "orb-crude-oil-profitability",
+  "track": "academic",
+  "title": "ORB on crude oil futures beats fair-game benchmark (Holmberg et al.)",
+  "claim": "An Opening Range Breakout strategy that trades only when price moves beyond a predetermined threshold (calibrated from the assumed return distribution) yields returns significantly above zero and a success rate above the fair-game benchmark on US crude oil futures.",
+  "source": {
+    "label": "Holmberg, Lönnbark & Lundström (2012), Umeå Economic Studies 845 / Finance Research Letters 2013, 'Assessing the profitability of intraday opening range breakout strategies'",
+    "url": "https://swopec.hhs.se/umnees/abs/umnees0845.htm",
+    "quote": "An investor that trades on the ORB strategy seeks to identify large intraday price movements and trades only when the price moves beyond some predetermined threshold. We present an ORB strategy based on normally distributed returns to identify such days and find that our ORB trading strategy result in significantly higher returns than zero as well as an increased success rate in relation to a fair game.",
+    "access": "abstract"
+  },
+  "rule_formal": "Enter long (short) when intraday price exceeds Open + k*sigma (Open - k*sigma), where k is a predetermined threshold derived from the assumed (normal) return distribution; hold to close. Exact k values not given in abstract.",
+  "numbers": {
+    "effect": null,
+    "sample": null,
+    "market": "US crude oil futures (per paper keywords; not stated in abstract text)",
+    "caveats": "Abstract provides no effect sizes, success-rate figures, or sample period; full text paywalled at Finance Research Letters"
+  },
+  "mechanism": "Days with large early moves beyond a distribution-based threshold identify conditional fat-tail days; once threshold is crossed, the day's return distribution is right-shifted in the breakout direction (joint distribution of Low/High/Open/Close, not independence of increments)",
+  "relevance": "Q2 directly: academic evidence that ORB works when the trigger threshold is scaled to the return distribution (volatility-normalized), not a fixed range — suggests testing Asian-range breakout with distribution-calibrated trigger distance rather than raw range edge",
+  "test_design": {
+    "computable_from": "m1",
+    "prediction_direction": "non-directional",
+    "lookahead_risk": "Threshold computable from historical return distribution before session open; breakout observed realtime — no lookahead"
+  },
+  "overlap_risk": "Threshold scaling by recent volatility correlates with dead variable rv (prev-day realized-vol percentile); however the claim is about entry trigger geometry, not day filtering, so overlap is partial"
+}
