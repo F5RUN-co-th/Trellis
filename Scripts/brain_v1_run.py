@@ -237,7 +237,7 @@ def ceiling(rows, free, lever):
             print(f"{name:<20}{L:>8.1f}{W:>8.1f}{P:>8.1f}{li:>9.1f}{wl:>9.1f}"
                   f"{pi:>9.1f}{worst:>8.1f}  {'PASS' if ok else 'fail'}")
             if best is None or li > best[1]:
-                best = (name, li, pi, ok, worst)
+                best = (name, li, pi, ok, worst, L, W, P)
     combos = [set(cc) for r_ in range(len(free) + 1) for cc in combinations(free, r_)]
     nc = len(combos)                                       # == 2**len(free) [M3]
     ycfg = {}
@@ -245,12 +245,22 @@ def ceiling(rows, free, lever):
         for i, cf in enumerate(combos):
             p = x["palt"] if x["cell"] in cf else x["pv4"]
             ycfg[(x["date"][:4], i)] = ycfg.get((x["date"][:4], i), 0) + p
+    allyears = {k[0] for k in ycfg}
     oL = sum(max(ycfg[(y, i)] for i in range(nc)) for y in LOSERS)
     oW = sum(max(ycfg[(y, i)] for i in range(nc)) for y in WINNERS)
+    maxP = max(sum(ycfg[(y, i)] for y in allyears) for i in range(nc))  # pooled ceiling
+    # [P1 fix / Engineer sol #2] script เป็นเจ้าของ "ตกเพราะข้อไหน" — ไม่ให้ LLM สรุปเอง
+    bn, _, _, bok, bwo, bL, bW, bP = best
+    binding = [c for c, ok_ in (("a-losers", bL > REQ_L), ("b-winners", bW >= REQ_W),
+                                ("c-pooled", bP >= REQ_P), ("d-worst", bwo >= WORST_REQ))
+               if not ok_]
     print(f"\nCEILING gate = any(config PASS §0 over {nc} cfg): "
           f"{'PASS' if any_pass else 'FAIL'}")
-    print(f"  best-by-loseImp (diagnostic) = {best[0]} → loseImp {best[1]:.1f}% "
-          f"poolImp {best[2]:.1f}% worst {best[4]:+.1f} (§0 {'PASS' if best[3] else 'fail'})")
+    print(f"  best-by-loseImp (diagnostic) = {bn} → L={bL:.1f} W={bW:.1f} P={bP:.1f} "
+          f"worst={bwo:+.1f} · BINDING(fail) = {binding or ['none']} "
+          f"[winners/worst อาจ PASS — อย่าเหมารวม]")
+    print(f"  POOLED CEILING: max pooled ทั้ง {nc} cfg = {maxP:.1f} "
+          f"(§0 ต้อง ≥{REQ_P} → ห่าง {REQ_P - maxP:+.1f} = reshaping สร้าง pooled ไม่ถึง)")
     print(f"  ORACLE per-year (unrealizable): losing {oL:+.1f} · winners {oW:+.1f}")
     return best, any_pass
 
