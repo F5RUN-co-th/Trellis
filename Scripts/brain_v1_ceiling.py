@@ -113,12 +113,32 @@ def main():
                   f"{pi:>9.1f}  {'PASS' if ok else 'fail'}")
             if best is None or li > best[1]:
                 best = (name, li, pi, ok)
-    print(f"\nCEILING: config ดีสุด (losing) = {best[0]} → loseImp {best[1]:.1f}% · "
+    print(f"\nCEILING (fixed-config): ดีสุด = {best[0]} → loseImp {best[1]:.1f}% · "
           f"poolImp {best[2]:.1f}% · §0 {'PASS' if best[3] else 'FAIL'}")
+
+    # ── ORACLE per-year bound (Claude Verify 2026-07-05 — แก้ถ้อยคำ overbroad):
+    # fixed-config ceiling เป็น upper bound เฉพาะ "กลยุทธ์ config เดียวคงที่"
+    # (= ดีไซน์ WS-1 ที่ D-1a บังคับ config เสถียรข้าม folds) · กลยุทธ์ era-adaptive
+    # (สลับ config ตามช่วงเวลา) ถูก bound ด้วย oracle รายปีข้างล่างแทน
+    combos = [set(c) for r in range(4)
+              for c in combinations(("CLEAN|SPENT", "POKED|FRESH", "POKED|SPENT"), r)]
+    yrs = sorted({d[:4] for d, _, _ in days})
+    ycfg = {}
+    for d, c, p in days:
+        for i, cf in enumerate(combos):
+            if c not in cf:
+                ycfg[(d[:4], i)] = ycfg.get((d[:4], i), 0) + p
+    oL = sum(max(ycfg[(y, i)] for i in range(8)) for y in LOSERS)
+    oW = sum(max(ycfg[(y, i)] for i in range(8)) for y in WINNERS)
+    print(f"ORACLE per-year (unrealizable hindsight — เพดานแท้ของ era-adaptive): "
+          f"losing {oL:+.1f} · winners {oW:+.1f} → §0-losing "
+          f"{'ยังเปิดในโลก oracle' if oL > REQ_L else 'ตายแม้ oracle'}")
+    print("  หมายเหตุ: best-config รายปีสลับมั่ว (PF+PS/CS+PF+PS/CS+PS/PF/CS ต่างปี)"
+          " = ไม่มี pattern เสถียรให้ WF เรียนจากอดีต — era-adaptive ไม่ใช่ path จริง"
+          " จนกว่ามีหลักฐาน learnability (backlog #2)")
     if not best[3]:
-        print("→ D-0.5 GATE: ceiling < §0 ⇒ **SKIP-only = documented-dead** "
-              "(in-sample = upper bound ของ WF/OOS ใดๆ) ⇒ branch → WS-3 exit levers "
-              "(#10 let-winners-run) ตามแผน v1.1 · ไม่เผา WF/PBO/MQL5 กับเส้นนี้")
+        print("→ D-0.5 GATE: ceiling < §0 ⇒ **SKIP-only (fixed-config = ดีไซน์ WS-1) "
+              "= documented-dead** ⇒ branch → WS-3 exit levers (#10) ตามแผน v1.1")
 
 
 if __name__ == "__main__":

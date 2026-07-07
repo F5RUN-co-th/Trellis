@@ -18,7 +18,8 @@
 - **Card C6 (poke) = FALSIFIED (07-05)** — ทิศถูกทั้งแผงแต่ p 0.26-0.34 · **P3(a) ผ่านเป็นใบแรก: losers −135→−55 (59%)** แต่ (b)(c) ตก · dose non-monotone (2+ pokes กลับดี) · **budget 7/40**
 - **Card C9 (overshoot exhaustion) = FALSIFIED (07-05, budget 8/40)** — แต่โปรไฟล์แข็งสุดใน wave: T บวกทุก leg แข็งขึ้นใต้ controls (T_bsz +0.918 p=0.0455 ผ่านเดี่ยว · p_family 0.105) · **PS ผ่านใบแรก 6/9+4/4** · P3 pooled เป็นบวกขึ้น (+583) winners ผ่าน — ตกเฉพาะ (a) 32%<50% · ⚠ ติดป้าย SE-leak (prediction freeze ก่อน leak, การแก้ tightening-only)
 - **Wave-1 ปิด + clean-room CONFIRMED ทั้งหมด** · **Gate C review จบ (07-05): Engineer CONFIRM-with-changes + Claude Verify ตรง** — ⭐ หลักฐานใหม่: **poke ⊥ overshoot (−0.081) + interaction: เซลล์ขาดทุนแท้ = SPENT∧POKED −0.581/ไม้ (n=103)** · audit ขาด: แกน exit (#7 time-stop · #10 let-winners-run ผูก RED FLAG) · แผนสุดท้าย: **Stage D first-scope = CONTINUATION vs SKIP(conjunction) + C10 MS kill-gate ขนาน (ฟรี) + defer fade + Stage F trigger-on-stall**
-- **Next: รอวินอนุมัติปิด Gate C + เริ่ม Stage D** · budget 8/40 · lockbox สะอาด · งานหลัง 2cf47eb ยังไม่ commit
+- **Gate C ปิดแล้ว + แผน TRELLIS-010D v1.1 + commit `2c9fd13` (07-05):** Engineer จับ H1 — **D-0.5 ceiling gate: SKIP-only เพดาน 32.4%/9.5% < §0 = documented-dead** (script `brain_v1_ceiling.py` ยืนยัน · ประหยัด WF+MQL5+GUI ทั้งเส้น) · fail-open 36.2% quantified · D-2b → skip-date-list-first
+- **Next (active path): WS-3 = exit lever #10 let-winners-run (จี้ RED FLAG cap-กลืน-edge) + WS-2 = C10 MS kill-gate ขนานฟรี** · budget 8/40 · lockbox สะอาด
 
 ## 🔴 TRELLIS-010 Stage 0: เจอ CLOCK BUG — เลข tester 2025/2026 และ holdout เดิมถูก re-baseline
 - **Root cause (พิสูจน์ครบ ดู Plan/TRELLIS-010 Progress Log):** tick 2025+2026 ใน XAUUSD_BT เป็น **UTC+0 ดิบ** (generator `ticks_to_mt5ticks.py` ไม่ shift + rename `_eet_`) ขณะ 2011–24 ถูก → tester 2025/26 test คนละ session
