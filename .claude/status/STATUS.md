@@ -20,7 +20,10 @@
 - **Wave-1 ปิด + clean-room CONFIRMED ทั้งหมด** · **Gate C review จบ (07-05): Engineer CONFIRM-with-changes + Claude Verify ตรง** — ⭐ หลักฐานใหม่: **poke ⊥ overshoot (−0.081) + interaction: เซลล์ขาดทุนแท้ = SPENT∧POKED −0.581/ไม้ (n=103)** · audit ขาด: แกน exit (#7 time-stop · #10 let-winners-run ผูก RED FLAG) · แผนสุดท้าย: **Stage D first-scope = CONTINUATION vs SKIP(conjunction) + C10 MS kill-gate ขนาน (ฟรี) + defer fade + Stage F trigger-on-stall**
 - **Gate C ปิดแล้ว + แผน TRELLIS-010D v1.1 + commit `2c9fd13` (07-05):** Engineer จับ H1 — **D-0.5 ceiling gate: SKIP-only เพดาน 32.4%/9.5% < §0 = documented-dead** (script `brain_v1_ceiling.py` ยืนยัน · ประหยัด WF+MQL5+GUI ทั้งเส้น) · fail-open 36.2% quantified · D-2b → skip-date-list-first
 - **WS-3 lever #10 = DEAD ที่ W3-0.5 ceiling (07-05):** ทุก RUN config ทำปีแพ้แย่ลง (−135→−200 ที่ CF) ช่วยแต่ปีชนะ → **ความรู้กลับด้าน: trail คือผู้ปกป้องปีแพ้บนสนาม search — RED FLAG ต้องแยกกลไก cap-skip ≠ trail-truncation** · `brain_v1_run.py` regressions 1,487/1,487 exact (จับ+แก้ root cause R-precision) · OVERCLAIM = SE acknowledged
-- **Next: lever #7 time-stop (โจมตีกอง stop/loss −3,358.5) spec→SE→ceiling + WS-2 C10 kill-gate** · budget 8/40 · commits ถึง 598454f + งาน W3 ยังไม่ commit
+- **W3 verified ครบ 3 ชั้น: clean-room CONFIRMED-DEAD** (reproduce 6/6 claims · artifact diff 0/1,487) · dead-code cleaned · **commit `9197794`**
+- **Lever #7 time-stop = FAIL ที่ W7-0.5 ceiling (07-05) แต่เฉียด+อ่อนโยนที่สุด:** CS+PF ช่วยปีแพ้ **41.2%** (เกณฑ์ 50%) ปีชนะแทบไม่เสีย · pooled +12.3% · kill-vector ที่ทายไว้ (winners) ไม่เกิด · CF-underwater ถูกกันออก = FAIL ไม่ล้างมลทินเต็ม (C-1 pre-registered)
+- **C10 MS: kill-gates ผ่านทุกด่าน** (orthogonal หมด: FRESH 0.238 · rjR 0.020 · eh −0.028) — รอวินเลือก (ก) full card 9/40 / (ข) fold เข้า Stage D
+- **⛔ STOP ตาม pre-registered guide: exit-lever ตาย 2/2 — รอวินเลือก:** (a) ไป Stage D ด้วยของที่มี (b) CF-free variant #7 ผ่าน SE (c) #3 session-exit (d) Stage F · budget 8/40 · งานหลัง 9197794 ยังไม่ commit
 
 ## 🔴 TRELLIS-010 Stage 0: เจอ CLOCK BUG — เลข tester 2025/2026 และ holdout เดิมถูก re-baseline
 - **Root cause (พิสูจน์ครบ ดู Plan/TRELLIS-010 Progress Log):** tick 2025+2026 ใน XAUUSD_BT เป็น **UTC+0 ดิบ** (generator `ticks_to_mt5ticks.py` ไม่ shift + rename `_eet_`) ขณะ 2011–24 ถูก → tester 2025/26 test คนละ session
