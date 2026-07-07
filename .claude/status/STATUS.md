@@ -27,7 +27,11 @@
 - **exit-axis ปิดสนิท (reshaping สร้าง pooled ไม่ได้ · 3 lever) + C10 falsified · budget 9/40 · commit `9db2e36`**
 - **★ 2026-07-07 session 2: OFFENSIVE REFRAME (วินสั่งรื้อ frame) → `Plan/TRELLIS-010_v3_offensive_reframe.md`** — v1/v2 = defensive/skip/symptom (ขัดเป้า) · **root = engine edge ไม่ใช่ capital** ("$100 ไม่รอด"=อาการ edge อ่อน) · No-Trade root-cause-only · martingale allowed (ban loss-driven) · Constraint vs Excuse lens · เป้าไม่เปลี่ยน ($100 รอด+กำไรมาก+เข้าทุกโอกาส)
 - **★ Step 1 (measurement foundation) ปิด — Engineer PASS + honest:** `edge_bar_mc.py` (ruin/edge-bar system-of-record · 3-metric: Orient$1.25/**Stress~5.6-7×v4**/Decision=eval_ruin) · `opportunity_unit.py` (Oracle set · **v4 blind: lift −2.2pp captured 47%**) · **edge ต้องแรง ~7× v4 ให้ $100 รอด** · Claude over-claim 2 headline (3.5×/35%) จับได้แก้แล้ว
-- **▶ Step 2: fade ตายทั้ง 2 construction → PIVOT Behavior→Discovery:** `fade_dataset.py` (mirror WR12%) + `exhaustion_fade.py` (−0.6/ไม้ WR40% · robust 20+DoF/9-9ปี · Engineer PASS · Claude จับ+แก้ too-clean bug) · scope="overshoot≠exhaustion-proxy บน OHLCV" · **"behavior-space บน v4-entry ไม่มี additive headroom" = pooled-ceiling** · **bottleneck → DISCOVERY** (หา opportunity ที่ v4 blind) + Discovery-Falsification-Gate + info-theory ceiling (OHLC-feature≠edge · order-flow=Stage F)
+- **▶ Step 2 · Behavior→Discovery→Direction-Prediction:**
+  - fade ตายทั้ง 2 (mirror WR12% · exhaustion −0.6 robust · Engineer PASS · Claude แก้ too-clean bug) → "behavior-space บน v4-entry ไม่มี additive headroom" = pooled-ceiling
+  - **Discovery probe v0 (Momentum): Engineer catch — Claude วัดผิด population** (all-missed 94% chop) เกือบสรุป ceiling→StageF (escape) · แก้: **missed ∧ oracle-opp → +1.745 (n=31) = Discovery NOT falsified · additive opp มีจริง**
+  - ⭐ **bottleneck = DIRECTION** (dir ตรง +17.98/WR100% ผิด −13.48) · PnL = Opportunity × Direction × Execution · **next = direction predictor (decision-time · oracle=label ไม่ใช่ target)** · Stage-F premature
+  - gate: Q4 orthogonality · Q5 attribution · scope=Momentum-family (ไม่ใช่ Discovery ทั้งหมด)
 
 ## 🔴 TRELLIS-010 Stage 0: เจอ CLOCK BUG — เลข tester 2025/2026 และ holdout เดิมถูก re-baseline
 - **Root cause (พิสูจน์ครบ ดู Plan/TRELLIS-010 Progress Log):** tick 2025+2026 ใน XAUUSD_BT เป็น **UTC+0 ดิบ** (generator `ticks_to_mt5ticks.py` ไม่ shift + rename `_eet_`) ขณะ 2011–24 ถูก → tester 2025/26 test คนละ session
