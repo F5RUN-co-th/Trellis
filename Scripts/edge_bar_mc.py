@@ -20,10 +20,10 @@ edge_bar_mc.py — TRELLIS-010 v3 Step 1 · system-of-record ของ ruin / ed
     **ORIENTATION** (edge ต้อง ~ระดับไหน) · winner-scaled = **STRESS-test** (ทน shape เข้ม
     ขึ้นไหม — **ไม่ใช่ upper bound เหนือทุก shape**) · `eval_ruin(distribution)` = **DECISION**
     (Step 2 · ตัดสินจริง) → $1.25(orient) กับ $2.0-2.5(stress) ตอบคนละคำถาม
-  · **block (Engineer P1 — cause แก้ให้ตรง evidence):** lag-1 autocorr = +0.010 (≈white noise ·
-    **ไม่ mean-revert** ตามที่เคยเขียนผิด) · block streakier by variance · แต่ **IID ruin สูงกว่า**
-    เพราะ IID concat loss-run ลึกกว่า empirical local sequencing → report **max(IID, block)** =
-    robust ต่อ sign ของ autocorr · streak=11
+  · **block (Engineer P1 · ChatGPT: แยก empirical จาก mechanistic):** OBSERVED = lag-1 autocorr
+    +0.010 (≈white noise · **ไม่ mean-revert**) · block-var 1678 > IID-var 1271 · **IID ruin
+    สูงกว่า block** (measured) · HYPOTHESIS (ยังไม่พิสูจน์ด้วย loss-run-length) = IID concat
+    loss-run ลึกกว่า local sequencing → report **max(IID, block)** = robust ต่อ sign autocorr · streak=11
   · **shape ≠ mean (HIGH-1):** ที่ mean เดียวกัน winner-scaled (winners×k · losers ยัง −R =
     shape "let-winners-run") ruin สูงกว่า mean-shift 3× → **gate จริง = distribution-in ไม่ใช่
     scalar** · CONFIRM = run CONFIRM distribution ผ่าน eval_ruin **ตรงๆ** (ไม่ +haircut บน SEARCH
