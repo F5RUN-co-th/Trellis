@@ -179,18 +179,17 @@ def main():
     print(f"  flip-rate(OOS)={100*flip.mean():.1f}% · flip-precision={100*fprec:.1f}% vs base-rate 47.6% · "
           f"features-kept/fold={keepn} · predLongFrac/fold={lfrac} (0.0/1.0 = degenerate constant-dir bet)")
 
-    # WEAK-SIGNAL test (Engineer Q2: perm-null = floor−baseline โครงสร้าง · ไม่ใช่ signal-test)
+    # perm-null ≈ floor−baseline (Engineer Q2: uninformative · N=1 shuffle → ไม่มี null-band → ไม่อ้าง signal)
     dpn, pLn, pSn, don, dyn, Rn, _, _, _ = wf(rl, rs, shuffle=True)
     liftn = np.where(dpn == 1, pLn, pSn) - np.where(don == 1, pLn, pSn)
     fb = floor.mean() - base.mean()
-    print(f"  perm-null lift={liftn.mean():+.3f} ≈ floor−baseline {fb:+.3f} (= re-state baseline skill · ไม่ใช่ signal-test)")
-    print(f"  weak-signal: predictor {lift.mean():+.3f} − perm-null {liftn.mean():+.3f} = {lift.mean()-liftn.mean():+.3f} "
-          f"(>0 = features มี signal อ่อน แต่ยังไม่ชนะ baseline)")
-    # ACTIVE-fold (ตัด abstain · Engineer Q1: aggregate เจือจาง 34% · abstain = 2 fold baseline แข็งสุด)
+    print(f"  perm-null lift={liftn.mean():+.3f} ≈ floor−baseline {fb:+.3f} (uninformative · **N=1 shuffle ไม่สร้าง null-band → "
+          f"ไม่อ้าง 'weak-signal exists'** · Engineer Q2)")
+    # ACTIVE-fold (ตัด abstain · Engineer Q1: aggregate เจือจาง 34% · = decision-relevant สำหรับ 'features มี signal ไหม')
     act = ~abst
     la, ha = day_ci(lift[act], dyo[act], rng)
-    print(f"  ACTIVE folds (มี feature stable · {act.sum()}/{len(lift)} ไม้): lift={lift[act].mean():+.3f}$ "
-          f"CI[{la:+.3f},{ha:+.3f}] · abstain {(~act).sum()} = baseline")
+    print(f"  **ACTIVE folds (gate ใช้ feature · {act.sum()}/{len(lift)} ไม้): lift={lift[act].mean():+.3f}$ "
+          f"CI[{la:+.3f},{ha:+.3f}]** (เมื่อ act = hurt · marginally-sig · post-selection) · abstain {(~act).sum()} = baseline")
 
     # NONLINEAR capacity check — capacity-FAIR (Engineer Q3: sign-classifier · weight=|payoff| · min_child~fold)
     from lightgbm import LGBMClassifier
@@ -215,19 +214,20 @@ def main():
     print(f"  [NONLINEAR GBM · sign-classifier weighted · min_child~fold/20] lift={glift.mean():+.3f}$ "
           f"CI[{glo:+.3f},{ghi:+.3f}] {'✓>0' if glo > 0 else 'คร่อม/<0'}")
 
-    print(f"\n[READOUT · honest · calibrated · in-field SEARCH ไม่ใช่ OOS จริง]")
-    print(f"  • baseline (v4 breakout-rule) = **direction edge จริง** +{base.mean():.3f}$/ไม้ (> floor {floor.mean():+.3f})")
-    print(f"  • OHLC features **near-totally NOT sign-stable** (kept {keepn}/19 · เฉลี่ย {np.mean(keepn):.1f}/19) = finding หลัก")
-    print(f"  • learned (linear+GBM) **ไม่ชนะ baseline** OOS (lift คร่อม 0) · features มี weak-signal (>perm-null) แต่ไม่พอ")
-    if (lo <= 0 <= hi) and (glo <= 0 <= ghi):
-        v = ("**v4 breakout-direction = ดี + ใกล้ OHLC-extractable ceiling** · learned OHLC ไม่เพิ่ม edge เหนือ "
-             f"MDE≈{(hi-lo)/2:.2f}$/ไม้ (active-fold {lift[act].mean():+.2f}) · **sub-MDE ไม่ถูกตัด = ไม่ใช่ 'exhausted/zero'**\n"
-             "       → **monetize direction ที่มี · อย่าไล่ล่า additive OHLC-direction** · tick-price = *hypothesis* ไม่ใช่ proven-need\n"
-             "       → magnitude/opportunity channel (STATUS +1.745/+0.66) = **positive อยู่แล้ว** น่าพิจารณาก่อน escalate")
-    else:
-        v = f"linear CI[{lo:+.2f},{hi:+.2f}] · GBM CI[{glo:+.2f},{ghi:+.2f}] — ตรวจ per-model ก่อนสรุป"
-    print(f"  → {v}")
-    print(f"  ⚠ SEARCH 2012-2020 · WF-within-span ≠ true-OOS · abstain 34% → MDE optimistic · not 'proven zero'")
+    print(f"\n[READOUT · honest · TERMINAL · in-field SEARCH ไม่ใช่ OOS จริง]")
+    print(f"  • baseline (v4 breakout-rule) มี direction skill +{base.mean():.3f}$/ไม้ (> floor {floor.mean():+.3f}) = fact ของ rule ที่มีอยู่")
+    print(f"  • learned OHLC (19-feat · linear+GBM) **ไม่ชนะ baseline · point-negative ทุก estimator:** "
+          f"aggregate {lift.mean():+.3f} (คร่อม 0 · เจือจาง abstain 34%) · ACTIVE-fold {lift[act].mean():+.3f} CI[{la:+.3f},{ha:+.3f}] "
+          f"(hurt เมื่อ act) · GBM {glift.mean():+.3f}")
+    print(f"  • OHLC features **~95% NOT sign-stable** (kept เฉลี่ย {np.mean(keepn):.1f}/19)")
+    print(f"  • **OHLC extractable ceiling = ยังไม่วัด** · oracle {ceil.mean():+.2f} → **headroom +{ceil.mean()-base.mean():.1f}$/ไม้ ยังเหลือ** "
+          f"= direction **ยังไม่ solved** (แค่ 19-feat นี้จับไม่ได้)")
+    v = ("**19 OHLC features เหล่านี้ไม่มี usable additive direction signal ที่ real exit** (point-negative เมื่อ act) · "
+         f"ceiling ที่แท้ไม่ทราบ · +{ceil.mean()-base.mean():.1f} oracle-headroom เหลือ · "
+         "**ไม่ prescribe ทิศถัดไป — ให้ Win ตัดสิน**") if (lo <= 0 <= hi) else \
+        f"linear CI[{lo:+.2f},{hi:+.2f}] · GBM CI[{glo:+.2f},{ghi:+.2f}] — ตรวจ per-model"
+    print(f"  → TERMINAL: {v}")
+    print(f"  ⚠ SEARCH 2012-2020 · WF≠true-OOS · post-selection active-fold (upper เปราะ) · **ไม่ใช่ 'proven-zero'**")
 
 
 if __name__ == "__main__":
