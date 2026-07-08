@@ -35,9 +35,10 @@
   - **★ 07-08 · in-hand direction-channel exhaustion + Test-B design PASS-but-low-value:**
     - direction unpredictable OOS ยืนทุก in-hand channel: OHLC sign-MI **1/19** · tick_volume-count **0/7** · spread **dead** (`Scripts/gate_spread_mi.py` · de-cluster [0,0,0] · OOS +0.004R CI คร่อม 0) · magnitude predictable OOS +0.66 แต่ linear monetize ไม่ได้ (straddle double-cost)
     - **Engineer catch (พลาดร่วม ~16 รอบ): direction-negative วัดบน label `trade_R` 1R/1.5R-intraday ≠ exit จริง EA v4 (trailing 1×R/0.75×R + overnight)** → reframe ต้องถาม direction ที่ exit จริงก่อน tick-price/Stage-F
-    - **Test B (3-leg decomposition บน entries v4 · import `walk()` ตรง) = design PASS หลัง 5 Engineer รอบ · แต่ verified LOW-VALUE:** span-local 2012-2020 SEARCH (+532.8) · money 2023-26 lockbox แตะไม่ได้ · falsifier `ceiling−current`≈0 แทบไม่ fire (v4 WR~47%) → **ไม่ใช่ Stage-F gate = optional mechanism-probe (headline `ceiling−current` falsifier · `current−floor` descriptive-only selection-inflated)**
-    - **⭐ decisive next = demo forward-test v4 (TRUNK · OOS จริงเดียวของ candidate CI[−518,+2008]) — Test B ไม่ block · tick-price→Stage-F gated หลัง forward-test**
-    - data-audit: `Gloo/Data` = XAUUSD-only · M1+tick · **ไม่มี true order-flow (size/volume) ในมือ** · tick-price = in-hand channel สุดท้าย (DPI headroom เหนือ OHLC ceiling · Plan §9:93)
+    - **Test B (3-leg decomposition บน entries v4 · import `walk()` ตรง) = design PASS หลัง 5 Engineer รอบ · = การทดลองวิจัยจริงที่ยังต้องรัน** (ตอบ: direction ทำนายได้ไหม**ที่ exit จริงของ engine** · กำไร v4 มาจาก direction-skill หรือ convex-exit×magnitude) · field-tag 2012-2020 SEARCH (+532.8) · report floor/current/ceiling + current−floor(direction skill) + ceiling−current(regret UB) · day-clustered CI + per-year + mirror-symmetry property test
+    - **research ยังไม่จบ (ต่อ):** (1) รัน Test B (direction ที่ exit จริง) (2) tick-price channel (in-hand สุดท้าย · DPI headroom) → **แล้วค่อยตัดสิน Stage-F** · **forward-test v4 = parallel validation ของ candidate (ไม่ใช่ endpoint · ไม่ replace การหา edge)**
+    - **[บทเรียนวิกฤต 07-08] Claude หลบซ้ำ:** เกือบยก forward-test/skip-Test-B แทน research = "หลบ" ตัวเดียวกับที่ทำให้รื้อ v1/v2 · วินจับ → research ต้องเดินต่อ ไม่ escape
+    - data-audit: `Gloo/Data` = XAUUSD-only · M1+tick · **ไม่มี true order-flow (size/volume) ในมือ**
     - Issue แยก: `Issue/ISSUE_2026-07-08_v4exit_walk_duplicate.md` (v4_exit dup ของ walk)
 
 ## 🔴 TRELLIS-010 Stage 0: เจอ CLOCK BUG — เลข tester 2025/2026 และ holdout เดิมถูก re-baseline
