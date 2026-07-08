@@ -131,7 +131,7 @@ def main():
     rng = np.random.default_rng(20260708)
 
     def wf(payoff_l, payoff_s, shuffle=False):
-        dp_all, pL_all, pS_all, d_all, day_all, R_all, keepn = [], [], [], [], [], [], []
+        dp_all, pL_all, pS_all, d_all, day_all, R_all, keepn, lfrac = [], [], [], [], [], [], [], []
         for Y in TEST_YEARS:
             te = yr == Y
             if te.sum() < 50:
@@ -143,19 +143,21 @@ def main():
             if shuffle:
                 perm = rng.permutation(tr.sum()); rlt, rst = rlt[perm], rst[perm]
             keep = sign_gate(X[tr], rlt - rst, dayix[tr], rng)
-            if keep.sum() == 0:
-                keep[:] = True
-            mu, sd = X[tr][:, keep].mean(0), X[tr][:, keep].std(0) + 1e-9
-            Xs = np.c_[np.ones(len(X)), (X[:, keep] - mu) / sd]
-            w = fit_signedR(Xs[tr], rlt, rst)
-            p = 1.0 / (1.0 + np.exp(-np.clip(Xs @ w, -30, 30)))
-            dp = np.where(p >= 0.5, 1, -1)
-            dp_all.append(dp[te]); pL_all.append(pL[te]); pS_all.append(pS[te])
-            d_all.append(dd[te]); day_all.append(dayix[te]); R_all.append(Rv[te]); keepn.append(keep.sum())
+            if keep.sum() == 0:                                # Engineer P1: ABSTAIN → baseline dir
+                dpte = dd[te]                                 # (ไม่มี feature stable = ไม่เบี่ยงจาก prior · lift 0)
+            else:
+                mu, sd = X[tr][:, keep].mean(0), X[tr][:, keep].std(0) + 1e-9
+                Xs = np.c_[np.ones(len(X)), (X[:, keep] - mu) / sd]
+                w = fit_signedR(Xs[tr], rlt, rst)
+                p = 1.0 / (1.0 + np.exp(-np.clip(Xs @ w, -30, 30)))
+                dpte = np.where(p >= 0.5, 1, -1)[te]
+            keepn.append(int(keep.sum())); lfrac.append(round(float((dpte == 1).mean()), 2))
+            dp_all.append(dpte); pL_all.append(pL[te]); pS_all.append(pS[te])
+            d_all.append(dd[te]); day_all.append(dayix[te]); R_all.append(Rv[te])
         return (np.concatenate(dp_all), np.concatenate(pL_all), np.concatenate(pS_all),
-                np.concatenate(d_all), np.concatenate(day_all), np.concatenate(R_all), keepn)
+                np.concatenate(d_all), np.concatenate(day_all), np.concatenate(R_all), keepn, lfrac)
 
-    dp, pLo, pSo, do_, dyo, Ro, keepn = wf(rl, rs)
+    dp, pLo, pSo, do_, dyo, Ro, keepn, lfrac = wf(rl, rs)
     pred = np.where(dp == 1, pLo, pSo)                    # $ ของ predictor
     base = np.where(do_ == 1, pLo, pSo)                   # $ ของ baseline (v4 dir)
     floor = (pLo + pSo) / 2; ceil = np.maximum(pLo, pSo)
@@ -173,24 +175,53 @@ def main():
           f"CI/R[{loR:+.4f},{hiR:+.4f}]  {'✓>0' if lo > 0 else ('✗<0' if hi < 0 else 'คร่อม 0')}")
     print(f"  MDE (day-clustered CI half-width) ≈ {(hi - lo) / 2:.3f}$/ไม้")
     print(f"  flip-rate(OOS)={100*flip.mean():.1f}% · flip-precision={100*fprec:.1f}% vs base-rate 47.6% · "
-          f"features-kept/fold={keepn}")
+          f"features-kept/fold={keepn} · predLongFrac/fold={lfrac} (0.0/1.0 = degenerate constant-dir bet)")
 
-    # PERMUTATION-NULL
-    dpn, pLn, pSn, don, dyn, Rn, _ = wf(rl, rs, shuffle=True)
+    # PERMUTATION-NULL — honest signal test = predictor vs perm-null (ไม่ใช่ vs baseline · Engineer P3)
+    dpn, pLn, pSn, don, dyn, Rn, _, _ = wf(rl, rs, shuffle=True)
     liftn = np.where(dpn == 1, pLn, pSn) - np.where(don == 1, pLn, pSn)
-    print(f"  permutation-null lift = {liftn.mean():+.4f}$/ไม้ (predictor ต้อง ≫ นี่)")
+    lon, hin = day_ci(liftn, dyn, rng)
+    print(f"  permutation-null lift = {liftn.mean():+.4f}$/ไม้ CI[{lon:+.3f},{hin:+.3f}]  ·  "
+          f"predictor {lift.mean():+.3f} vs perm-null {liftn.mean():+.3f}")
+
+    # NONLINEAR capacity check (Engineer Q6 · ก่อนเรียก 'OHLC exhausted' ต้องกัน 'linear อ่อนไป')
+    from lightgbm import LGBMRegressor
+    gdp, gpL, gpS, gd, gday = [], [], [], [], []
+    for Y in TEST_YEARS:
+        te = yr == Y
+        if te.sum() < 50:
+            continue
+        tr = np.array([int(y) < int(Y) for y in yr]) & (dayix < dayix[te].min() - Nemb)
+        if tr.sum() < 300:
+            continue
+        gm = LGBMRegressor(max_depth=3, n_estimators=150, learning_rate=0.05, min_child_samples=200,
+                           subsample=0.8, colsample_bytree=0.8, verbose=-1, random_state=0)
+        gm.fit(X[tr], (rl - rs)[tr])
+        gdp.append(np.where(gm.predict(X[te]) >= 0, 1, -1))
+        gpL.append(pL[te]); gpS.append(pS[te]); gd.append(dd[te]); gday.append(dayix[te])
+    gdp, gpL, gpS, gd, gday = map(np.concatenate, (gdp, gpL, gpS, gd, gday))
+    glift = np.where(gdp == 1, gpL, gpS) - np.where(gd == 1, gpL, gpS)
+    glo, ghi = day_ci(glift, gday, rng)
+    print(f"  [NONLINEAR GBM] lift={glift.mean():+.4f}$/ไม้ CI[{glo:+.3f},{ghi:+.3f}] "
+          f"{'✓>0 = linear อ่อนไป จริง' if glo > 0 else 'คร่อม/<0 = channel ไม่ให้แม้ nonlinear'}")
 
     print(f"\n[READOUT · honest · in-field SEARCH ไม่ใช่ OOS จริง]")
-    if flip.mean() < 0.02:
-        v = "predictor collapse → baseline (flip~0) = **ไม่พบ edge** (ไม่ใช่ tie)"
-    elif lo > 0:
-        v = "learned predictor ชนะ baseline OOS (in-field) → มี direction-info เกิน breakout-rule"
-    elif hi < 0:
-        v = "predictor แย่กว่า baseline = features ทำ direction แย่ลง"
+    degenerate = any(f in (0.0, 1.0) for f in lfrac)
+    near_null = abs(lift.mean() - liftn.mean()) < 0.15
+    lin_null = near_null or (lo <= 0 <= hi)
+    gbm_null = (glo <= 0 <= ghi) or (ghi < 0)
+    if lo > 0 or glo > 0:
+        v = (f"มี additive OHLC direction signal ({'linear' if lo > 0 else 'GBM-nonlinear'} lift CI>0) → "
+             "build ต่อบน channel นี้ (ยังไม่ต้อง tick-price)")
+    elif lin_null and gbm_null:
+        v = ("ไม่พบ additive OHLC direction edge **ทั้ง linear และ nonlinear(GBM)** (lift คร่อม 0 · predictor≈perm-null"
+             + (" · linear degenerate constant-dir" if degenerate else "") + ") → "
+             f"**OHLC-feature direction = exhausted (วัดครบ 2 model class · MDE≈{(hi-lo)/2:.3f}$/ไม้)** · "
+             "baseline breakout-rule = direction-signal เดียวที่ใช้ได้จาก OHLC · next = tick-price channel")
     else:
-        v = f"ไม่พบ edge ที่ detectable (lift CI คร่อม 0 · MDE≈{(hi-lo)/2:.3f}$/ไม้ · underpowered ≠ 'dead')"
+        v = "mixed (linear vs GBM ไม่ตรง) — ตรวจ per-model ก่อนสรุป"
     print(f"  → {v}")
-    print(f"  ⚠ SEARCH 2012-2020 · partly WF-selected · OOS จริง = forward-test เท่านั้น")
+    print(f"  ⚠ SEARCH 2012-2020 · partly WF-selected · OOS จริง = forward-test · tested: signed-R linear + GBM nonlinear")
 
 
 if __name__ == "__main__":
