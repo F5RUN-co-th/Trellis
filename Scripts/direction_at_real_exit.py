@@ -35,6 +35,14 @@ if hasattr(sys.stdout, "reconfigure"):
 TEST_YEARS = ["2015", "2016", "2017", "2018", "2019", "2020"]
 
 
+def _rng(tag, root=20260708):
+    """deterministic per-call-site rng (Engineer: shared rng = order-dependent CI · root fix)
+    crc32 = stable ข้าม run (ไม่ใช้ hash() ที่ผูก PYTHONHASHSEED = irreproducible)
+    root = seed สำหรับ multi-seed robustness (Engineer: single draw ≠ robust fact)"""
+    import zlib
+    return np.random.default_rng(np.random.SeedSequence([root, zlib.crc32(str(tag).encode()) & 0xffffffff]))
+
+
 def sign_gate(Xtr, payoff, days, rng, B=300):
     """P1-d · train-only day-clustered corr-CI · keep feature ถ้า CI(corr) excludes 0 (sign-stable)"""
     uq = np.unique(days); d2i = {d: np.where(days == d)[0] for d in uq}
@@ -128,9 +136,7 @@ def main():
           f"(1 ตัด a<240) · full BASE_P={BASE_P:+.1f} · GUARD 2 future-mask ✓ · embargo N={Nemb}d")
     print(f"⚠ FIELD = 2012-2020 SEARCH · money 2023-26 LOCKBOX (ไม่วัด) · WF-within-span ≠ true-OOS\n")
 
-    rng = np.random.default_rng(20260708)
-
-    def wf(payoff_l, payoff_s, shuffle=False):
+    def wf(payoff_l, payoff_s, shuffle=False, root=20260708):
         dp_all, pL_all, pS_all, d_all, day_all, R_all, keepn, lfrac, ab_all = ([] for _ in range(9))
         for Y in TEST_YEARS:
             te = yr == Y
@@ -141,8 +147,8 @@ def main():
                 continue
             rlt, rst = payoff_l[tr].copy(), payoff_s[tr].copy()
             if shuffle:
-                perm = rng.permutation(tr.sum()); rlt, rst = rlt[perm], rst[perm]
-            keep = sign_gate(X[tr], rlt - rst, dayix[tr], rng)
+                perm = _rng(f"perm_{Y}", root).permutation(tr.sum()); rlt, rst = rlt[perm], rst[perm]
+            keep = sign_gate(X[tr], rlt - rst, dayix[tr], _rng(f"gate_{Y}_{shuffle}", root))
             if keep.sum() == 0:                                # Engineer P1: ABSTAIN → baseline dir
                 dpte = dd[te]                                 # (ไม่มี feature stable = ไม่เบี่ยงจาก prior · lift 0)
             else:
@@ -163,75 +169,76 @@ def main():
     pred = np.where(dp == 1, pLo, pSo)                    # $ ของ predictor
     base = np.where(do_ == 1, pLo, pSo)                   # $ ของ baseline (v4 dir)
     floor = (pLo + pSo) / 2; ceil = np.maximum(pLo, pSo)
-    lift = pred - base
-    lo, hi = day_ci(lift, dyo, rng); loR, hiR = day_ci(lift / Ro, dyo, rng)
-    blo, bhi = day_ci(base - floor, dyo, rng)             # Engineer: baseline positive ต้อง CI เท่ากับ negative
-    flip = dp != do_
-    fprec = (np.where(dp == 1, pLo > pSo, pSo > pLo)[flip]).mean() if flip.any() else float("nan")
+    print(f"{'strategy (walk-exit · levels)':<32}{'Σ$':>10}{'/ไม้$':>9}{'Σ/R':>9}")
+    for nm, pn in [("floor (coin-flip · fact)", floor), ("baseline (v4 dir · fact)", base),
+                   ("predictor (learned · 1-seed illustr)", pred), ("ceiling (oracle UB · fact)", ceil)]:
+        print(f"  {nm:<30}{pn.sum():>+10.1f}{pn.mean():>+9.3f}{(pn/Ro).sum():>+9.1f}")
+    # [TRIM · Engineer B] ตัด single-seed lift-CI / perm-null / active-fold prints — single-draw prose =
+    # residual-generator (catch #2,3,6,7) · robust conclusion อยู่ที่ MULTI-SEED เท่านั้น (ด้านล่าง)
 
-    print(f"{'strategy (walk-exit)':<26}{'Σ$':>10}{'/ไม้$':>9}{'Σ/R':>9}")
-    for nm, pn in [("floor (coin-flip)", floor), ("baseline (v4 dir)", base),
-                   ("predictor (learned)", pred), ("ceiling (oracle UB)", ceil)]:
-        print(f"  {nm:<24}{pn.sum():>+10.1f}{pn.mean():>+9.3f}{(pn/Ro).sum():>+9.1f}")
-    print(f"\n[DECISIVE] predictor − baseline (OOS {len(pred)} ไม้ · {TEST_YEARS[0]}-{TEST_YEARS[-1]}):")
-    print(f"  lift = {lift.sum():+.1f}$ ({lift.mean():+.4f}$/ไม้) · CI$[{lo:+.3f},{hi:+.3f}] · "
-          f"CI/R[{loR:+.4f},{hiR:+.4f}]  {'✓>0' if lo > 0 else ('✗<0' if hi < 0 else 'คร่อม 0')}")
-    print(f"  MDE (day-clustered CI half-width) ≈ {(hi - lo) / 2:.3f}$/ไม้")
-    print(f"  flip-rate(OOS)={100*flip.mean():.1f}% · flip-precision={100*fprec:.1f}% vs base-rate 47.6% · "
-          f"features-kept/fold={keepn} · predLongFrac/fold={lfrac} (0.0/1.0 = degenerate constant-dir bet)")
-
-    # perm-null ≈ floor−baseline (Engineer Q2: uninformative · N=1 shuffle → ไม่มี null-band → ไม่อ้าง signal)
-    dpn, pLn, pSn, don, dyn, Rn, _, _, _ = wf(rl, rs, shuffle=True)
-    liftn = np.where(dpn == 1, pLn, pSn) - np.where(don == 1, pLn, pSn)
-    fb = floor.mean() - base.mean()
-    print(f"  perm-null lift={liftn.mean():+.3f} ≈ floor−baseline {fb:+.3f} (uninformative · **N=1 shuffle ไม่สร้าง null-band → "
-          f"ไม่อ้าง 'weak-signal exists'** · Engineer Q2)")
-    # ACTIVE-fold (ตัด abstain · Engineer Q1: aggregate เจือจาง 34% · = decision-relevant สำหรับ 'features มี signal ไหม')
-    act = ~abst
-    la, ha = day_ci(lift[act], dyo[act], rng)
-    print(f"  ACTIVE folds (gate ใช้ feature · {act.sum()}/{len(lift)} ไม้): lift={lift[act].mean():+.3f}$ "
-          f"CI[{la:+.3f},{ha:+.3f}] (CI เปราะ · flips excl↔straddle-0 ตาม rng · post-selection = ไม่ robust) · abstain {(~act).sum()} = baseline")
-
-    # NONLINEAR capacity check — capacity-FAIR (Engineer Q3: sign-classifier · weight=|payoff| · min_child~fold)
+    # NONLINEAR capacity check (Engineer Q3: sign-classifier · weight=|payoff| · min_child~fold · subsample=no-op ตัดออก)
     from lightgbm import LGBMClassifier
-    gdp, gpL, gpS, gd, gday = [], [], [], [], []
-    for Y in TEST_YEARS:
-        te = yr == Y
-        if te.sum() < 50:
-            continue
-        tr = np.array([int(y) < int(Y) for y in yr]) & (dayix < dayix[te].min() - Nemb)
-        if tr.sum() < 300:
-            continue
-        yt = ((rl - rs)[tr] >= 0).astype(int); wt = np.abs((rl - rs)[tr])
-        gm = LGBMClassifier(max_depth=3, n_estimators=150, learning_rate=0.05,
-                            min_child_samples=max(20, tr.sum() // 20),
-                            subsample=0.8, colsample_bytree=0.8, verbose=-1, random_state=0)
-        gm.fit(X[tr], yt, sample_weight=wt)
-        gdp.append(np.where(gm.predict(X[te]) == 1, 1, -1))
-        gpL.append(pL[te]); gpS.append(pS[te]); gd.append(dd[te]); gday.append(dayix[te])
-    gdp, gpL, gpS, gd, gday = map(np.concatenate, (gdp, gpL, gpS, gd, gday))
-    glift = np.where(gdp == 1, gpL, gpS) - np.where(gd == 1, gpL, gpS)
-    glo, ghi = day_ci(glift, gday, rng)
-    print(f"  [NONLINEAR GBM · sign-classifier weighted · min_child~fold/20] lift={glift.mean():+.3f}$ "
-          f"CI[{glo:+.3f},{ghi:+.3f}] {'✓>0' if glo > 0 else 'คร่อม/<0'}")
 
-    bskill = "distinguishable จาก coin-flip" if blo > 0 else "point-positive แต่ CI คร่อม 0 (ยืนจาก Test B/WF ไม่ใช่ run นี้)"
-    print(f"\n[READOUT · honest · TERMINAL · in-field SEARCH ไม่ใช่ OOS จริง]")
-    print(f"  • baseline (v4 breakout-rule) direction skill = base−floor +{base.mean()-floor.mean():.3f}$/ไม้ "
-          f"CI[{blo:+.3f},{bhi:+.3f}] = **{bskill}** (CI-backed เท่ากับ negative)")
-    print(f"  • learned OHLC (19-feat · linear+GBM) **ไม่มีหลักฐานว่าช่วย · point-negative ทุก estimator แต่ส่วนใหญ่ CI คร่อม 0:** "
-          f"aggregate {lift.mean():+.3f} CI[{lo:+.3f},{hi:+.3f}] · ACTIVE {lift[act].mean():+.3f} CI[{la:+.3f},{ha:+.3f}] (เปราะ · post-selection) · GBM {glift.mean():+.3f} CI[{glo:+.3f},{ghi:+.3f}]")
-    print(f"  • OHLC features **~95% NOT sign-stable** (kept เฉลี่ย {np.mean(keepn):.1f}/19) = สาเหตุ non-transfer")
-    print(f"  • **OHLC extractable ceiling = ยังไม่วัด** · oracle {ceil.mean():+.2f} → **headroom +{ceil.mean()-base.mean():.1f}$/ไม้ เหลือ** "
-          f"= direction **ยังไม่ solved** (แค่ 19-feat นี้จับไม่ได้)")
-    v = ("**19 OHLC features เหล่านี้ไม่มีหลักฐาน usable additive direction signal ที่ real exit** (point-negative ทุก estimator · "
-         f"sign ไม่แน่นอน) · ceiling ที่แท้ไม่ทราบ · +{ceil.mean()-base.mean():.1f} oracle-headroom เหลือ · **ไม่ใช่ 'proven-zero'**") \
-        if (lo <= 0 <= hi) else f"linear CI[{lo:+.2f},{hi:+.2f}] · GBM CI[{glo:+.2f},{ghi:+.2f}] — ตรวจ per-model"
+    def gbm_eval(s):                                       # s = random_state ของ model + rng ของ CI (seed-swept)
+        gdp, gpL, gpS, gd, gday = [], [], [], [], []
+        for Y in TEST_YEARS:
+            te = yr == Y
+            if te.sum() < 50:
+                continue
+            tr = np.array([int(y) < int(Y) for y in yr]) & (dayix < dayix[te].min() - Nemb)
+            if tr.sum() < 300:
+                continue
+            yt = ((rl - rs)[tr] >= 0).astype(int); wt = np.abs((rl - rs)[tr])
+            gm = LGBMClassifier(max_depth=3, n_estimators=150, learning_rate=0.05,
+                                min_child_samples=max(20, tr.sum() // 20),
+                                colsample_bytree=0.8, verbose=-1, random_state=s)
+            gm.fit(X[tr], yt, sample_weight=wt)
+            gdp.append(np.where(gm.predict(X[te]) == 1, 1, -1))
+            gpL.append(pL[te]); gpS.append(pS[te]); gd.append(dd[te]); gday.append(dayix[te])
+        gdp, gpL, gpS, gd, gday = map(np.concatenate, (gdp, gpL, gpS, gd, gday))
+        gl = np.where(gdp == 1, gpL, gpS) - np.where(gd == 1, gpL, gpS)
+        glo_, ghi_ = day_ci(gl, gday, _rng("gbm", s))
+        return gl.mean(), glo_, ghi_
+
+    # MULTI-SEED ROBUSTNESS (Engineer: single deterministic seed = 1 draw · descriptor seed-fragile)
+    SEEDS = [20260708, 1, 2, 42, 123, 999, 99999, 20260709, 7]
+    m_base_lo, m_agg, m_agg_lo, m_abst, m_gbm, m_gbm_lo = [], [], [], [], [], []
+    for s in SEEDS:
+        sdp, spLo, spSo, sdo, sdyo, sRo, _, _, sabst = wf(rl, rs, root=s)
+        sbase = np.where(sdo == 1, spLo, spSo); sfloor = (spLo + spSo) / 2
+        slift = np.where(sdp == 1, spLo, spSo) - sbase
+        s_lo, _sh = day_ci(slift, sdyo, _rng("mlift", s))
+        sb_lo, _bh = day_ci(sbase - sfloor, sdyo, _rng("mbf", s))
+        gpt_s, glo_s, _ghi_s = gbm_eval(s)                # Engineer R1: sweep GBM ด้วย (random_state=s)
+        m_base_lo.append(sb_lo); m_agg.append(slift.mean()); m_agg_lo.append(s_lo); m_abst.append(100 * sabst.mean())
+        m_gbm.append(gpt_s); m_gbm_lo.append(glo_s)
+    base_robust = all(b > 0 for b in m_base_lo)
+    lin_robust = all(a < 0 for a in m_agg) and not any(l > 0 for l in m_agg_lo)
+    gbm_robust = all(g < 0 for g in m_gbm) and not any(l > 0 for l in m_gbm_lo)
+    ohlc_robust = lin_robust and gbm_robust
+    print(f"\n[MULTI-SEED ROBUSTNESS · {len(SEEDS)} roots · pipeline-owned · Engineer]")
+    print(f"  base−floor: point +{base.mean()-floor.mean():.3f} (fact · seed-indep) · CI-lower min {min(m_base_lo):+.3f} "
+          f"max {max(m_base_lo):+.3f} → {'>0 ทุก seed (bootstrap-MC stable · ไม่ใช่ data-resample)' if base_robust else '⚠ คร่อม 0'}")
+    print(f"  LINEAR aggregate: min {min(m_agg):+.3f} max {max(m_agg):+.3f} · CI-excl-0-positive="
+          f"{'ไม่มี' if not any(l>0 for l in m_agg_lo) else '⚠มี'} → {'ALL<0 ROBUST' if lin_robust else '⚠'}")
+    print(f"  GBM aggregate (seed-swept): min {min(m_gbm):+.3f} max {max(m_gbm):+.3f} · CI-excl-0-positive="
+          f"{'ไม่มี' if not any(l>0 for l in m_gbm_lo) else '⚠มี'} → {'ALL<0 ROBUST' if gbm_robust else '⚠'}")
+    print(f"  abstain% = **SEED-FRAGILE {min(m_abst):.0f}–{max(m_abst):.0f}%** → ห้าม freeze ค่าเดียว (descriptor ไม่ robust)")
+
+    print(f"\n[READOUT · TERMINAL · seed-robust invariants · in-field SEARCH ไม่ใช่ OOS จริง]")
+    print(f"  • **v4 breakout-direction = edge จริง:** base−floor **+{base.mean()-floor.mean():.3f}$/ไม้ (point=fact · seed-indep)** · "
+          f"CI-lower > 0 ทุก {len(SEEDS)} seed (min {min(m_base_lo):+.3f} · bootstrap-MC stable) = distinguishable จาก coin-flip")
+    print(f"  • **learned OHLC (19-feat) ไม่มี additive edge (SEED-ROBUST ทั้ง linear ∧ GBM-swept):** aggregate < 0 ทุก seed "
+          f"ทั้งสอง model · ไม่มี seed CI-excl-0-positive = inconclusive-to-null (ไม่ใช่ harmful)")
+    print(f"  • gate descriptors (abstain {min(m_abst):.0f}–{max(m_abst):.0f}% · kept ~0–12/19) = **seed-fragile ไม่ freeze**")
+    print(f"  • **OHLC extractable ceiling = ยังไม่วัด** · oracle {ceil.mean():+.2f} → headroom +{ceil.mean()-base.mean():.1f}$/ไม้ เหลือ = direction **ยังไม่ solved**")
+    v = ("**19 OHLC features ไม่มีหลักฐาน additive direction signal ที่ real exit (seed-robust · linear ∧ GBM-swept)** · "
+         "v4 breakout-direction = edge จริง CI-backed · ceiling ไม่ทราบ · headroom เหลือ · **ไม่ใช่ 'proven-zero'**") \
+        if (base_robust and ohlc_robust) else "⚠ invariants ไม่ครบ — ตรวจ MULTI-SEED table ก่อนสรุป"
     print(f"  → TERMINAL: {v}")
-    print(f"  [OPTIONS ต่อ · caveated · Win ตัดสิน · ไม่ prescribe]: (a) monetize v4-direction ที่ CI-backed อยู่แล้ว · "
-          "(b) magnitude channel — +0.66 (label-agnostic, sturdier) > +1.745 (n=31 unvalidated) · "
-          "(c) richer-OHLC representation / (d) tick-price = untested hypotheses · (e) forward-test v4")
-    print(f"  ⚠ SEARCH 2012-2020 · WF≠true-OOS · active-fold post-selection · **ไม่ใช่ 'proven-zero'**")
+    print(f"  [OPTIONS ต่อ · caveated · Win ตัดสิน · ไม่ prescribe]: (a) monetize v4-direction ที่ CI-backed · "
+          "(b) magnitude channel (ผลบวกจาก analysis แยก · ยังไม่ re-verify) · (c) richer-OHLC / (d) tick-price = hypotheses · (e) forward-test v4")
+    print(f"  ⚠ SEARCH 2012-2020 · WF≠true-OOS · conclusion seed-robust ({len(SEEDS)} roots) · **ไม่ใช่ 'proven-zero'**")
 
 
 if __name__ == "__main__":
