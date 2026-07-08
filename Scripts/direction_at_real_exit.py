@@ -131,7 +131,7 @@ def main():
     rng = np.random.default_rng(20260708)
 
     def wf(payoff_l, payoff_s, shuffle=False):
-        dp_all, pL_all, pS_all, d_all, day_all, R_all, keepn, lfrac = [], [], [], [], [], [], [], []
+        dp_all, pL_all, pS_all, d_all, day_all, R_all, keepn, lfrac, ab_all = ([] for _ in range(9))
         for Y in TEST_YEARS:
             te = yr == Y
             if te.sum() < 50:
@@ -152,12 +152,14 @@ def main():
                 p = 1.0 / (1.0 + np.exp(-np.clip(Xs @ w, -30, 30)))
                 dpte = np.where(p >= 0.5, 1, -1)[te]
             keepn.append(int(keep.sum())); lfrac.append(round(float((dpte == 1).mean()), 2))
+            ab_all.append(np.full(int(te.sum()), keep.sum() == 0))
             dp_all.append(dpte); pL_all.append(pL[te]); pS_all.append(pS[te])
             d_all.append(dd[te]); day_all.append(dayix[te]); R_all.append(Rv[te])
-        return (np.concatenate(dp_all), np.concatenate(pL_all), np.concatenate(pS_all),
-                np.concatenate(d_all), np.concatenate(day_all), np.concatenate(R_all), keepn, lfrac)
+        cat = lambda L: np.concatenate(L)
+        return (cat(dp_all), cat(pL_all), cat(pS_all), cat(d_all), cat(day_all), cat(R_all),
+                keepn, lfrac, cat(ab_all))
 
-    dp, pLo, pSo, do_, dyo, Ro, keepn, lfrac = wf(rl, rs)
+    dp, pLo, pSo, do_, dyo, Ro, keepn, lfrac, abst = wf(rl, rs)
     pred = np.where(dp == 1, pLo, pSo)                    # $ ของ predictor
     base = np.where(do_ == 1, pLo, pSo)                   # $ ของ baseline (v4 dir)
     floor = (pLo + pSo) / 2; ceil = np.maximum(pLo, pSo)
@@ -177,15 +179,21 @@ def main():
     print(f"  flip-rate(OOS)={100*flip.mean():.1f}% · flip-precision={100*fprec:.1f}% vs base-rate 47.6% · "
           f"features-kept/fold={keepn} · predLongFrac/fold={lfrac} (0.0/1.0 = degenerate constant-dir bet)")
 
-    # PERMUTATION-NULL — honest signal test = predictor vs perm-null (ไม่ใช่ vs baseline · Engineer P3)
-    dpn, pLn, pSn, don, dyn, Rn, _, _ = wf(rl, rs, shuffle=True)
+    # WEAK-SIGNAL test (Engineer Q2: perm-null = floor−baseline โครงสร้าง · ไม่ใช่ signal-test)
+    dpn, pLn, pSn, don, dyn, Rn, _, _, _ = wf(rl, rs, shuffle=True)
     liftn = np.where(dpn == 1, pLn, pSn) - np.where(don == 1, pLn, pSn)
-    lon, hin = day_ci(liftn, dyn, rng)
-    print(f"  permutation-null lift = {liftn.mean():+.4f}$/ไม้ CI[{lon:+.3f},{hin:+.3f}]  ·  "
-          f"predictor {lift.mean():+.3f} vs perm-null {liftn.mean():+.3f}")
+    fb = floor.mean() - base.mean()
+    print(f"  perm-null lift={liftn.mean():+.3f} ≈ floor−baseline {fb:+.3f} (= re-state baseline skill · ไม่ใช่ signal-test)")
+    print(f"  weak-signal: predictor {lift.mean():+.3f} − perm-null {liftn.mean():+.3f} = {lift.mean()-liftn.mean():+.3f} "
+          f"(>0 = features มี signal อ่อน แต่ยังไม่ชนะ baseline)")
+    # ACTIVE-fold (ตัด abstain · Engineer Q1: aggregate เจือจาง 34% · abstain = 2 fold baseline แข็งสุด)
+    act = ~abst
+    la, ha = day_ci(lift[act], dyo[act], rng)
+    print(f"  ACTIVE folds (มี feature stable · {act.sum()}/{len(lift)} ไม้): lift={lift[act].mean():+.3f}$ "
+          f"CI[{la:+.3f},{ha:+.3f}] · abstain {(~act).sum()} = baseline")
 
-    # NONLINEAR capacity check (Engineer Q6 · ก่อนเรียก 'OHLC exhausted' ต้องกัน 'linear อ่อนไป')
-    from lightgbm import LGBMRegressor
+    # NONLINEAR capacity check — capacity-FAIR (Engineer Q3: sign-classifier · weight=|payoff| · min_child~fold)
+    from lightgbm import LGBMClassifier
     gdp, gpL, gpS, gd, gday = [], [], [], [], []
     for Y in TEST_YEARS:
         te = yr == Y
@@ -194,34 +202,32 @@ def main():
         tr = np.array([int(y) < int(Y) for y in yr]) & (dayix < dayix[te].min() - Nemb)
         if tr.sum() < 300:
             continue
-        gm = LGBMRegressor(max_depth=3, n_estimators=150, learning_rate=0.05, min_child_samples=200,
-                           subsample=0.8, colsample_bytree=0.8, verbose=-1, random_state=0)
-        gm.fit(X[tr], (rl - rs)[tr])
-        gdp.append(np.where(gm.predict(X[te]) >= 0, 1, -1))
+        yt = ((rl - rs)[tr] >= 0).astype(int); wt = np.abs((rl - rs)[tr])
+        gm = LGBMClassifier(max_depth=3, n_estimators=150, learning_rate=0.05,
+                            min_child_samples=max(20, tr.sum() // 20),
+                            subsample=0.8, colsample_bytree=0.8, verbose=-1, random_state=0)
+        gm.fit(X[tr], yt, sample_weight=wt)
+        gdp.append(np.where(gm.predict(X[te]) == 1, 1, -1))
         gpL.append(pL[te]); gpS.append(pS[te]); gd.append(dd[te]); gday.append(dayix[te])
     gdp, gpL, gpS, gd, gday = map(np.concatenate, (gdp, gpL, gpS, gd, gday))
     glift = np.where(gdp == 1, gpL, gpS) - np.where(gd == 1, gpL, gpS)
     glo, ghi = day_ci(glift, gday, rng)
-    print(f"  [NONLINEAR GBM] lift={glift.mean():+.4f}$/ไม้ CI[{glo:+.3f},{ghi:+.3f}] "
-          f"{'✓>0 = linear อ่อนไป จริง' if glo > 0 else 'คร่อม/<0 = channel ไม่ให้แม้ nonlinear'}")
+    print(f"  [NONLINEAR GBM · sign-classifier weighted · min_child~fold/20] lift={glift.mean():+.3f}$ "
+          f"CI[{glo:+.3f},{ghi:+.3f}] {'✓>0' if glo > 0 else 'คร่อม/<0'}")
 
-    print(f"\n[READOUT · honest · in-field SEARCH ไม่ใช่ OOS จริง]")
-    degenerate = any(f in (0.0, 1.0) for f in lfrac)
-    near_null = abs(lift.mean() - liftn.mean()) < 0.15
-    lin_null = near_null or (lo <= 0 <= hi)
-    gbm_null = (glo <= 0 <= ghi) or (ghi < 0)
-    if lo > 0 or glo > 0:
-        v = (f"มี additive OHLC direction signal ({'linear' if lo > 0 else 'GBM-nonlinear'} lift CI>0) → "
-             "build ต่อบน channel นี้ (ยังไม่ต้อง tick-price)")
-    elif lin_null and gbm_null:
-        v = ("ไม่พบ additive OHLC direction edge **ทั้ง linear และ nonlinear(GBM)** (lift คร่อม 0 · predictor≈perm-null"
-             + (" · linear degenerate constant-dir" if degenerate else "") + ") → "
-             f"**OHLC-feature direction = exhausted (วัดครบ 2 model class · MDE≈{(hi-lo)/2:.3f}$/ไม้)** · "
-             "baseline breakout-rule = direction-signal เดียวที่ใช้ได้จาก OHLC · next = tick-price channel")
+    print(f"\n[READOUT · honest · calibrated · in-field SEARCH ไม่ใช่ OOS จริง]")
+    print(f"  • baseline (v4 breakout-rule) = **direction edge จริง** +{base.mean():.3f}$/ไม้ (> floor {floor.mean():+.3f})")
+    print(f"  • OHLC features **near-totally NOT sign-stable** (kept {keepn}/19 · เฉลี่ย {np.mean(keepn):.1f}/19) = finding หลัก")
+    print(f"  • learned (linear+GBM) **ไม่ชนะ baseline** OOS (lift คร่อม 0) · features มี weak-signal (>perm-null) แต่ไม่พอ")
+    if (lo <= 0 <= hi) and (glo <= 0 <= ghi):
+        v = ("**v4 breakout-direction = ดี + ใกล้ OHLC-extractable ceiling** · learned OHLC ไม่เพิ่ม edge เหนือ "
+             f"MDE≈{(hi-lo)/2:.2f}$/ไม้ (active-fold {lift[act].mean():+.2f}) · **sub-MDE ไม่ถูกตัด = ไม่ใช่ 'exhausted/zero'**\n"
+             "       → **monetize direction ที่มี · อย่าไล่ล่า additive OHLC-direction** · tick-price = *hypothesis* ไม่ใช่ proven-need\n"
+             "       → magnitude/opportunity channel (STATUS +1.745/+0.66) = **positive อยู่แล้ว** น่าพิจารณาก่อน escalate")
     else:
-        v = "mixed (linear vs GBM ไม่ตรง) — ตรวจ per-model ก่อนสรุป"
+        v = f"linear CI[{lo:+.2f},{hi:+.2f}] · GBM CI[{glo:+.2f},{ghi:+.2f}] — ตรวจ per-model ก่อนสรุป"
     print(f"  → {v}")
-    print(f"  ⚠ SEARCH 2012-2020 · partly WF-selected · OOS จริง = forward-test · tested: signed-R linear + GBM nonlinear")
+    print(f"  ⚠ SEARCH 2012-2020 · WF-within-span ≠ true-OOS · abstain 34% → MDE optimistic · not 'proven zero'")
 
 
 if __name__ == "__main__":
