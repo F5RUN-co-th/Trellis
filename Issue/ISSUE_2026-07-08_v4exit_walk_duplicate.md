@@ -1,6 +1,17 @@
 # ISSUE 2026-07-08 — `v4_exit` เป็น duplicate code ของ `walk()`
 
-**สถานะ:** OPEN · pre-existing tech-debt (ไม่ block งานปัจจุบัน) · ค้นพบระหว่าง TRELLIS-010 Test-B design review (Engineer Q5, Claude verify)
+**สถานะ:** ✅ **RESOLVED 2026-07-08** (commit ถัดไป) · ค้นพบระหว่าง TRELLIS-010 Test-B design review (Engineer Q5, Claude verify)
+
+## วิธีแก้ที่ทำจริง (production-ready · ไม่ใช่ workaround)
+`brain_v1_run.py`: refactor เป็น **single source `_walk_core()`** คืน `(q_exit, pnl, reason, armed, raised, uw30, d30)` + 2 thin adapters:
+- `walk()` = `(pnl, reason, armed, raised, uw30, d30)` — **signature เดิมไม่เปลี่ยน** → caller ทั้ง 4 (brain_v1_run/fade_dataset/exhaustion_fade/test_b) ไม่ต้องแตะ
+- `walk_exit()` = `(exit_index, pnl)` — แทน `v4_exit` เดิม
+`opportunity_unit_v3.py`: ลบ `def v4_exit` (สำเนา) · import + ใช้ `walk_exit` · `opportunity_unit_v4.py`: เปลี่ยนไป `walk_exit`
+**verified ไม่เพี้ยน:** exit-locator regression `pnl==facts.pnl` **1487/1487 ✓** · test_b reproduce `Σcurrent==+532.8` ✓ · ทุก caller import OK
+→ duplicate logic หมด · เหลือ implementation เดียว · CLAUDE.md rule 3 ผ่าน
+
+---
+### (บันทึกเดิม — ปัญหา)
 **ความรุนแรง:** Low (code-quality · ไม่กระทบ correctness — มี regression-assert คุมอยู่) · แต่ละเมิด CLAUDE.md rule 3 "ไม่มี duplicate code"
 
 ## ปัญหา (evidence)

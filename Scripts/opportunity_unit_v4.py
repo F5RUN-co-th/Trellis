@@ -30,8 +30,8 @@ import numpy as np
 from numpy.lib.stride_tricks import sliding_window_view
 
 sys.path.insert(0, str(Path(__file__).parent))
-from brain_v1_run import load_ctx, PT, SLIP_IN, CAPR
-from opportunity_unit_v3 import v4_exit, residual_mfe        # reuse verified (no dup)
+from brain_v1_run import load_ctx, walk_exit, PT, SLIP_IN, CAPR
+from opportunity_unit_v3 import residual_mfe                 # reuse verified (no dup)
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -131,7 +131,7 @@ def compute_cache(ctx, Rmap):
         ash, asl = ctx["lv"][dts]; Rv = ash - asl
         ent = (o[k] + ctx["sp"][k] * PT + SLIP_IN) if d == 1 else (o[k] - SLIP_IN)
         st0 = max(asl, ent - CAPR * Rv) if d == 1 else min(ash, ent + CAPR * Rv)
-        xb, _ = v4_exit(ctx, k, d, ent, st0, Rv); hold[dts] = (k, xb, d)
+        xb, _ = walk_exit(ctx, k, d, ent, st0, Rv); hold[dts] = (k, xb, d)
     ul, fl, bl = uniq.tolist(), fidx.tolist(), bnd.tolist(); cache = []
     for j, (di, i0, i1) in enumerate(zip(ul, fl, bl)):
         dts = str(np.datetime64(int(di), "D"))

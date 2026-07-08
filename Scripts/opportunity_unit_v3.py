@@ -37,7 +37,7 @@ import numpy as np
 from numpy.lib.stride_tricks import sliding_window_view
 
 sys.path.insert(0, str(Path(__file__).parent))
-from brain_v1_run import load_ctx, PT, SLIP_IN, SLIP_STOP, CAPR, A, D_TRAIL
+from brain_v1_run import load_ctx, walk_exit, PT, SLIP_IN, SLIP_STOP, CAPR, A, D_TRAIL
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -51,40 +51,8 @@ ACCT_LO, ACCT_HI = 4.0, 8.0   # account-scale criterion ($ at min-lot · §1 med
 BIG = 10 ** 9
 
 
-# ══ Q4: v4 exit-locator (mirror walk() :143-179 · trail_on,no-TS) — returns exit-bar ══
-# walk() ไม่คืน exit-index · locator นี้ mirror + regression assert pnl==facts (CH-1 pattern
-# · fail-loud ไม่ silent-diverge) → ได้ [entry,exit] interval สำหรับ event-overlap coverage
-def v4_exit(ctx, k, d, ent, stop0, R):
-    o, h, l, c, sp = ctx["o"], ctx["h"], ctx["l"], ctx["c"], ctx["sp"]
-    hour, day, dow = ctx["hour"], ctx["day"], ctx["dow"]
-    n = len(o)
-    stop, best, edy, q = stop0, ent, day[k], k + 1
-    while q < n:
-        if day[q] != edy:
-            gap = (o[q] <= stop) if d == 1 else (o[q] >= stop)
-            if gap:
-                px = o[q] - SLIP_STOP * d
-                ex = px if d == 1 else px + sp[q] * PT
-                return q, ((ex - ent) * d if d == 1 else (ent - ex))
-            ex = o[q] if d == 1 else o[q] + sp[q] * PT
-            return q, ((ex - ent) if d == 1 else (ent - ex))
-        hit = l[q] <= stop if d == 1 else h[q] >= stop
-        if hit:
-            px = (min(stop, o[q]) if d == 1 else max(stop, o[q])) - SLIP_STOP * d
-            ex = px if d == 1 else px + sp[q] * PT
-            return q, ((ex - ent) * d if d == 1 else (ent - ex))
-        if hour[q] >= (20 if dow[q] == 5 else 23):
-            ex = c[q] if d == 1 else c[q] + sp[q] * PT
-            return q, ((ex - ent) if d == 1 else (ent - ex))
-        best = max(best, c[q]) if d == 1 else min(best, c[q])
-        fav = (best - ent) if d == 1 else (ent - best)
-        if fav >= A * R:
-            ns = best - D_TRAIL * R if d == 1 else best + D_TRAIL * R
-            stop = max(stop, ns) if d == 1 else min(stop, ns)
-        q += 1
-    return n - 1, np.nan
-
-
+# ══ Q4: v4 exit-locator = brain_v1_run.walk_exit (single canonical walk · ไม่ dup) ══
+# (เดิมมี v4_exit สำเนา walk() — ลบแล้ว 2026-07-08 · Issue ISSUE_2026-07-08_v4exit_walk_duplicate)
 # ══ Q2: continuous realizable-MFE per origin (stop-aware 1R adverse-first) ══
 def day_events(h, l, c, R, floor=FLOOR):
     """คืน disjoint events (origin, reach, dir, mfe_R) · mfe = max favorable ก่อนโดน 1R stop
@@ -247,7 +215,7 @@ def main():
         R = ash - asl
         ent = (o[k] + ctx["sp"][k] * PT + SLIP_IN) if d == 1 else (o[k] - SLIP_IN)
         stop0 = max(asl, ent - CAPR * R) if d == 1 else min(ash, ent + CAPR * R)
-        xb, pnl = v4_exit(ctx, k, d, ent, stop0, R)
+        xb, pnl = walk_exit(ctx, k, d, ent, stop0, R)
         if not (np.isfinite(pnl) and abs(pnl - float(ctx["facts"][dts]["pnl"])) < 2e-3):
             mism += 1
         hold[dts] = (k, xb, d)

@@ -127,10 +127,10 @@ def cell_of(ctx, d):
         ("CLEAN" if pk == "0" else "POKED") + "|" + ("FRESH" if s == 0 else "SPENT")
 
 
-def walk(ctx, k, d, ent, stop0, R, trail_on=True, ts_on=False):
-    """single code path (CH-4/C-4): mirror run_detailed :87-126 + TS rung ·
-    คืน (pnl, reason, armed, raised, uw30, d30) — uw30/d30 = สถานะที่ checkpoint
-    30 นาที (ประเมิน passive เสมอเมื่อไปถึง — ใช้ทำ regression ทั้งสอง mode)"""
+def _walk_core(ctx, k, d, ent, stop0, R, trail_on=True, ts_on=False):
+    """single canonical exit walk (CH-4) — คืน (q_exit, pnl, reason, armed, raised, uw30, d30).
+    adapters: walk()=(pnl,reason,armed,raised,uw30,d30) เดิม · walk_exit()=(exit_index,pnl)
+    (แทน opportunity_unit_v3.v4_exit → ลบ duplicate · single source of truth · CLAUDE rule 3)"""
     o, h, l, c, sp = ctx["o"], ctx["h"], ctx["l"], ctx["c"], ctx["sp"]
     tmin, hour, day, dow = ctx["tmin"], ctx["hour"], ctx["day"], ctx["dow"]
     n = len(o)
@@ -146,20 +146,20 @@ def walk(ctx, k, d, ent, stop0, R, trail_on=True, ts_on=False):
             if gap_hit:
                 px = o[q] - SLIP_STOP * d
                 ex = px if d == 1 else px + sp[q] * PT
-                return ((ex - ent) * d if d == 1 else (ent - ex), "stop",
+                return (q, (ex - ent) * d if d == 1 else (ent - ex), "stop",
                         armed, stop != stop0, uw30, d30)
             ex = o[q] if d == 1 else o[q] + sp[q] * PT
-            return ((ex - ent) if d == 1 else (ent - ex), "catchup",
+            return (q, (ex - ent) if d == 1 else (ent - ex), "catchup",
                     armed, stop != stop0, uw30, d30)
         hit = l[q] <= stop if d == 1 else h[q] >= stop
         if hit:                                        # stop (SL ชนะ TS เสมอ)
             px = (min(stop, o[q]) if d == 1 else max(stop, o[q])) - SLIP_STOP * d
             ex = px if d == 1 else px + sp[q] * PT
-            return ((ex - ent) * d if d == 1 else (ent - ex), "stop",
+            return (q, (ex - ent) * d if d == 1 else (ent - ex), "stop",
                     armed, stop != stop0, uw30, d30)
         if hour[q] >= (20 if dow[q] == 5 else 23):     # eod
             ex = c[q] if d == 1 else c[q] + sp[q] * PT
-            return ((ex - ent) if d == 1 else (ent - ex), "eod",
+            return (q, (ex - ent) if d == 1 else (ent - ex), "eod",
                     armed, stop != stop0, uw30, d30)
         if not ts_done and tmin[q] >= tdl:             # TS checkpoint (ครั้งเดียว)
             ts_done = True
@@ -167,7 +167,7 @@ def walk(ctx, k, d, ent, stop0, R, trail_on=True, ts_on=False):
             uw30 = d30 <= 0.0
             if ts_on and uw30:
                 ex = c[q] if d == 1 else c[q] + sp[q] * PT
-                return ((ex - ent) if d == 1 else (ent - ex), "tstop",
+                return (q, (ex - ent) if d == 1 else (ent - ex), "tstop",
                         armed, stop != stop0, uw30, d30)
         best = max(best, c[q]) if d == 1 else min(best, c[q])
         fav = (best - ent) if d == 1 else (ent - best)
@@ -177,7 +177,19 @@ def walk(ctx, k, d, ent, stop0, R, trail_on=True, ts_on=False):
                 ns = best - D_TRAIL * R if d == 1 else best + D_TRAIL * R
                 stop = max(stop, ns) if d == 1 else min(stop, ns)
         q += 1
-    return np.nan, "eof", armed, stop != stop0, uw30, d30
+    return (n - 1, np.nan, "eof", armed, stop != stop0, uw30, d30)
+
+
+def walk(ctx, k, d, ent, stop0, R, trail_on=True, ts_on=False):
+    """backward-compat adapter — (pnl, reason, armed, raised, uw30, d30) (signature เดิม ไม่เปลี่ยน)"""
+    _, pnl, reason, armed, raised, uw30, d30 = _walk_core(ctx, k, d, ent, stop0, R, trail_on, ts_on)
+    return pnl, reason, armed, raised, uw30, d30
+
+
+def walk_exit(ctx, k, d, ent, stop0, R, trail_on=True, ts_on=False):
+    """(exit_index, pnl) adapter — แทน v4_exit เดิม (single impl · no dup)"""
+    r = _walk_core(ctx, k, d, ent, stop0, R, trail_on, ts_on)
+    return r[0], r[1]
 
 
 def dual_rows(ctx, alt_kwargs):
