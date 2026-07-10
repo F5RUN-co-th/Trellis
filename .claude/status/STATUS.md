@@ -10,20 +10,20 @@
 - **สถานะล่าสุด:** direction-at-real-exit = **FROZEN terminal** [LEDGER CLAIM-0010] · **รอ Win ตัดสิน next** (richer-OHLC / tick-price / magnitude / monetize-v4 / forward-test) — ไม่ prescribe
 - **frontier + open/eliminated hypotheses:** LEDGER `## CURRENT FRONTIER`
 
-## Research pipeline สถานะ (ผล → Claim-ID · ไม่ซ้ำเลขที่นี่)
-| ขั้น | สถานะ | Claim |
+## Research pipeline (✅ = จบ · ▶ = active — **status word อยู่ LEDGER ที่เดียว** · ดูสด = `/ledger status`)
+| ขั้น | pipeline | Claim |
 |---|---|---|
-| Measurement foundation (edge-bar/opportunity) | ✅ terminal | CLAIM-0001 |
-| Opportunity-Unit v4 FROZEN protocol | ✅ terminal | CLAIM-0002 |
-| fade (behavior-space) | ✅ FALSIFIED | CLAIM-0003 |
-| Discovery (additive opportunity) | ▶ live | CLAIM-0004 |
-| Direction Predictor v0 (linear) | ✅ superseded | CLAIM-0005 |
-| Direction Predictor v1 (leaky) | ✅ superseded | CLAIM-0006 |
-| in-hand direction gates (trade_R label) | ✅ superseded | CLAIM-0007 |
-| spread channel | ✅ DEAD | CLAIM-0008 |
-| Test B (direction load-bearing at real exit) | ✅ terminal | CLAIM-0009 |
-| **direction-at-real-exit** | ✅ **FROZEN terminal** | CLAIM-0010 |
-| v4 Dual-Asian (carried candidate) | ▶ candidate | CLAIM-0012 |
+| Measurement foundation (edge-bar/opportunity) | ✅ | CLAIM-0001 |
+| Opportunity-Unit v4 FROZEN protocol | ✅ | CLAIM-0002 |
+| fade (behavior-space) | ✅ | CLAIM-0003 |
+| Discovery (additive opportunity) | ▶ | CLAIM-0004 |
+| Direction Predictor v0 (linear) | ✅ | CLAIM-0005 |
+| Direction Predictor v1 (leaky) | ✅ | CLAIM-0006 |
+| in-hand direction gates (trade_R label) | ✅ | CLAIM-0007 |
+| spread channel | ✅ | CLAIM-0008 |
+| Test B (direction load-bearing at real exit) | ✅ | CLAIM-0009 |
+| **direction-at-real-exit** | ✅ | CLAIM-0010 |
+| v4 Dual-Asian (carried candidate) | ▶ | CLAIM-0012 |
 
 ## Tooling / Governance
 - **Research Traceability System** [CLAIM-0011] — `Scripts/ledger_check.py` (validate + `--emit-index` + `--self-test`)

@@ -19,6 +19,7 @@
 ## จบ session ทุกครั้ง
 
 ต่อท้าย Progress Log: Stage/งานที่ทำ · tests ที่ใช้ (สะสม N/40) · findings รวมที่ถูก falsify · สิ่งที่ต้องทำต่อ — ให้ session ถัดไปอ่านแล้วทำต่อได้โดยไม่ตีความ
+**บันทึกผลเป็น claim เข้า LEDGER → ใช้ `/ledger`** (คำสั่งนี้ = รัน experiment ใต้ budget/lockbox · `/ledger` = บันทึก/ปิด/แก้ claim)
 
 ## Argument (ถ้ามี)
 
