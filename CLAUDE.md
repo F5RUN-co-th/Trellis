@@ -9,11 +9,11 @@
 - Analysis, recommendations, และ code suggestions แสดงได้ แต่ห้ามเขียนลงไฟล์จนกว่าวินจะอนุมัติ
 
 ## ⛔ Working Loop + Anti-Appearance-of-Done (บังคับ)
-> pre-send checklist (14-pattern) = hook `settings.local.json` UserPromptSubmit inject ทุก turn (เขี้ยว · canary-verified 2026-07-09) · ราก+why = memory `feedback-no-appearance-of-done` · #9 rubber-stamp → Working Rule "ตรวจ Engineer critical" + §Communication (Claude Verify) + §Verify≠Self-grading
+> pre-send checklist (14-pattern) = hook `settings.local.json` UserPromptSubmit inject ทุก turn (เขี้ยว · canary-verified) · ราก+why = memory `feedback-no-appearance-of-done` · #9 rubber-stamp → Working Rule "ตรวจ Engineer critical" + §Communication (Claude Verify) + §Verify≠Self-grading
 
 **Working Loop:**
 - ไม่มีปัญหา → ไม่เปิด issue / ไม่ปั้นงาน
-- requirement ใหม่ | bug → doc(`Plan/`)/`Issue/` → Engineer-finding → Claude-Verify (แผนไม่เคยสมบูรณ์) → **รอวินอนุมัติ** → implement
+- requirement ใหม่ | bug → doc(`Plan/`)/`Issue/` → Engineer-finding → **STOP (วินตรวจ finding)** → Claude-Verify (แผนไม่เคยสมบูรณ์) → **STOP (วินอนุมัติ)** → implement · cadence = §Communication 3-Phase Gate
 - fix เล็ก (reversible + ไม่มี design-choice + verify ทันที + ไม่กระทบ scope อื่น · **ลังเล = ไม่เล็ก**) → ข้ามได้แค่ doc+Engineer round · **approval + แตะ .mq5/.mqh/source ยังบังคับขอเสมอ (ไม่ override CRITICAL)**
 
 ## กฎการทำงาน (Working Rules)
@@ -25,7 +25,7 @@
 6. **ถ้า fix ไม่ work** → วิเคราะห์ว่า WHY ไม่ work ก่อนทำ fix ถัดไป → ไม่ revert แล้วทิ้งปัญหา
 7. **ห้ามสรุปโดยไม่มี evidence** — ต้อง quote code line number หรือ log line เสมอ ถ้าไม่มี → บอกตรงๆ "ไม่มีข้อมูล ต้อง diagnose ก่อน"
 8. **ทุก fix ต้องตอบ "root cause หรือ workaround?"** — ถ้าลบ fix ออกแล้วปัญหากลับมา = workaround ไม่ใช่ root cause
-8.1 **ห้ามแก้ปัญหาแบบ "หลบ" (หลักวิน 2026-07-03)** — เพิ่มทุน/ข้ามวัน/หยุดเทรด/เพิ่มตัวแปรให้เลี่ยง ไม่ใช่การแก้ปัญหา (เจอสถานการณ์ใหม่ก็ตายอยู่ดี) · ทุก fix ต้องตอบได้ว่าทำให้ engine **เข้าใจสาเหตุการเคลื่อนของราคา/ปรับตัว**ขึ้นตรงไหน · risk-management มีได้ในฐานะเพดานความถ่อมตัว ไม่ใช่ในฐานะ "การแก้ปัญหา"
+8.1 **ห้ามแก้ปัญหาแบบ "หลบ" (หลักวิน)** — เพิ่มทุน/ข้ามวัน/หยุดเทรด/เพิ่มตัวแปรให้เลี่ยง ไม่ใช่การแก้ปัญหา (เจอสถานการณ์ใหม่ก็ตายอยู่ดี) · ทุก fix ต้องตอบได้ว่าทำให้ engine **เข้าใจสาเหตุการเคลื่อนของราคา/ปรับตัว**ขึ้นตรงไหน · risk-management มีได้ในฐานะเพดานความถ่อมตัว ไม่ใช่ในฐานะ "การแก้ปัญหา"
 9. **ทุก backtest round ต้อง compare metrics กับ round ก่อน** — ห้ามดูแค่ตัวเลข round ใหม่ ต้องตาราง compare ทุก metric
 10. **ส่ง Engineer review ต้องส่งงานทั้ง scope** — ไม่ใช่แค่ส่วนที่ Claude สนใจ
 11. **ตรวจ Engineer proposals อย่าง critical ก่อนยอมรับ** — Engineer อาจพลาดหรือไม่ทราบบริบท ห้ามเชื่อทันที
@@ -59,11 +59,11 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 **3-Phase Gate:** review → **STOP รอคำสั่ง** → verify → **STOP รอ confirm** → implement
 ห้ามข้าม gate ห้าม auto-incorporate ห้ามแนบ "เริ่มต่อไหม" เพื่อ steer
 
-- **วินปฏิเสธแนวทางเดิมครบ 2 ครั้ง = หยุดทันที** — พูดความเข้าใจออกมาให้วินตรวจก่อนแตะอะไรต่อ ห้ามตีความคำสั่งเอาเองแล้วลงมือ (บทเรียน 2026-07-03: ตีความ "เร่งพัฒนา" ผิดจนโดน interrupt)
-- **สื่อสารด้วยสิ่งที่วินเห็นบนจอจริง ไม่ใช่ชื่อในโค้ด (บทเรียน 2026-07-03):** MT5 Inputs tab แสดง **comment** ของ input ไม่ใช่ชื่อตัวแปร — วินไม่มีทางเห็น `InpXxx` ที่ Claude อ้าง → (1) comment ของทุก `input` ต้องเป็น label เดียวกับคำที่ Claude ใช้สั่งงานวิน (2) ขั้นตอน UI ต้องอ้าง label ที่ปรากฏบนจอจริง (3) ไม่แน่ใจว่าจอวินแสดงอะไร → ขอ screenshot ก่อน ห้ามเดา (4) input ที่วินไม่ต้องตั้ง → แปลงเป็น const ให้ dialog เหลือเฉพาะที่ใช้จริง
+- **วินปฏิเสธแนวทางเดิมครบ 2 ครั้ง = หยุดทันที** — พูดความเข้าใจออกมาให้วินตรวจก่อนแตะอะไรต่อ ห้ามตีความคำสั่งเอาเองแล้วลงมือ (บทเรียน: ตีความ "เร่งพัฒนา" ผิดจนโดน interrupt)
+- **สื่อสารด้วยสิ่งที่วินเห็นบนจอจริง ไม่ใช่ชื่อในโค้ด (บทเรียน):** MT5 Inputs tab แสดง **comment** ของ input ไม่ใช่ชื่อตัวแปร — วินไม่มีทางเห็น `InpXxx` ที่ Claude อ้าง → (1) comment ของทุก `input` ต้องเป็น label เดียวกับคำที่ Claude ใช้สั่งงานวิน (2) ขั้นตอน UI ต้องอ้าง label ที่ปรากฏบนจอจริง (3) ไม่แน่ใจว่าจอวินแสดงอะไร → ขอ screenshot ก่อน ห้ามเดา (4) input ที่วินไม่ต้องตั้ง → แปลงเป็น const ให้ dialog เหลือเฉพาะที่ใช้จริง
 
 - **วินสั่ง "Engineer review"** → Engineer รายงาน: (1) ปัญหา + evidence (code line/log line) (2) root cause analysis (ไม่ใช่ symptom) (3) solution แบบ Production-Ready/Best Practice — **ห้าม workaround**
-- **วินสั่ง "Claude Verify"** → Claude: (1) วิเคราะห์ทุก finding ด้วย evidence จาก code/log จริง (2) เห็นทางที่ดีกว่า (ไม่ดรอปศักยภาพ) → เสนอ (3) เห็นด้วย → ต้อง verify ได้จริงว่า root cause + production-ready — **ห้าม rubber-stamp · ห้ามยอมรับ workaround แม้ Engineer เสนอ**
+- **วินสั่ง "Claude Verify"** → Claude: (1) วิเคราะห์ทุก finding ด้วย evidence จาก code/log จริง (2) เห็นทางที่ดีกว่า (ไม่ดรอปศักยภาพ → §หลักดีที่สุด) → เสนอ (3) เห็นด้วย → ต้อง verify ได้จริงว่า root cause + production-ready — **ห้าม rubber-stamp · ห้ามยอมรับ workaround แม้ Engineer เสนอ**
 - **ตอบคำถามทั่วไป** → ห้ามคาดเดา/แต่งเติม · ไม่รู้ → "ไม่รู้" ตรงๆ (evidence-required = Working Rule 7)
 
 ## Honest Reporting (ความซื่อสัตย์เหนือความน่าประทับใจ)
@@ -79,11 +79,18 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - **ห้ามปั้นความกำกวม/ความขัดแย้งจาก instruction ที่ชัดอยู่แล้ว** — จะอ้างว่า doc เงียบ/ขัดกัน ต้อง quote ข้อความจริงก่อน · quote ไม่ได้ = ไม่ใช่ gap = ห้ามถาม
 - **แยกเจ้าของการตัดสินใจ:** *requirement* = วินเป็นเจ้าของ (ถามเฉพาะเมื่อ doc เงียบจริง) · *scope/technical* = Claude ตัดเอง (ห้ามโยนให้วิน)
 
+## ⚖️ หลักดีที่สุด — ไม่ดรอปศักยภาพด้านใด
+> 8 clause เต็ม → `Plan/CLAUDE_MD_GOVERNANCE.md → ## หลักดีที่สุด`
+- trade-off (A เสีย X / B เสีย Y) = สัญญาณ false-dichotomy → หา **C ที่แก้รากร่วม** (root-cause กับการตัดสินใจ ไม่ใช่แค่โค้ด)
+- **complexity-gate:** เลือก C เฉพาะเมื่อ net-value > ต้นทุน/blast · "ประกาศ residual" ≠ ใบอนุญาตเลือกทางซับซ้อน · potential เล็ก+ต้นทุนสูง → **เลือกทางง่ายได้ก็ต่อเมื่อประกาศสิ่งที่ดรอป** (เลือกง่ายแบบเงียบ = ไม่อนุญาต · best ไม่ใช่ยอมแพ้/ไม่ใช่กลบ)
+- หา C ไม่ได้ใน 1 รอบซื่อสัตย์ → เสนอ A vs C + cost ให้วิน (requirement=วิน) · ห้ามค้าง search แทนตัดสิน
+- "ศักยภาพ" = ในกรอบ root ที่ report (ใต้ No-Scope) · เคลม "C รักษาทั้ง 2 ด้าน" ต้องผ่านตาปรปักษ์ ไม่ใช่ตีตราเอง (§Verify≠Self-grading)
+
 ## Authority Order + Glossary-first
 - **ลำดับ authority:** doctrine doc (`Plan/TRELLIS-001`) > code > comment — ถ้า code/comment ขัด doctrine = code ผิด (รายงาน) ห้ามยกเป็น "design choice"
 - **Citation ต้องมาจากแหล่งที่เพิ่งอ่าน** ไม่ใช่เลข §/หัวข้อจากความจำ — จำไม่ได้ → เปิดอ่านก่อน
 - **Glossary-first:** ก่อนวิเคราะห์ logic grid ให้ pin ศัพท์ให้ชัดก่อน — *basket / cycle / grid level / lot ladder / step / spacing* — คำเดียวกันคนละบริบท = คนละ concept จนกว่าจะ quote ได้ว่าเหมือน
-- **Glossary เวลาเทรด (บทเรียน C7 2026-07-05 — Engineer จับ lookahead ก่อนรัน):** *signal bar j* (บาร์ที่ close ทะลุ level — จุดตัดสินใจ = close ของ j) ≠ *execution bar i* (เข้าที่ open ของ i · runner เก็บ timestamp = `t[i]`) — **feature ใดอ้าง "ณ เวลา entry" ต้อง as-of ≤ close ของ bar j เท่านั้น** (data ของ bar i เกิดหลังจุดตัดสินใจ = within-bar lookahead) · อ้าง bar ก่อนหน้าด้วย **sequence-position ใน bar-series เดียวกับ sim** (j = index(i)−1) ห้ามลบนาทีเลขคณิต (missing bar ทำเลื่อน) · คำที่มีสองความหมายเชิงเวลา (entry/breakout/signal/fill) = pin ด้วย code line ก่อนใช้เป็น as-of
+- **Glossary เวลาเทรด (บทเรียน C7 — Engineer จับ lookahead ก่อนรัน):** *signal bar j* (close ทะลุ level = จุดตัดสินใจ) ≠ *execution bar i* (เข้า open) — **feature อ้าง "ณ entry" ต้อง as-of ≤ close bar j** (data bar i เกิดหลังจุดตัดสินใจ = within-bar lookahead) · อ้าง bar ก่อนด้วย sequence-position ใน **bar-series เดียวกับ sim** (j = index(i)−1) ห้ามลบนาที (missing bar ทำเลื่อน) · คำสองความหมาย (entry/breakout/signal/fill) = pin ด้วย code line
 - **โดนแก้ 1 fact → แก้เฉพาะจุดนั้น** ห้ามเหวี่ยงทั้ง model ไปขั้วตรงข้าม (flip-flop) · ส่วนที่ยังไม่ pin = คง "ยังไม่รู้" ห้ามเดาเติม
 
 ## ⭐ Verify ≠ Self-grading — Expectancy Proof Integrity (หัวใจ Stage 0)
@@ -93,7 +100,7 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - **node/Python script เป็นเจ้าของตัวเลขเสมอ ไม่ใช่ LLM** — expectancy/win-rate/max-DD ต้อง derive จาก script ที่ตรวจซ้ำได้ · ห้าม Claude พิมพ์ตัวเลขสรุปเอง
 - **โปร่งใส 2 ชั้น:** แยกให้วินเห็นทุกครั้งว่า อะไร = pipeline ทำ (อัตโนมัติ ตรวจซ้ำได้) vs อะไร = ดุลพินิจ LLM (ใครตัดสิน) · ห้ามนำเสนอให้ "ดูเหมือนระบบจับได้" ทั้งที่ Claude เลือกเอง
 - **ตรวจเครื่องมือตัวเองด้วย** — จุดที่ script "ตัด/รวม/จับคู่" ถ้ามีอะไรหลุดต้อง fail loud หรือ log · ผลที่สะอาดเกินไปให้สงสัยว่ามีของตกหล่นเงียบๆ ก่อน
-- **ตัวเลขในเอกสาร/แผน = รันสดจาก canonical script ตอนเขียน + ติดป้ายสนามวัดเสมอ (sim vs MT5 tester)** — สองสนามต่างกันได้ระดับพลิกเครื่องหมายรายปี (บทเรียน 2026-07-03: 2025 sim +207 / tester −169) · target ที่ผสมสนาม = target ปลอม
+- **ตัวเลขในเอกสาร/แผน = รันสดจาก canonical script ตอนเขียน + ติดป้ายสนามวัดเสมอ (sim vs MT5 tester)** — สองสนามต่างกันได้ระดับพลิกเครื่องหมายรายปี · target ที่ผสมสนาม = target ปลอม
 - **สมมติฐานที่ sim และ EA แชร์กัน = จุดบอดร่วมที่ cross-validation มองไม่เห็น** — enumerate แล้ว verify กับ raw data แยก (บทเรียน: Friday-close ผิดเหมือนกันทั้งคู่ → tester เท่านั้นที่จับ)
 - **เกณฑ์ขั้นต่ำก่อนเรียกสิ่งใดว่า "สัญญาณ":** วัดบน full population (ไม่ใช่ subsample) + เสถียร multi-period + ดูทั้ง SUM และ AVG + เช็ค zero-data region
 
@@ -101,12 +108,12 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - ทุก tool call ต้องใช้ tag namespace ครบ: `antml:invoke` / `antml:parameter` เสมอ
 - เขียน `<invoke>` / `<parameter>` เปล่า (ขาด `antml:`) = ระบบ parse ไม่ออก → กลายเป็นข้อความ ไม่ execute (ประกาศ "ทำต่อ" แต่ tool ไม่ทำงาน) — เช็ค tag เปิด/ปิดก่อนยิงทุกครั้ง
 
-## MT5 Backtest / Tester Workflow (บังคับ — บทเรียน 2026-06-29)
+## MT5 Backtest / Tester Workflow (บังคับ)
 - **Headless `terminal64.exe /config` ไม่ทำงานบนเครื่องนี้** — terminal restart ตัวเอง `launched with C:\` ทิ้ง config + LiveUpdate (auto-update) ดัก disable ไม่ได้ · **ห้ามลอง headless ซ้ำ** (ดู memory `reference-mt5-tester-workflow`)
 - **Flow ที่ถูก:** Claude `compile` + deploy **ex5 + source (.mq5/.mqh) เข้า terminal MQL5 tree** (tester ต้องการ source ไม่ใช่แค่ .ex5) → **วินรัน Strategy Tester GUI เอง** → ส่ง agent log → Claude วิเคราะห์
 - **⛔ อย่า re-try วิธีที่วินบอกแล้วว่าไม่ work** — ดื้อทำซ้ำ dead-end = เปลือง token + เสียเวลา + ทำให้วินหงุดหงิด · วินชี้ว่าอะไรไม่ได้ = จบ หาทางอื่น ไม่วน
 - **เช็ค data coverage ของ symbol ก่อนกำหนดช่วงรันเสมอ** — บรรทัด "N bars generated" ใน tester log = หลักฐาน (บทเรียน: XAUUSD_BT เคยจบ ธ.ค. 2025 เงียบๆ ทั้งที่ CSV มีถึง ก.พ. 2026)
-- **Clock/session พิสูจน์ด้วย price-matching เท่านั้น ห้ามอนุมานจากโครงสร้าง** — ข้อเท็จจริงที่พิสูจน์แล้ว (แก้ 2026-07-03 เย็น หลัง price-match shoulder weeks): BT-clock (Dukascopy-converted) เทียบ UTC = **+2 หนาว/+3 ร้อน ตามกฎ EU-DST (last Sun Mar/Oct) — ไม่ใช่ US-DST** (ก.พ./ฤดูร้อนสองกฎให้ค่าเท่ากัน แยกไม่ได้ — จุดตัดสิน = shoulder weeks) → EA บน Exness ใช้ HourShift=-1 (AUTO, `IsEuDST`) · tester XAUUSD_BT ใช้ 0 · **บทเรียน: tick 2025/26 เคยถูก import เป็น UTC ดิบ → tester test คนละ session ทั้งปีแบบเงียบ — data ใหม่ทุกก้อนต้อง verify first-epoch/clock ก่อน import** (TRELLIS-010 Stage 0)
+- **Clock/session พิสูจน์ด้วย price-matching เท่านั้น ห้ามอนุมานจากโครงสร้าง** — BT-clock = **EET +2 หนาว/+3 ร้อน (EU-DST · ไม่ใช่ US)** พิสูจน์ด้วย shoulder-week price-match → EA Exness HourShift=-1 (AUTO `IsEuDST`) · tester XAUUSD_BT=0 · **data ใหม่ทุกก้อน verify first-epoch/clock ก่อน import** (tick 2025/26 เคย import UTC ดิบ = tester คนละ session เงียบ) · เต็ม → `Plan/TRELLIS-010_brain_research_workflow.md` Stage 0
 
 ## Project Overview
 - **Name:** Trellis — Expert Advisor (EA) for MetaTrader 5
