@@ -11,7 +11,7 @@
 - **MINOR-6 (รับ):** `mkdir Plan/done` ก่อน move (_TEMP untracked → mv ธรรมดา)
 - **MINOR-1 (framing):** bug F1 = latent ไม่ใช่ active (CLAIM-0002 ไม่ถูก cite ใน head · validator ปัจจุบัน PASS) — fix ยังถูกต้อง (defensive)
 - **Engineer ยืนยัน:** trace (i) บน frontier จริง pass clean · F2 count-census ครบ (ไม่มี live copy หลุด) · `_TEMP` ref เดียว = `ledger_check.py:5` · move .md ไม่กระทบ check ใด
-- **out-of-scope ใหม่ (log แยก · ไม่ fold):** status-leading-token invariant (root ของ MINOR-2/4 — status เป็น free-text ทุก non-live test เป็น heuristic)
+- **out-of-scope ใหม่ (log แยก · ไม่ fold):** status-leading-token invariant (root ของ MINOR-2/4 — status เป็น free-text ทุก non-live test เป็น heuristic) → **✅ ปิดแล้ว 07-10b:** check (j) (j1 token + j2 superseded→target) + `leading_token` single-parser refactor (h)/(i) + fixtures (x)/(xi) · Engineer PASS-with-changes (CRITICAL-1 `.get` · MAJOR-1 good_claim) — งานเล็กปิดตรง ไม่เปิด doc ใหม่ (Win directive 07-10)
 
 ---
 

@@ -14,6 +14,7 @@ checks: (a) cover (b) reproduce-resolves (c) required-fields (d) frontier/carrie
         (e) script→claim + claim-internal Claim-ID ref (f) __main__→EXPERIMENT (g) imported→ASSET
         (h) non-live claim cited ใน frontier ต้องมี annotation (→/DEAD/=live · กัน bare superseded-cite)
         (i) superseded cite arrow-target ต้องตรง status-target (SSOT=status · กัน denorm-without-sync)
+        (j) status ต้องขึ้นต้นด้วย disposition token + superseded ต้องมี →target (enforce P4 · กัน silent false-negative)
 """
 import ast
 import re
@@ -26,6 +27,17 @@ MAIN_RE = re.compile(r"if\s+__name__\s*==\s*['\"]__main__['\"]")
 CLAIMID_RE = re.compile(r"CLAIM-\d{4}")
 # จับทั้ง 2 spelling ของ status-target · re.I ให้ consistent กับ gate ที่เช็คบน lowered (MINOR-3)
 SUP_TGT = re.compile(r"superseded(?:→|-by-)CLAIM-(\d{4})", re.I)
+# disposition-token vocabulary — `status:` ต้องขึ้นต้นด้วย token ใดตัวหนึ่ง (บังคับโดย check j)
+# token ใหม่ในอนาคต = เพิ่ม tuple ที่นี่ (fail-loud by design) · NONLIVE = subset ที่ (h) ใช้
+NONLIVE = ("superseded", "dead", "falsified", "inconclusive")
+STATUS_TOKENS = ("live", "terminal") + NONLIVE
+TOKEN_RE = re.compile(r"^(" + "|".join(STATUS_TOKENS) + r")\b")
+
+
+def leading_token(st):
+    """จุด parse เดียวของ disposition token (single parser — กัน predicate-drift ระหว่าง check h/i/j)"""
+    m = TOKEN_RE.match(st.strip().lower())
+    return m.group(1) if m else None
 REQUIRED = ["observed", "supported", "not-yet-supported", "evidence-level",
             "dependencies", "invalidated-by", "kind", "status", "fairness",
             "correction-lineage", "scope-of-death", "reproduce"]
@@ -134,6 +146,15 @@ def validate(scripts_dir, ledger_path):
         for r in REQUIRED:
             if not fields.get(r):
                 fail(f"(c) {cid} field `{r}` หาย/ว่าง")
+    # (j) [status-token invariant] `status:` ต้องขึ้นต้นด้วย disposition token — enforce P4
+    #     กัน false-negative เงียบของ (h)/(i): status ผิดรูปแบบ = claim ถูกมองเป็น live โดยไม่มีเสียง
+    for cid, fields in claims.items():
+        stt = fields.get("status", "")          # .get — claim ที่ status หาย (c) รายงานอยู่แล้ว (CRITICAL-1)
+        tok = leading_token(stt)
+        if tok is None:
+            fail(f"(j) {cid} status ไม่ขึ้นต้นด้วย disposition token {'/'.join(STATUS_TOKENS)}: `{stt}`")
+        elif tok == "superseded" and not SUP_TGT.search(stt):
+            fail(f"(j) {cid} superseded แต่ไม่มี →CLAIM-target ใน status: `{stt}`")
     # (b) reproduce resolve → script path จริง
     for cid, fields in claims.items():
         for tok in re.findall(r"Scripts/([A-Za-z_]\w*)\.py", fields.get("reproduce", "")):
@@ -154,14 +175,12 @@ def validate(scripts_dir, ledger_path):
     # (h) [cite-convention] frontier/carried cite ของ claim ที่ status ≠ live ต้องมี annotation
     #     (→superseded / DEAD / =live fact-level escape) — กัน bare superseded-cite หลอก owner (mechanize convention · ไม่พึ่ง prose)
     head = text.split("## SCRIPT INDEX")[0]
-    NONLIVE = ("superseded", "dead", "falsified", "inconclusive")
     for br in re.findall(r"\[CLAIM-\d{4}[^\]]*\]", head):
         for cid in CLAIMID_RE.findall(br):
-            st = claims.get(cid, {}).get("status", "").lower()
-            # leading-token เท่านั้น (str.startswith รับ tuple · st .lower() แล้ว · field strip ที่ parse :90)
-            # (P4) สมมติฐาน: `status:` ต้อง lead ด้วย disposition token — "re-measured, superseded→…" จะ false-negative
-            # substring เดิม false-flag "terminal (…superseded-by-…)" / Substring used to false-flag terminal claims
-            if st.startswith(NONLIVE):
+            st = claims.get(cid, {}).get("status", "")
+            # (P4 → enforced by check j) leading disposition token · parse ผ่าน leading_token จุดเดียว
+            # substring เดิม false-flag "terminal (…superseded-by-…)" / single parser prevents predicate drift
+            if leading_token(st) in NONLIVE:
                 if not ("→" in br or "dead" in br.lower() or "=live" in br.lower()):
                     fail(f"(h) {cid} (status non-live) cite bare ใน frontier/carried `{br}` — ต้อง annotate (→N/DEAD/=live)")
     # (i) [arrow-target consistency · TRUE invariant] superseded cite ที่มี →target ต้องตรง status-target (SSOT = status field)
@@ -171,7 +190,7 @@ def validate(scripts_dir, ledger_path):
             continue
         for cid in CLAIMID_RE.findall(br):
             st_raw = claims.get(cid, {}).get("status", "")
-            if not st_raw.strip().lower().startswith("superseded"):   # superseded-ONLY (กัน [CLAIM-0008 DEAD] false-positive)
+            if leading_token(st_raw) != "superseded":   # superseded-ONLY (กัน [CLAIM-0008 DEAD] false-positive) · parser เดียวกับ (h)/(j)
                 continue
             stgt = SUP_TGT.search(st_raw)             # parse target จาก status field (SSOT)
             cm = re.search(r"→(\d{4})", br)           # cite arrow-target
@@ -209,7 +228,9 @@ def self_test():
         ERRORS.extend(nonlocal_errors)
 
     good_claim = ("### CLAIM-0001\n" + "\n".join(
-        f"- **{f}:** x" for f in REQUIRED).replace("reproduce:** x", "reproduce:** python Scripts/a.py") + "\n")
+        f"- **{f}:** x" for f in REQUIRED)
+        .replace("status:** x", "status:** terminal")   # template "valid claim" ต้องสะอาดใต้ (j) — กัน latent mask (MAJOR-1)
+        .replace("reproduce:** x", "reproduce:** python Scripts/a.py") + "\n")
 
     # (i) field หาย → (c) FAIL
     def fx_i(sd, led):
@@ -246,7 +267,7 @@ def self_test():
     def fx_vi(sd, led):
         _write(sd, "a", "def f():\n    pass\n")
         sup = ("### CLAIM-0001\n" + "\n".join(f"- **{f}:** x" for f in REQUIRED)
-               .replace("status:** x", "status:** superseded")
+               .replace("status:** x", "status:** superseded→CLAIM-0001")   # target ครบ กัน (j2) ปน · self-ref กัน (e)
                .replace("reproduce:** x", "reproduce:** python Scripts/a.py") + "\n")
         led.write_text("## FRONTIER\nดู [CLAIM-0001]\n## SCRIPT INDEX\n- `a` :: ASSET\n## CLAIMS\n" + sup, encoding="utf-8")
     run_case("(vi) bare-superseded-cite→(h)", fx_vi, "(h) CLAIM-0001")
@@ -264,7 +285,7 @@ def self_test():
     def fx_viii(sd, led):
         _write(sd, "a", "def f():\n    pass\n")
         sup = ("### CLAIM-0001\n" + "\n".join(f"- **{f}:** x" for f in REQUIRED)
-               .replace("status:** x", "status:** superseded")
+               .replace("status:** x", "status:** superseded→CLAIM-0001")   # target ครบ กัน (j2) ปน · cite ว่างยัง fire (i)
                .replace("reproduce:** x", "reproduce:** python Scripts/a.py") + "\n")
         led.write_text("## FRONTIER\nดู [CLAIM-0001→]\n## SCRIPT INDEX\n- `a` :: ASSET\n## CLAIMS\n" + sup, encoding="utf-8")
     run_case("(viii) empty-arrow→(i)", fx_viii, "(i) CLAIM-0001 superseded แต่ cite ไม่มี arrow-target")
@@ -278,6 +299,24 @@ def self_test():
                 .replace("reproduce:** x", "reproduce:** python Scripts/a.py") + "\n")
         led.write_text("## FRONTIER\nดู [CLAIM-0001]\n## SCRIPT INDEX\n- `a` :: ASSET\n## CLAIMS\n" + term, encoding="utf-8")
     run_case("(ix) terminal-w-superseded-substr NOT→(h)", fx_ix, "(h) CLAIM-0001", expect_present=False)
+
+    # (x) [(j1)] status ไม่ lead ด้วย disposition token → (j) FAIL (เคส false-negative เงียบที่ P4 เตือน)
+    def fx_x(sd, led):
+        _write(sd, "a", "def f():\n    pass\n")
+        bad = ("### CLAIM-0001\n" + "\n".join(f"- **{f}:** x" for f in REQUIRED)
+               .replace("status:** x", "status:** re-measured, superseded→CLAIM-0001")   # self-ref กัน (e)
+               .replace("reproduce:** x", "reproduce:** python Scripts/a.py") + "\n")
+        led.write_text("## SCRIPT INDEX\n- `a` :: ASSET\n## CLAIMS\n" + bad, encoding="utf-8")
+    run_case("(x) non-leading-token→(j1)", fx_x, "(j) CLAIM-0001 status ไม่ขึ้นต้นด้วย disposition token")
+
+    # (xi) [(j2)] superseded ไร้ →target ใน status + ไม่ถูก cite ใน frontier ((i) จับไม่ได้) → (j) FAIL
+    def fx_xi(sd, led):
+        _write(sd, "a", "def f():\n    pass\n")
+        sup = ("### CLAIM-0001\n" + "\n".join(f"- **{f}:** x" for f in REQUIRED)
+               .replace("status:** x", "status:** superseded")
+               .replace("reproduce:** x", "reproduce:** python Scripts/a.py") + "\n")
+        led.write_text("## SCRIPT INDEX\n- `a` :: ASSET\n## CLAIMS\n" + sup, encoding="utf-8")
+    run_case("(xi) superseded-no-target→(j2)", fx_xi, "(j) CLAIM-0001 superseded แต่ไม่มี →CLAIM-target")
 
     # golden-fixture: synthetic tree hand-audit — scan-logic ต้องตรง ground-truth (pin อิสระจาก emit)
     #   exotic syntax: no-space __main__ · multiline from-import · dynamic __import__(stdlib) · import a,b

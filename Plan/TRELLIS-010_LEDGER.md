@@ -249,7 +249,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **kind:** experiment
 - **status:** live
 - **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y] · null-control[none] · seed-robust[NA] · leak-guard[NA] · verified-by[Engineer]
-- **correction-lineage:** corrections 11 รอบ (v1→v-final-6 · DEFECT-8/9/10 + BLOCKER · Engineer FAIL 10 → PASS · closure 07-10: F1 substring→startswith + check(i) arrow-target + F2 count-derive + fixture(ix) regression-guard — Engineer PASS-with-changes) · Claude verify import-scan 3-way agree
+- **correction-lineage:** corrections 12 รอบ (v1→v-final-6 · DEFECT-8/9/10 + BLOCKER · Engineer FAIL 10 → PASS · closure 07-10: F1 substring→startswith + check(i) arrow-target + F2 count-derive + fixture(ix) regression-guard — Engineer PASS-with-changes · 07-10b: check(j) status-token invariant + leading_token single-parser refactor (h)/(i) — Engineer PASS-with-changes CRITICAL-1 .get + MAJOR-1 good_claim) · Claude verify import-scan 3-way agree
 - **scope-of-death:** NA (tooling · existence-check ไม่ตัดสิน semantics = known limit)
 - **reproduce:** python Scripts/ledger_check.py --self-test
 
