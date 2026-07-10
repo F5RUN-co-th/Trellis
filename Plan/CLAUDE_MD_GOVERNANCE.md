@@ -1,7 +1,7 @@
 # CLAUDE.md Governance — Working Loop + Anti-Appearance-of-Done Guard
 
-> **สถานะ:** design **v4** (post Engineer-finding รอบ 2 + Claude-Verify) · **รอวินอนุมัติ → implement (มี canary gate บังคับกลางทาง)**
-> **ยังไม่แตะ `CLAUDE.md` / `settings.local.json` จนวินอนุมัติ**
+> **สถานะ: ✅ IMPLEMENTED ครบทุก requirement (R1+R2+R3+Concision · 2026-07-10)** — R1: hook UserPromptSubmit live + canary-verified (inject ยืนยันทุก turn) + CLAUDE.md Working Loop section (commit `869e668`) · R2+R3+Concision: 2-STOP reconcile + §หลักดีที่สุด compact + strip dates (commit `cfe48e4` · Engineer PASS 07-10) · doc นี้ = design history
+> ~~ยังไม่แตะ `CLAUDE.md` / `settings.local.json` จนวินอนุมัติ~~ (อนุมัติ+ทำแล้ว)
 
 ---
 
