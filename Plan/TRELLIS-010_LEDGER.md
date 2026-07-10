@@ -235,7 +235,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **kind:** experiment
 - **status:** terminal
 - **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y] · null-control[permutation] · seed-robust[Y] · leak-guard[Y] · verified-by[adversarial]
-- **correction-lineage:** corrections 6 รอบ (Engineer · Claude verified ทุกครั้ง) · a26a93e fallback-artifact · b42278f perm-null+stump · 9e846b4 N=1+circular-ceiling · 8f6b8e6 baseline-no-CI · rng-defect→crc32 · single-draw→multi-seed · meta-pattern: ลบ affirmative→ใส่นุ่มแทน · frozen f31fd60
+- **correction-lineage:** corrections 6 รอบ (Engineer · Claude verified ทุกครั้ง) · a26a93e fallback-artifact · b42278f perm-null+stump · 9e846b4 N=1+circular-ceiling · 8f6b8e6 baseline-no-CI · rng-defect→crc32 · single-draw→multi-seed · meta-pattern: ลบ affirmative→ใส่นุ่มแทน · frozen f31fd60 · 07-10 no-behavior-change lint (unused import FEATS + dead unpack→`_` · Engineer verified 0 refs/ตัวเลขไม่เปลี่ยน — ไม่ใช่ correction ของผล)
 - **scope-of-death:** 19-feat OHLC (linear+GBM) additive-direction ที่ real exit บน SEARCH 2012-2020 (ไม่ใช่ ceiling · ไม่ใช่ tick-price · ไม่ใช่ proven-zero)
 - **reproduce:** python Scripts/direction_at_real_exit.py
 

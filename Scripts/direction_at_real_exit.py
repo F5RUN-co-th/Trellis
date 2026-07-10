@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from brain_v1_run import load_ctx, walk, walk_exit, PT, SLIP_IN, CAPR, BASE_P
 from opportunity_unit_v4 import make_triggers
 from direction_predictor import fit_signedR, day_ci
-from dir_features import compute_features, session_derived, FEATS
+from dir_features import compute_features, session_derived
 from test_b_direction_decomp import property_test_mirror_symmetry
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -165,7 +165,7 @@ def main():
         return (cat(dp_all), cat(pL_all), cat(pS_all), cat(d_all), cat(day_all), cat(R_all),
                 keepn, lfrac, cat(ab_all))
 
-    dp, pLo, pSo, do_, dyo, Ro, keepn, lfrac, abst = wf(rl, rs)
+    dp, pLo, pSo, do_, _, Ro, _, _, _ = wf(rl, rs)       # dyo/keepn/lfrac/abst dead หลัง trim → _
     pred = np.where(dp == 1, pLo, pSo)                    # $ ของ predictor
     base = np.where(do_ == 1, pLo, pSo)                   # $ ของ baseline (v4 dir)
     floor = (pLo + pSo) / 2; ceil = np.maximum(pLo, pSo)
@@ -204,7 +204,7 @@ def main():
     SEEDS = [20260708, 1, 2, 42, 123, 999, 99999, 20260709, 7]
     m_base_lo, m_agg, m_agg_lo, m_abst, m_gbm, m_gbm_lo = [], [], [], [], [], []
     for s in SEEDS:
-        sdp, spLo, spSo, sdo, sdyo, sRo, _, _, sabst = wf(rl, rs, root=s)
+        sdp, spLo, spSo, sdo, sdyo, _, _, _, sabst = wf(rl, rs, root=s)   # sRo dead → _
         sbase = np.where(sdo == 1, spLo, spSo); sfloor = (spLo + spSo) / 2
         slift = np.where(sdp == 1, spLo, spSo) - sbase
         s_lo, _sh = day_ci(slift, sdyo, _rng("mlift", s))
