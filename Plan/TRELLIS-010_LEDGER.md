@@ -20,10 +20,10 @@ Hypothesis-Elimination-Matrix (qualitative · **ไม่มีเลข posteri
 | Representation: **tick-price** (in-hand เหนือ OHLC-ceiling · DPI) | tickvol 0/7 [CLAIM-0007→0009] · spread dead [CLAIM-0008 DEAD] · tick-price ยังไม่เทส | **open (in-hand สุดท้ายก่อน Stage-F)** |
 | Representation: nonlinear/event-stream/multi-scale | ยังไม่เทสที่ real exit นอกจาก GBM | **open** |
 | Optimization: adaptive/rolling (concept-drift remedy) | Gate-A linear AUC 0.547 ลด static-prior [CLAIM-0007→0009] | **open** |
-| Magnitude channel (label-agnostic) | +0.66 sturdier [CLAIM-0007·mag=live] · day-mean proxy ตรวจไม่พบ rank บน realizable (blunt · **at-trigger ยังไม่เทส**) [CLAIM-0013] | **open** |
+| Magnitude channel (label-agnostic) | in-sample MI 6/19 (**DIAGNOSTIC/overfit-floor** · de-cluster [5,1,6]) · OOS straddle-net-cost **dead** [CLAIM-0007→0009] · "+0.66 sturdier" เดิม = demoted no-artifact · day-mean not-detected [CLAIM-0013] · at-trigger ผ่าน intraday-features = **structurally blocked** [CLAIM-0014] | **open (เฉพาะ session-open form ที่ยังไม่เทส · prior บาง · priority ต่ำ)** |
 | Discovery: additive opp **realizable** ด้วย ex-ante trigger | validation 07-10: ceiling ยืน (+1.5..+4 · n~30) แต่ **0/7 trigger-config FWE** · anchor ลบ [CLAIM-0004] | **open (ceiling-only — กุญแจ = ex-ante discovery ไม่ใช่ trigger เพิ่ม)** |
 
-**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **[07-10/11] opportunity-validation รัน + Engineer execution-review PASS: ceiling ยืน (+1.5..+4 · n~30) · realizable 0/7 FWE · magnitude day-mean proxy = not-detected (at-trigger ยังไม่เทส)** [CLAIM-0004] + [CLAIM-0013] · **next = Win ตัดสิน** (at-trigger magnitude · discovery mechanism ใหม่ · tick-price · monetize-v4)
+**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **[07-10/11] opportunity-validation: ceiling ยืน (+1.5..+4 · n~30) · realizable 0/7 FWE** [CLAIM-0004] + [CLAIM-0013] · **[07-12] at-trigger = structural-wall [CLAIM-0014] + demote "+0.66" (no-artifact) → magnitude arm ปิดโดยพฤตินัย (prior บาง · form เหลือ = session-open เท่านั้น)** · **next = Win ตัดสิน** (discovery mechanism ใหม่ · tick-price · monetize-v4 · forward-test)
 
 ---
 
@@ -53,9 +53,9 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `dir_features` :: ASSET(imported 1)
 - `direction_at_real_exit` :: EXPERIMENT=live→CLAIM-0010
 - `direction_predictor` :: ASSET(imported 4) :: EXPERIMENT=superseded→CLAIM-0005
-- `direction_predictor_v1` :: ASSET(imported 4) :: EXPERIMENT=superseded→CLAIM-0006
+- `direction_predictor_v1` :: ASSET(imported 5) :: EXPERIMENT=superseded→CLAIM-0006
 - `discovery_probe` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0004
-- `opportunity_validation` :: EXPERIMENT=live→CLAIM-0013
+- `opportunity_validation` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0013
 - `dual_asian_sim` :: ASSET(imported 7) :: EXPERIMENT=reproduce-only(v4-canonical numbers §9:107)
 - `edge_bar_mc` :: EXPERIMENT=live→CLAIM-0001
 - `edge_screen` :: EXPERIMENT=legacy→ARCHIVE
@@ -82,6 +82,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `h0_join_pnl` :: EXPERIMENT=reproduce-only(h0 PnL-join · carried)
 - `holdout_exness` :: EXPERIMENT=reproduce-only(v4 holdout +511.8 clock-corrected)
 - `layer0_meanrev_pregate` :: EXPERIMENT=legacy→ARCHIVE
+- `magnitude_at_trigger` :: EXPERIMENT=live→CLAIM-0014
 - `layer1_null_test` :: EXPERIMENT=legacy→ARCHIVE
 - `layer2_real_data` :: EXPERIMENT=legacy→ARCHIVE
 - `layer2b_bar_null` :: EXPERIMENT=legacy→ARCHIVE
@@ -186,7 +187,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **reproduce:** python Scripts/direction_predictor_v1.py
 
 ### CLAIM-0007
-- **observed:** in-hand direction-channel LEARNED features ไม่เพิ่ม OOS direction skill ใต้ label `trade_R` — OHLC sign-MI **1/19** · tickvol **0/7** · Gate-A linear domain-classifier AUC **0.547** · magnitude predictable **+0.66** (label-agnostic) · MDE CI-half **~0.043R** vs ruin-safe **0.37-0.46R**
+- **observed:** in-hand direction-channel LEARNED features ไม่เพิ่ม OOS direction skill ใต้ label `trade_R` — OHLC sign-MI **1/19** · tickvol **0/7** · Gate-A linear domain-classifier AUC **0.547** · magnitude predictable **+0.66** (label-agnostic) **[⚠ DEMOTED 07-12: '+0.66' ไม่มี artifact ต้นทาง — รันครบ 4 source (gate1/gate_magnitude/gate_c/gate2 · script unchanged ตั้งแต่ 13cefaf + deterministic): ค่าจริง = in-sample MAGNITUDE-MI 6/19 FWE-sig (DIAGNOSTIC/overfit-floor · de-cluster [5,1,6]/19) · OOS straddle-net-cost ตาย (ทุก bucket ลบ CI-excl-0 · Spearman +0.0253)]** · MDE CI-half **~0.043R** vs ruin-safe **0.37-0.46R**
 - **supported:** ใต้ intraday 1R/1.5R `trade_R` label + tested representation — learned features ไม่ add · Gate-A ลด static-model prior (**ไม่ eliminate**)
 - **not-yet-supported:** "direction ตายทุก channel" (label ผิด → CLAIM-0009) · "static-GBM ไม่ transfer" (linear เท่านั้น) · tick-price (ยังไม่เทส)
 - **evidence-level:** L1
@@ -195,7 +196,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **kind:** experiment
 - **status:** superseded→CLAIM-0009 (label re-measured at real exit)
 - **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y] · null-control[permutation] · seed-robust[N] · leak-guard[Y] · verified-by[Engineer]
-- **correction-lineage:** corrections 1 รอบ · Engineer catch (พลาดร่วม ~16 รอบ): วัดบน trade_R ≠ real EA exit
+- **correction-lineage:** corrections 2 รอบ · Engineer catch (พลาดร่วม ~16 รอบ): วัดบน trade_R ≠ real EA exit · 07-12: demote "+0.66" (no-artifact transcription จาก session 07-08 — Claude รันครบ 4 source + Engineer verify อิสระ เลขตรงกัน · แทนด้วยค่าจริง script-owned ใน observed annotation)
 - **scope-of-death:** learned OHLC/tickvol features ใต้ intraday 1R/1.5R trade_R label (ไม่ใช่ real-exit · ไม่ใช่ tick-price)
 - **reproduce:** python Scripts/gate1_mi_ceiling.py ; python Scripts/gate_magnitude_oos.py
 
@@ -272,7 +273,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 ### CLAIM-0013
 - **observed:** magnitude rank บน realizable population (both/W60 trades วัน v4-missed · **proxy = day-mean GBM-straddle forecast เฉลี่ยบน v1-events** · TEST_YEARS 2015-20 · n=512): **Spearman(pred, |pnl|) = −0.012 CI[−0.088,+0.086]** · top-half−bottom-half (signed pnl) **−0.629 CI[−2.720,+1.311]**
 - **supported:** **ตรวจไม่พบ** ranking ใต้ proxy ทื่อ 3 ชั้น (day-mean · cross-event กับ trigger จริง · TEST_YEARS-only) — **ไม่พอสรุปว่า magnitude ไม่ transfer** (not-detected ≠ falsified · power problem ไม่ใช่ signal absence — Engineer execution-review)
-- **not-yet-supported:** **event-specific/at-trigger magnitude forecast** (ไม่ใช่ day-mean บน v1-events) ยังไม่เทส · "magnitude ตายทั้งแนว" · in-population เดิมของ CLAIM-0007 ไม่ถูกแตะ · exit/representation อื่นยังไม่เทส
+- **not-yet-supported:** **event-specific/at-trigger magnitude forecast** — ผ่าน v1 intraday-features = **structurally blocked** (CLAIM-0014 · trades ตัดสิน session-open) · ต้อง session-open features ถ้าจะเทส · "magnitude ตายทั้งแนว" · in-population เดิมของ CLAIM-0007 ไม่ถูกแตะ · exit/representation อื่นยังไม่เทส
 - **evidence-level:** L0
 - **dependencies:** opportunity_validation · direction_predictor_v1 build · gate_c_wf gbm/TEST_YEARS · population (b) ของ CLAIM-0004 validation
 - **invalidated-by:** at-trigger magnitude forecast rank ได้ CI-separated (จะ supersede not-detected นี้) · join-coverage bias พิสูจน์ได้
@@ -282,3 +283,17 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **correction-lineage:** corrections 1 รอบ · design ผ่าน Engineer 2 รอบก่อนรัน (INT-2) · execution-review 07-11: Engineer downgrade "FAIL/ไม่ transfer" → "not-detected-under-blunt-proxy" (Claude over-claim · แก้แล้ว)
 - **scope-of-death:** NA (not-detected · ไม่ใช่ falsification — ดู supported)
 - **reproduce:** python Scripts/opportunity_validation.py
+
+### CLAIM-0014
+- **observed:** at-trigger magnitude บน realizable population = **โครงสร้างเทสไม่ได้ด้วย v1 features**: trades 759 → i≥240 eligible **1** (dropped 758 · hour-dist {1:87, 2:597, 3:65, 4:5, ...}) → join ∧ TEST_YEARS = **0** · fail-loud STOP ตาม pre-registration · discriminator: trade เดียวที่ k≥240 **join พบจริง** (2014-05-23/276 → True) = join-key ถูก ไม่ใช่ bug · k median=72 max=276
+- **supported:** first-event ของ both/W60 บนวัน missed = **ตัดสินตอนเปิด session/ข้ามคืน** (ชม.1-3 = 749/758) ↔ v1 features ต้องการประวัติ 240 session-bars → **disjoint 98.7% เชิงโครงสร้าง** · CLAIM-0013 วัดได้เพราะ day-mean เฉลี่ยบน bars (i≥240) ที่ disjoint กับ trade bars — ไม่ใช่แค่ diluted
+- **not-yet-supported:** at-trigger magnitude ด้วย **session-open features** (prior-day/overnight/first-N-bars · ไม่พึ่งประวัติ 4 ชม.) — ยังออกแบบ/เทสได้ถ้าคุ้ม (prior หลัง demote +0.66 = บางมาก · priority ต่ำ)
+- **evidence-level:** L1 (discriminator reproduce อิสระ 2 ฝ่าย: Engineer + Claude เลขตรงกันทุกตัว)
+- **dependencies:** magnitude_at_trigger · opportunity_validation population · direction_predictor_v1 build (meta+i) · gate_c_wf gbm/TEST_YEARS
+- **invalidated-by:** session-open feature set ทำ at-trigger test ได้จริง (จะ supersede "untestable")
+- **kind:** experiment
+- **status:** terminal (structural-wall · ไม่ใช่ผลวัด — การวัดทำไม่ได้ใน config นี้)
+- **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y fail-loud guard] · null-control[NA ไม่ถึงการวัด] · seed-robust[NA] · leak-guard[Y] · verified-by[Engineer+Claude discriminator ตรงกัน]
+- **correction-lineage:** corrections 0 รอบ · design ผ่าน Engineer 3 รอบก่อนรัน (TRAP-1/2/5 · MISS-1/2 · SEED-1) · wall review: Engineer แยกสมมติฐาน structural-vs-join-bug ด้วย evidence
+- **scope-of-death:** at-trigger magnitude **เฉพาะผ่าน v1 intraday-history features** บน first-event population นี้ (ไม่ใช่ session-open features · ไม่ใช่ population อื่น)
+- **reproduce:** python Scripts/magnitude_at_trigger.py

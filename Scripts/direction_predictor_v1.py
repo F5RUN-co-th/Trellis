@@ -95,7 +95,7 @@ def build(ctx):
                 tdir * ret15, pos * slope60,
             ]
             X.append(feat)
-            meta.append((dts[:4], j, tdir, rl, rs))
+            meta.append((dts[:4], j, tdir, rl, rs, i))   # i = session-bar index (append ท้าย — ผู้บริโภคเดิม positional m[0..4] ไม่กระทบ · CLAIM-0014 join)
     return np.array(X), meta
 
 

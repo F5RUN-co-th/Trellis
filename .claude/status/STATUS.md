@@ -24,7 +24,7 @@
 | Test B (direction load-bearing at real exit) | ✅ | CLAIM-0009 |
 | **direction-at-real-exit** | ✅ | CLAIM-0010 |
 | v4 Dual-Asian (carried candidate) | ▶ | CLAIM-0012 |
-| opportunity validation (3-population + magnitude rank) | ▶ | CLAIM-0004 · CLAIM-0013 |
+| opportunity validation + magnitude arm (3-population · day-mean · at-trigger wall · demote +0.66) | ✅ | CLAIM-0004 · CLAIM-0013 · CLAIM-0014 |
 
 ## Tooling / Governance
 - **Research Traceability System** [CLAIM-0011] — `Scripts/ledger_check.py` (validate + `--emit-index` + `--self-test`)
