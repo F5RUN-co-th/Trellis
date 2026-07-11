@@ -20,9 +20,10 @@ Hypothesis-Elimination-Matrix (qualitative · **ไม่มีเลข posteri
 | Representation: **tick-price** (in-hand เหนือ OHLC-ceiling · DPI) | tickvol 0/7 [CLAIM-0007→0009] · spread dead [CLAIM-0008 DEAD] · tick-price ยังไม่เทส | **open (in-hand สุดท้ายก่อน Stage-F)** |
 | Representation: nonlinear/event-stream/multi-scale | ยังไม่เทสที่ real exit นอกจาก GBM | **open** |
 | Optimization: adaptive/rolling (concept-drift remedy) | Gate-A linear AUC 0.547 ลด static-prior [CLAIM-0007→0009] | **open** |
-| Magnitude channel (label-agnostic) | +0.66 sturdier [CLAIM-0007·mag=live] · +1.745 n=31 unvalidated [CLAIM-0004] | **open (Win-decide)** |
+| Magnitude channel (label-agnostic) | +0.66 sturdier [CLAIM-0007·mag=live] · day-mean proxy ตรวจไม่พบ rank บน realizable (blunt · **at-trigger ยังไม่เทส**) [CLAIM-0013] | **open** |
+| Discovery: additive opp **realizable** ด้วย ex-ante trigger | validation 07-10: ceiling ยืน (+1.5..+4 · n~30) แต่ **0/7 trigger-config FWE** · anchor ลบ [CLAIM-0004] | **open (ceiling-only — กุญแจ = ex-ante discovery ไม่ใช่ trigger เพิ่ม)** |
 
-**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **next = Win ตัดสิน** (richer-OHLC · tick-price · magnitude · monetize-v4 · forward-test) — ไม่ prescribe
+**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **[07-10/11] opportunity-validation รัน + Engineer execution-review PASS: ceiling ยืน (+1.5..+4 · n~30) · realizable 0/7 FWE · magnitude day-mean proxy = not-detected (at-trigger ยังไม่เทส)** [CLAIM-0004] + [CLAIM-0013] · **next = Win ตัดสิน** (at-trigger magnitude · discovery mechanism ใหม่ · tick-price · monetize-v4)
 
 ---
 
@@ -53,7 +54,8 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `direction_at_real_exit` :: EXPERIMENT=live→CLAIM-0010
 - `direction_predictor` :: ASSET(imported 4) :: EXPERIMENT=superseded→CLAIM-0005
 - `direction_predictor_v1` :: ASSET(imported 4) :: EXPERIMENT=superseded→CLAIM-0006
-- `discovery_probe` :: EXPERIMENT=live→CLAIM-0004
+- `discovery_probe` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0004
+- `opportunity_validation` :: EXPERIMENT=live→CLAIM-0013
 - `dual_asian_sim` :: ASSET(imported 7) :: EXPERIMENT=reproduce-only(v4-canonical numbers §9:107)
 - `edge_bar_mc` :: EXPERIMENT=live→CLAIM-0001
 - `edge_screen` :: EXPERIMENT=legacy→ARCHIVE
@@ -142,18 +144,18 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **reproduce:** python Scripts/exhaustion_fade.py
 
 ### CLAIM-0004
-- **observed:** Discovery NOT falsified — missed ∧ oracle-opportunity **+1.745 (n=31 WR54.8%)** (conditioning-error fix จาก −2.88 · ไม่ใช่ sign-flip) · decomposition: dir ตรง **+17.98/WR100%** ผิด **−13.48/WR12%**
-- **supported:** ใต้ Momentum-family · **PnL = Opportunity × DIRECTION × Execution · Opportunity ผ่าน · Direction=คอขวด**
-- **not-yet-supported:** additive opp ที่ full-population (n=31 = subsample เล็ก · unvalidated) · Discovery ทั้งหมด (scope=Momentum)
-- **evidence-level:** L0
-- **dependencies:** oracle=labeling-instrument (ไม่ใช่ target) · opportunity_unit_v4 · opening-range trigger
-- **invalidated-by:** n เพิ่มแล้ว +1.745 หาย · oracle-guardrail ละเมิด (hindsight-leak)
+- **observed:** Discovery NOT falsified — missed ∧ oracle-opportunity **+1.745 (n=31 WR54.8%)** (conditioning-error fix จาก −2.88 · ไม่ใช่ sign-flip) · decomposition: dir ตรง **+17.98/WR100%** ผิด **−13.48/WR12%** · **[07-10 validation `opportunity_validation.py` · pre-registered]** 3-population decomposition บนวัน v4-missed (826 วัน): **(a) anchor outcome-blind ลบทุก config** (both/W60 −1.482 n=759 · ช่วง −0.30..−2.75) · **(b) realizable = 0/7 trigger-config PASS** (FWE Bonferroni m=7 จ่ายเต็ม · ไม่มี config ถึง CI95-low>0) · **(c) ceiling oracle-conditioned ยืน** (pd +1.555 n=30 ≈ เดิม +1.745 · don/W120 +4.064 · both/W60 +3.662 · n~30-32 = full population ของวัน missed∧opp ทั้ง field)
+- **supported:** additive opportunity **มีจริงในฐานะ oracle-CEILING เท่านั้น** (~+1.5..+4/ไม้ บน ~30 วัน/9 ปี) · **ไม่ realizable ด้วย ex-ante trigger-grid 7 config** (don/pd/both × W · FWE-paid) · base-rate วัน missed = ลบ · ยืนยัน PnL = Opportunity × DIRECTION: กุญแจ = discovery/direction ex-ante ไม่ใช่ trigger เพิ่ม
+- **not-yet-supported:** realizable ด้วย mechanism นอก grid นี้ (representation/data ใหม่) · "Discovery ตายทั้งแนว" (scope = trigger-grid Momentum บน OHLC)
+- **evidence-level:** L0 (validation รันแล้ว · promotion รอ Engineer adversarial round)
+- **dependencies:** oracle=labeling-instrument (ไม่ใช่ target) · opportunity_unit_v4 (Q3 trigger frozen estimand) · discovery_probe · brain_v1_run
+- **invalidated-by:** ex-ante rule ใดพิสูจน์ realizable CI-separated บน missed population · oracle-guardrail ละเมิด (hindsight-leak)
 - **kind:** experiment
 - **status:** live
-- **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y] · null-control[permutation] · seed-robust[N] · leak-guard[Y] · verified-by[Engineer]
-- **correction-lineage:** corrections 1 รอบ · Engineer จับ Claude วัดผิด population (all-missed 94% chop) เกือบสรุป ceiling→StageF
-- **scope-of-death:** NA (positive · แต่ n=31 unvalidated)
-- **reproduce:** python Scripts/discovery_probe.py
+- **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y] · null-control[circular-shift พร้อม · ไม่ถึงคิว (0/7 ตกก่อน) + boot-CI] · seed-robust[N single-seed 20260710] · leak-guard[Y ex-ante trigger · Engineer verified no-leak + exit-mirror exact] · verified-by[Engineer]
+- **correction-lineage:** corrections 1 รอบ · Engineer จับ Claude วัดผิด population (all-missed 94% chop) เกือบสรุป ceiling→StageF · 07-10 validation: design ผ่าน Engineer 2 รอบ (D1-D6+A-1 FWE) ก่อนรัน · execution-review 07-11 Engineer PASS (Q-A ยืนทุกแกน)
+- **scope-of-death:** realizable-additive ด้วย trigger-grid don/pd/both × W{30,60,120} บน SEARCH (ไม่ใช่ ceiling · ไม่ใช่ mechanism อื่น)
+- **reproduce:** python Scripts/opportunity_validation.py ; python Scripts/discovery_probe.py
 
 ### CLAIM-0005
 - **observed:** Direction Predictor v0 honest NEGATIVE — OOS **−0.093R** ≈ follow-trigger −0.094 ≈ perm-null −0.095 · features lift **+0.006R (~0 UNDERFIT)** · oracle-if-dir-known **+0.775R** · payoff-dir SIGN-FLIP train −0.125→OOS +0.018
@@ -266,3 +268,17 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **correction-lineage:** corrections 1 รอบ · holdout +802 (US-rule ผิด) → +511.8 (EU ground-truth) · ห้ามเลือกกฎจาก P&L
 - **scope-of-death:** NA (candidate ยังไม่ falsified · ยังไม่ proven)
 - **reproduce:** python Scripts/dual_asian_sim.py
+
+### CLAIM-0013
+- **observed:** magnitude rank บน realizable population (both/W60 trades วัน v4-missed · **proxy = day-mean GBM-straddle forecast เฉลี่ยบน v1-events** · TEST_YEARS 2015-20 · n=512): **Spearman(pred, |pnl|) = −0.012 CI[−0.088,+0.086]** · top-half−bottom-half (signed pnl) **−0.629 CI[−2.720,+1.311]**
+- **supported:** **ตรวจไม่พบ** ranking ใต้ proxy ทื่อ 3 ชั้น (day-mean · cross-event กับ trigger จริง · TEST_YEARS-only) — **ไม่พอสรุปว่า magnitude ไม่ transfer** (not-detected ≠ falsified · power problem ไม่ใช่ signal absence — Engineer execution-review)
+- **not-yet-supported:** **event-specific/at-trigger magnitude forecast** (ไม่ใช่ day-mean บน v1-events) ยังไม่เทส · "magnitude ตายทั้งแนว" · in-population เดิมของ CLAIM-0007 ไม่ถูกแตะ · exit/representation อื่นยังไม่เทส
+- **evidence-level:** L0
+- **dependencies:** opportunity_validation · direction_predictor_v1 build · gate_c_wf gbm/TEST_YEARS · population (b) ของ CLAIM-0004 validation
+- **invalidated-by:** at-trigger magnitude forecast rank ได้ CI-separated (จะ supersede not-detected นี้) · join-coverage bias พิสูจน์ได้
+- **kind:** experiment
+- **status:** live
+- **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y] · null-control[bootstrap-CI เท่านั้น] · seed-robust[N] · leak-guard[Y expanding-WF] · verified-by[Engineer]
+- **correction-lineage:** corrections 1 รอบ · design ผ่าน Engineer 2 รอบก่อนรัน (INT-2) · execution-review 07-11: Engineer downgrade "FAIL/ไม่ transfer" → "not-detected-under-blunt-proxy" (Claude over-claim · แก้แล้ว)
+- **scope-of-death:** NA (not-detected · ไม่ใช่ falsification — ดู supported)
+- **reproduce:** python Scripts/opportunity_validation.py

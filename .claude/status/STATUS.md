@@ -24,13 +24,14 @@
 | Test B (direction load-bearing at real exit) | ✅ | CLAIM-0009 |
 | **direction-at-real-exit** | ✅ | CLAIM-0010 |
 | v4 Dual-Asian (carried candidate) | ▶ | CLAIM-0012 |
+| opportunity validation (3-population + magnitude rank) | ▶ | CLAIM-0004 · CLAIM-0013 |
 
 ## Tooling / Governance
 - **Research Traceability System** [CLAIM-0011] — `Scripts/ledger_check.py` (validate + `--emit-index` + `--self-test`)
 - run: `python Scripts/ledger_check.py` (validate) · `--emit-index` (regen SCRIPT INDEX skeleton) · `--self-test`
 
 ## Blockers / รอ Win
-- **next-experiment decision** (LEDGER frontier options) — ไม่ prescribe
+- **next-experiment decision** — opportunity-validation verified แล้ว (Engineer 07-11) · options สด → LEDGER FRONTIER
 - clock-fix Gate 0 re-import 2025-26 (pre-reframe · ARCHIVE) — ค้างก่อนหน้า reframe
 
 ## EA / Modules (pre-reframe TRELLIS-003 build — frozen · ดู ARCHIVE)
