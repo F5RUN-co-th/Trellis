@@ -13,7 +13,7 @@
 
 **Working Loop:**
 - ไม่มีปัญหา → ไม่เปิด issue / ไม่ปั้นงาน
-- requirement ใหม่ | bug → doc(`Plan/`)/`Issue/` → Engineer-finding → **STOP (วินตรวจ finding)** → Claude-Verify (แผนไม่เคยสมบูรณ์) → **STOP (วินอนุมัติ)** → implement · cadence = §Communication 3-Phase Gate
+- requirement ใหม่ | bug → doc(`Plan/`)/`Issue/` → Engineer-finding → **STOP (วินตรวจ finding)** → Claude-Verify (**เป้า = ทำแผนให้สมบูรณ์**: ไม่มีจุดผิด/หลุด + comprehensive → เดินหน้า · ไม่มี finding ใหม่ = จบ ห้ามวนรอบเพิ่มเพื่อหาความไม่สมบูรณ์) → **STOP (วินอนุมัติ)** → implement · cadence = §Communication 3-Phase Gate
 - fix เล็ก (reversible + ไม่มี design-choice + verify ทันที + ไม่กระทบ scope อื่น · **ลังเล = ไม่เล็ก**) → ข้ามได้แค่ doc+Engineer round · **approval + แตะ .mq5/.mqh/source ยังบังคับขอเสมอ (ไม่ override CRITICAL)**
 
 ## กฎการทำงาน (Working Rules)
