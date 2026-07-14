@@ -18,12 +18,12 @@ Hypothesis-Elimination-Matrix (qualitative · **ไม่มีเลข posteri
 | Label: intraday `trade_R` 1R/1.5R | gates วัดผิด exit → re-measured [CLAIM-0007→0009] | **eliminated as measurement** |
 | Direction มี skill ที่ **real EA exit** | v4-breakout-dir base−floor +0.582 CI-backed [CLAIM-0010] | **open (edge จริง · ceiling ยังไม่วัด)** |
 | Representation: **tick-price** (in-hand เหนือ OHLC-ceiling · DPI) | tickvol 0/7 [CLAIM-0007→0009] · spread dead [CLAIM-0008 DEAD] · TP-1 nested: gated 0/9 + perm 0.805 [CLAIM-0015→0016] · **TP-2 inference-completed 07-14: p(S1·GBM-med9)=0.398 (obs +0.1215 ≈ null-elevation +0.093 — "GBM 9/9 บวก" = mechanical) · p(S2)=0.063 · ไม่มี statistic ถึง α=0.0167** [CLAIM-0016] | **eliminated (scope: 6 features · linear+GBM · real exit · MDE~+0.28 — event-stream/richer form อยู่แถว nonlinear ที่ยัง open · ไม่ใช่ proven-zero)** |
-| Representation: nonlinear/event-stream/multi-scale | ยังไม่เทสที่ real exit นอกจาก GBM | **open** |
+| Representation: nonlinear/event-stream/multi-scale | GBM บน 19-feat ตาย [CLAIM-0010] · **ES-1 07-15: DC multi-scale บน M1 closes ที่ real exit = KILL** (p(S1)=0.445 · p(S2)=0.464 · observed นั่งบน null-mean พอดี · MDE-floor +0.07/+0.08) [CLAIM-0017] | **open เฉพาะ form ที่เหลือ: tick-DC / event-functional อื่น / richer nonlinear — M1-DC-multi-scale = eliminated (power-context ตาม emit · not-detected ≠ falsified)** |
 | Optimization: adaptive/rolling (concept-drift remedy) | Gate-A linear AUC 0.547 ลด static-prior [CLAIM-0007→0009] | **open** |
 | Magnitude channel (label-agnostic) | in-sample MI 6/19 (**DIAGNOSTIC/overfit-floor** · de-cluster [5,1,6]) · OOS straddle-net-cost **dead** [CLAIM-0007→0009] · "+0.66 sturdier" เดิม = demoted no-artifact · day-mean not-detected [CLAIM-0013] · at-trigger ผ่าน intraday-features = **structurally blocked** [CLAIM-0014] | **open (เฉพาะ session-open form ที่ยังไม่เทส · prior บาง · priority ต่ำ)** |
 | Discovery: additive opp **realizable** ด้วย ex-ante trigger | validation 07-10: ceiling ยืน (+1.5..+4 · n~30) แต่ **0/7 trigger-config FWE** · anchor ลบ [CLAIM-0004] | **open (ceiling-only — กุญแจ = ex-ante discovery ไม่ใช่ trigger เพิ่ม)** |
 
-**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **[07-10/11] opportunity-validation: ceiling ยืน (+1.5..+4 · n~30) · realizable 0/7 FWE** [CLAIM-0004] + [CLAIM-0013] · **[07-12] at-trigger = structural-wall [CLAIM-0014] + demote "+0.66" (no-artifact) → magnitude arm ปิดโดยพฤตินัย** · **[07-13/14] tick-price arm ปิดใน scope ที่เทส: TP-1 INCONCLUSIVE gate-limited → TP-2 inference-completed = KILL [CLAIM-0016] (budget 2/40 family v3 · null-mean-elevation [run +0.093/+0.104 · calib ≈+0.12] = การค้นพบ methodology ถาวร: nested-lift point-positivity ≠ signal)** · **next = Win ตัดสิน** (nonlinear/event-stream · adaptive · discovery mechanism · monetize-v4 · forward-test)
+**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **[07-10/11] opportunity-validation: ceiling ยืน (+1.5..+4 · n~30) · realizable 0/7 FWE** [CLAIM-0004] + [CLAIM-0013] · **[07-12] at-trigger = structural-wall [CLAIM-0014] + demote "+0.66" (no-artifact) → magnitude arm ปิดโดยพฤตินัย** · **[07-13/14] tick-price arm ปิดใน scope ที่เทส: TP-1 INCONCLUSIVE gate-limited → TP-2 inference-completed = KILL [CLAIM-0016] (budget 2/40 family v3 · null-mean-elevation [run +0.093/+0.104 · calib ≈+0.12] = การค้นพบ methodology ถาวร: nested-lift point-positivity ≠ signal)** · **[07-15] ES-1 DC-multi-scale (M1) ที่ real exit = KILL [CLAIM-0017] (budget 3/40 · prediction held 2-independent+1-implied · null-mean ES เป็นลบ — elevation เป็น per-feature-set ห้ามยืมข้าม card)** · **next = Win ตัดสิน** (event-form ที่เหลือ · adaptive · discovery mechanism · monetize-v4 · forward-test)
 
 ---
 
@@ -57,6 +57,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `discovery_probe` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0004
 - `opportunity_validation` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0013
 - `dual_asian_sim` :: ASSET(imported 7) :: EXPERIMENT=reproduce-only(v4-canonical numbers §9:107)
+- `es1_card` :: EXPERIMENT=live→CLAIM-0017
 - `edge_bar_mc` :: EXPERIMENT=live→CLAIM-0001
 - `edge_screen` :: EXPERIMENT=legacy→ARCHIVE
 - `edge_screen2` :: EXPERIMENT=legacy→ARCHIVE
@@ -96,9 +97,9 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `stage0_verify_import` :: EXPERIMENT=legacy→ARCHIVE
 - `stageb_pipeline` :: EXPERIMENT=legacy→ARCHIVE
 - `test_b_direction_decomp` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0009
-- `tp1_card` :: ASSET(imported 1) :: EXPERIMENT=superseded→CLAIM-0015
+- `tp1_card` :: ASSET(imported 2) :: EXPERIMENT=superseded→CLAIM-0015
 - `tp1_tick_features` :: EXPERIMENT=superseded→CLAIM-0015
-- `tp2_inference` :: EXPERIMENT=live→CLAIM-0016
+- `tp2_inference` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0016
 - `walk_forward` :: EXPERIMENT=reproduce-only(v4 anchored-WF +876)
 
 ---
@@ -328,3 +329,17 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **correction-lineage:** corrections 0 รอบหลังรัน · design 3 รอบก่อนรัน: R1 B1 "plain-perm anti-conservative" → Claude หักล้างทิศด้วย H0-true demo (3/3 draws) · R2 จับ demo Claude circular + cross-fold bug (I-4) + runtime ผิด 10× (จริง 1.62s/eval) + บังคับ calibration · R3 audit demo = FAIR + 5 changes (script-owned observed · ตัด plain-perm · diagnostic line · CLAIM-0015 annotation · C-a=hedge language) · Claude disclose M5: tp1_card ประกาศ GBM-perm แต่ไม่เคยรัน → docstring แก้ + process-check "ทุก pre-registered test ต้อง emit หรือ mark deferred"
 - **scope-of-death:** tick-price **6 features (imb/path_eff/srun/mvol/dur_cv/lvl_act · bid-only · event-time N=3000) ผ่าน linear+GBM ที่ real walk-exit บน SEARCH 2012-2020 · MDE ≈ +0.28** — ไม่ใช่ tick-price ทั้งแนว · ไม่ใช่ event-stream · ไม่ใช่ proven-zero
 - **reproduce:** python Scripts/tp2_inference.py ; python Scripts/tp2_inference.py calib
+
+### CLAIM-0017
+- **observed:** Card ES-1 event-stream DC multi-scale ที่ real exit (pre-registered spec v4 · Engineer 4 รอบ · `es1_card.py` · n=1486 · 8 DC encodings δ∈{0.1,0.25,0.5}×aw บน M1 session closes 01:00→close(j) · baseline 20 = 19-feat + rjR) — **observed script-owned: S1 linear-forced-median9 = −0.1427 · S2 GBM-nested-median9 = −0.1269** · **p(S1 · OLS residual-perm B=1000) = 0.4446** (null mean −0.1603 · null-p95 +0.0665) · **p(S2 · GBM-proj residual-perm B=1000) = 0.4635** (null mean −0.1362 · null-p95 +0.0822) · α=0.025 (m=2) · ไม่ trigger escalation · **calibration ก่อนรัน (15 H0-true draws · reproduce ได้ `es1_card.py calib`): S1 0/15@0.05 median 0.510 · S2 1/15@0.05 median 0.500 — both calibrate** · gates: UNDEF==0 assert ✓ · slice-discipline 54 entries (M2: guard เชิงโครงสร้าง — **no-lookahead power = smoke NEG-CTRL planted span+20 ยิงจริง**) ✓ · R-match ผูก walker ทุกไม้ ✓ · DIAG (descriptive-only): drop-δ0.25 ทำ S1 ดีขึ้น +0.163 (scale กลาง = noise ต่อ linear) · GATED −0.1796 · leave-max-out = **z-profile report เท่านั้น ไม่ recompute** (|z|max 9.46sd · 13 วัน>4sd · ตัด row เปลี่ยน fold-structure — M3)
+- **supported:** **KILL ตาม pre-registration** — observed ทั้งสองนั่งบน null-mean ของตัวเองพอดี (S1 −0.143 vs −0.160 · S2 −0.127 vs −0.136) → DC multi-scale บน M1 closes **ไม่ add direction info เหนือ baseline ที่ real exit** · root-cause explanation: dc_align redundant กับ momentum block (linear-R² 0.04-0.19 · GBM-OOF 0.21-0.64) + os/dur/asym ไม่มี information เกิน composition — ไม่ใช่แค่ p≥α · **null-mean ES เป็นลบ (ต่างจาก TP-2 ที่บวก) = elevation เป็น per-feature-set** (methodology ถาวรต่อยอด CLAIM-0016)
+- **not-yet-supported:** event-stream form อื่น (tick-DC · event-functional อื่น · richer nonlinear — frontier แถว nonlinear ยัง open เฉพาะ form เหล่านั้น) · "event-stream ตายทั้งแนว" · proven-zero (**sensitivity-floor ≈ +0.07/+0.08 $/ไม้** — not-detected ≠ falsified ตาม CLAIM-0013) · **prediction held: 2-independent + 1-implied** (KILL ✓ · p∈[0.2,0.9] ทั้งคู่ ✓ [0.4446/0.4635] · "ไม่มี p<0.10" = implied โดย band-edge — Engineer M-1: เกณฑ์ nested ห้ามนับ "3/3")
+- **evidence-level:** L1 (Engineer execution-review 07-15: observed bit-exact ทุก seed + feature spot-check โค้ดอิสระ deviation 0.00e+00 + dissect mirror exact + null sanity B=50 — precedent CLAIM-0014/0015/0016)
+- **dependencies:** es1_card (dissect mirror c9_dc_features:51-82) · tp2_inference machinery (TP2 class/null_run/proj) · tp1_card folds/fit_predict · direction_at_real_exit build_rows · brain_v1_run walker · h0_tickfeat rjR (frozen SHA)
+- **invalidated-by:** event-form อื่นให้ผล CI-backed · calibration พบ mis-calibration ภายหลัง · execution-review พบ defect
+- **kind:** experiment
+- **status:** terminal (KILL scoped · ไม่มี middle branch ตาม pre-registration)
+- **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y observed+p+verdict+MDE emit จาก script] · null-control[residual-perm ×2 · B=1000 · calibration-checked 15 draws ทั้งสอง statistic ของ card เอง] · seed-robust[Y median-9] · leak-guard[Y UNDEF-assert + slice-discipline + smoke NEG-CTRL power-proven + R-match] · verified-by[Engineer execution-review 07-15 — reproduce อิสระครบ (observed bit-exact · features 0-deviation · null B=50 sanity · calib audit) ไม่พบ result-affecting defect]
+- **correction-lineage:** corrections 2 รอบ (1: drop-one diag mask-width crash — แก้หลัง observed ออกแล้ว ไม่ปนเปื้อน · + 4 bug ก่อนรัน: dead hook/GATED seed/MDE emit/tickfeat header · 2: execution-review M1-M3 — prediction "3/3"→"2-independent+1-implied" [nested criteria] + relabel guard เป็น slice-discipline + leave-max-out = z-report) · design 4 รอบก่อนรัน (R2 Claude หักล้าง δ-set ของ R1 ด้วย ES-window จริง · R3 two-field adjudication + Engineer จับ "ceiling" ผิดทิศ · R4 P1-P4) · selection-contamination declared (asym@0.1/dur@0.25 = occupancy-guided)
+- **scope-of-death:** **8 DC encodings (δ∈{0.1,0.25,0.5}×aw · M1 closes · classic dissection) ผ่าน linear+GBM ที่ real walk-exit บน SEARCH 2012-2020 · sensitivity-floor ≈ +0.07/+0.08** — ไม่ใช่ event-stream ทั้งแนว · ไม่ใช่ tick-DC · ไม่ใช่ proven-zero
+- **reproduce:** python Scripts/es1_card.py ; python Scripts/es1_card.py calib

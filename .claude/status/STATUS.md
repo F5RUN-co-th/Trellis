@@ -7,7 +7,7 @@
 
 ## Current Stage — TRELLIS-010 v3 Offensive Reframe (research: DIRECTION edge)
 - **frame:** หา additive DIRECTION edge (root = engine edge ไม่ใช่ capital) · เป้า: $100 รอด + กำไรมาก + เข้าทุกโอกาส
-- **สถานะล่าสุด:** tick-price arm ปิดใน scope ที่เทส — TP-1 INCONCLUSIVE → **TP-2 inference-completed = KILL** [LEDGER CLAIM-0016 · CLAIM-0015 superseded] · budget 2/40 family v3 · **รอ Engineer execution-review TP-2 + Win ตัดสิน next** (nonlinear/event-stream · adaptive · discovery · monetize-v4 · forward-test) — ไม่ prescribe
+- **สถานะล่าสุด:** ES-1 (event-stream DC multi-scale บน M1 ที่ real exit) = **KILL · L1** [LEDGER CLAIM-0017 — execution-review PASS 07-15 · prediction held 2-independent+1-implied] · budget 3/40 family v3 · **รอ Win ตัดสิน next** (event-form ที่เหลือ / adaptive / discovery / monetize-v4 / forward-test) — ไม่ prescribe
 - **frontier + open/eliminated hypotheses:** LEDGER `## CURRENT FRONTIER`
 
 ## Research pipeline (✅ = จบ · ▶ = active — **status word อยู่ LEDGER ที่เดียว** · ดูสด = `/ledger status`)
@@ -27,6 +27,7 @@
 | opportunity validation + magnitude arm (3-population · day-mean · at-trigger wall · demote +0.66) | ✅ | CLAIM-0004 · CLAIM-0013 · CLAIM-0014 |
 | TP-1 tick-price nested-incremental (card 1/40 family v3 · Engineer execution-review + integrity hardening) | ✅ | CLAIM-0015 |
 | TP-2 inference completion (card 2/40 · calibration-checked residual-perm · KILL · execution-review PASS) | ✅ | CLAIM-0016 |
+| ES-1 event-stream DC multi-scale (card 3/40 · calib S1+S2 · KILL · execution-review PASS) | ✅ | CLAIM-0017 |
 
 ## Tooling / Governance
 - **Research Traceability System** [CLAIM-0011] — `Scripts/ledger_check.py` (validate + `--emit-index` + `--self-test`)
