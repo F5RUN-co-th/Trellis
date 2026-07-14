@@ -23,7 +23,9 @@ VERDICT RULES (R3 Issue-1 asymmetric):
 PERM-NULL (R2 P2 รันจริง · R3 Issue-2): permute tick-block rows ใน train ต่อ fold (one-entry-per-day
   verified — row-perm = day-perm) · re-gate เฉพาะ tick block (baseline gate/standardize cache —
   invariant ต่อ tick-perm) · refit B · lift vs cached A · B_PERM=1000 · single seed 20260708
-  (decouple จาก 9-seed sweep) · GBM-perm B=300 = DIAGNOSTIC
+  (decouple จาก 9-seed sweep) · GBM-perm: **ไม่ได้ execute ใน card นี้** (pre-registered แล้วไม่รัน —
+  correction 07-14 · จับโดย Claude disclose · superseded-by `tp2_inference.py` แบบ powered+calibrated ·
+  process-check ใหม่: ทุก pre-registered test ต้อง emit result หรือ mark deferred)
 SCOPE-OF-DEATH (ถ้า KILL): 6 tick-price features (imb/path_eff/srun/mvol/dur_cv/lvl_act ·
   bid-only · event-time N=3000) · linear+GBM · ที่ real walk-exit บน SEARCH 2012-2020 —
   ไม่ใช่ tick-price ทั้งแนว · ไม่ใช่ proven-zero · ไม่ใช่ event-stream representation อื่น
@@ -54,7 +56,7 @@ FEAT_SHA = ROOT / "Research/h0/tp1_tickfeat_2012_2020.sha256"
 TICK_COLS = ["imb", "path_eff", "srun", "mvol", "dur_cv", "lvl_act"]
 SHADOW_COLS = ["sh_path", "sh_srun", "sh_mvol", "sh_lvl"]
 SEEDS = [20260708, 1, 2, 42, 123, 999, 99999, 20260709, 7]   # ชุดเดียวกับ CLAIM-0010
-B_PERM, B_PERM_GBM = 1000, 300
+B_PERM = 1000                       # (B_PERM_GBM ตาย — ลบตาม correction 07-14 · GBM-perm → tp2)
 PERM_ROOT = 20260708
 
 
