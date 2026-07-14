@@ -17,13 +17,13 @@ Hypothesis-Elimination-Matrix (qualitative · **ไม่มีเลข posteri
 | Representation: **19-feat OHLC (linear+GBM) ที่ real exit** | aggregate<0 ทุก 9 seed · ไม่มี CI-positive [CLAIM-0010] | **eliminated (seed-robust)** |
 | Label: intraday `trade_R` 1R/1.5R | gates วัดผิด exit → re-measured [CLAIM-0007→0009] | **eliminated as measurement** |
 | Direction มี skill ที่ **real EA exit** | v4-breakout-dir base−floor +0.582 CI-backed [CLAIM-0010] | **open (edge จริง · ceiling ยังไม่วัด)** |
-| Representation: **tick-price** (in-hand เหนือ OHLC-ceiling · DPI) | tickvol 0/7 [CLAIM-0007→0009] · spread dead [CLAIM-0008 DEAD] · tick-price ยังไม่เทส | **open (in-hand สุดท้ายก่อน Stage-F)** |
+| Representation: **tick-price** (in-hand เหนือ OHLC-ceiling · DPI) | tickvol 0/7 [CLAIM-0007→0009] · spread dead [CLAIM-0008 DEAD] · **TP-1 nested 07-13: gated 0/9 CI-positive + perm-p 0.805 · forced-in 1/9 (+0.028) · GBM point-positive ทุก seed แต่ 0/9 CI** [CLAIM-0015] | **open (INCONCLUSIVE gate-limited — ไม่ eliminate · form เหลือ = gate ที่เห็น conditional signal / feature richer)** |
 | Representation: nonlinear/event-stream/multi-scale | ยังไม่เทสที่ real exit นอกจาก GBM | **open** |
 | Optimization: adaptive/rolling (concept-drift remedy) | Gate-A linear AUC 0.547 ลด static-prior [CLAIM-0007→0009] | **open** |
 | Magnitude channel (label-agnostic) | in-sample MI 6/19 (**DIAGNOSTIC/overfit-floor** · de-cluster [5,1,6]) · OOS straddle-net-cost **dead** [CLAIM-0007→0009] · "+0.66 sturdier" เดิม = demoted no-artifact · day-mean not-detected [CLAIM-0013] · at-trigger ผ่าน intraday-features = **structurally blocked** [CLAIM-0014] | **open (เฉพาะ session-open form ที่ยังไม่เทส · prior บาง · priority ต่ำ)** |
 | Discovery: additive opp **realizable** ด้วย ex-ante trigger | validation 07-10: ceiling ยืน (+1.5..+4 · n~30) แต่ **0/7 trigger-config FWE** · anchor ลบ [CLAIM-0004] | **open (ceiling-only — กุญแจ = ex-ante discovery ไม่ใช่ trigger เพิ่ม)** |
 
-**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **[07-10/11] opportunity-validation: ceiling ยืน (+1.5..+4 · n~30) · realizable 0/7 FWE** [CLAIM-0004] + [CLAIM-0013] · **[07-12] at-trigger = structural-wall [CLAIM-0014] + demote "+0.66" (no-artifact) → magnitude arm ปิดโดยพฤตินัย (prior บาง · form เหลือ = session-open เท่านั้น)** · **next = Win ตัดสิน** (discovery mechanism ใหม่ · tick-price · monetize-v4 · forward-test)
+**FROZEN terminal (session 07-08):** direction-at-real-exit [CLAIM-0010] · **[07-10/11] opportunity-validation: ceiling ยืน (+1.5..+4 · n~30) · realizable 0/7 FWE** [CLAIM-0004] + [CLAIM-0013] · **[07-12] at-trigger = structural-wall [CLAIM-0014] + demote "+0.66" (no-artifact) → magnitude arm ปิดโดยพฤตินัย (prior บาง · form เหลือ = session-open เท่านั้น)** · **[07-13] TP-1 tick-price nested = INCONCLUSIVE gate-limited [CLAIM-0015] (budget 1/40 family v3 ใหม่ — Win ปิด family เก่า 9/40)** · **next = Win ตัดสิน** (execution-review TP-1 · gate-form ใหม่ · discovery mechanism · monetize-v4 · forward-test)
 
 ---
 
@@ -51,7 +51,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `c9_dc_features` :: EXPERIMENT=legacy→ARCHIVE
 - `diag_analyze` :: EXPERIMENT=legacy→ARCHIVE
 - `dir_features` :: ASSET(imported 1)
-- `direction_at_real_exit` :: EXPERIMENT=live→CLAIM-0010
+- `direction_at_real_exit` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0010
 - `direction_predictor` :: ASSET(imported 4) :: EXPERIMENT=superseded→CLAIM-0005
 - `direction_predictor_v1` :: ASSET(imported 5) :: EXPERIMENT=superseded→CLAIM-0006
 - `discovery_probe` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0004
@@ -96,6 +96,8 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `stage0_verify_import` :: EXPERIMENT=legacy→ARCHIVE
 - `stageb_pipeline` :: EXPERIMENT=legacy→ARCHIVE
 - `test_b_direction_decomp` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0009
+- `tp1_card` :: EXPERIMENT=live→CLAIM-0015
+- `tp1_tick_features` :: EXPERIMENT=live→CLAIM-0015
 - `walk_forward` :: EXPERIMENT=reproduce-only(v4 anchored-WF +876)
 
 ---
@@ -297,3 +299,17 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **correction-lineage:** corrections 0 รอบ · design ผ่าน Engineer 3 รอบก่อนรัน (TRAP-1/2/5 · MISS-1/2 · SEED-1) · wall review: Engineer แยกสมมติฐาน structural-vs-join-bug ด้วย evidence
 - **scope-of-death:** at-trigger magnitude **เฉพาะผ่าน v1 intraday-history features** บน first-event population นี้ (ไม่ใช่ session-open features · ไม่ใช่ population อื่น)
 - **reproduce:** python Scripts/magnitude_at_trigger.py
+
+### CLAIM-0015
+- **observed:** Card TP-1 tick-price nested-incremental ที่ real exit (n=1486 · 6 bid tick features event-time N=3000 · baseline 24 = 19-FEATS + 4 M1-shadows + log_winsec · pre-registered ก่อนรัน) — **LINEAR GATED (primary): agg [−0.7303, +0.0821]$/ไม้ · CI-lower [−1.2278, −0.1358] · 0/9 seed CI-positive** · **perm-null B=1000 (รันจริง): observed −0.2352 · p=0.8052** (null mean −0.1172 · p95 +0.0761) · **FORCED-IN (gate-bypass tick): agg [−0.5480, +0.4190] · 1/9 seed CI-lower>0 (+0.0280 — ⚠ single-seed บางเฉียบเหนือ 0 · verdict INCONCLUSIVE ยืนบนเส้นนี้ตาม asymmetric rule ที่ pre-register)** · **GBM nested (A/B same-hyperparams): agg point บวกทุก seed [+0.0069, +0.1916] แต่ 0/9 CI-positive** · gates: G1-SOFT reconstruction 100.0000% ทุกปี (~3.15M bars · bad=0 · buildlog artifact) · G1-HARD PASS · G3 future-mask+shadow-sentinel 54 entries (power พิสูจน์ด้วย negative-control 2 planted bugs ยิงจริง) · NaN-drop 0 · tickfeat SHA 94c8e68cf8ec6649
+- **supported:** ใต้ 6 features + nested protocol นี้ — **ไม่พบ additive tick-price signal ผ่าน gated pipeline** (0/9 + perm-p 0.81) · verdict ตาม pre-registered asymmetric rule = **INCONCLUSIVE (gate-limited)** — forced-in มี 1/9 seed CI-positive → **ห้ามเรียก KILL / ห้าม eliminate frontier** (univariate sign-gate อาจกด conditional signal — เงื่อนไขที่ประกาศก่อนรัน)
+- **not-yet-supported:** "tick-price มี additive signal" (ไม่มีหลักฐาน CI-backed) · "tick-price ตาย" (gate-limited + GBM point-positive ทุก seed แต่ไม่ CI) · features/window/gate form อื่น · **prediction-score:** ทำนาย clean-null → ได้ INCONCLUSIVE — sub-outcome เป็น fact: aggregate −0.2352 ∈ [−0.30,+0.10] ✓ · gated 0/9 ✓ · perm>0.05 ✓ · GBM ทาย ≤0 ✗ (point บวกทุก seed) · **2/4 metric เบนเข้า weak-signal (GBM 9/9 point-positive + forced-in 1/9)** — ไม่นับเป็น "ถูก 3/4" (Engineer M-4: เกณฑ์ผิดที่ pre-register โดน forced-in ชนตามตัวอักษร)
+- **evidence-level:** L1 (Engineer execution-review 07-14: reproduce ทุก inferential number + feature spot-check โค้ดอิสระ — precedent CLAIM-0014)
+- **dependencies:** tp1_tick_features (frozen SHA) · tp1_card · direction_at_real_exit (build_rows/sign_gate/protocol) · brain_v1_run walker · dir_features · ticks eet 2012-2020
+- **invalidated-by:** gate form ที่เห็น conditional signal (multivariate/nested-gate) ให้ผลชัดทางใดทางหนึ่ง · feature set richer · execution-review พบ defect
+- **kind:** experiment
+- **status:** live
+- **fairness:** field-tag[SIM-SEARCH] · pipeline-owned[Y verdict จาก script] · null-control[permutation B=1000 pipeline-run · review-verify = code-audit + B=40 sanity (p 0.854 สอดคล้อง 0.805) ไม่ใช่ full re-run — ประกาศตรง] · seed-robust[Y 9-seed ทั้ง 3 branch] · leak-guard[Y G1 HARD/SOFT(assert≥99.9) + G3 future-mask+shadow-sentinel + negative-control พิสูจน์ guard power + strict boundary t(j)+60s] · verified-by[Engineer execution-review + apply-plan review 07-14]
+- **correction-lineage:** corrections 2 รอบ · design ผ่าน Engineer 3 รอบก่อนรัน (R1 B1-B3/M1-M6 · R2 P1-P6 · R3 Issue1-6 — spec v2 ใน docstring tp1_card) · Claude จับ Engineer ผิด 1 (M4b Exness ticks ไม่มีจริง) · Engineer จับ Claude 2 (corr-gate → nested · perm ไม่เคยรันใน template) · G1-HARD checker bug (partial-first-minute 1,467) จับโดย fail-loud เอง แก้ก่อนมี output · **รอบ 2 (07-14 execution-review M-1..M-4 + apply-plan F-1..F-5):** integrity hardening (buildlog artifact + SOFT assert + shadow-sentinel non-mutating + negative-control) — no-behavior-change พิสูจน์ด้วย CSV SHA เท่าเดิม · prediction-score แก้จาก "3/4" เป็น framing ตรง (M-4)
+- **scope-of-death:** NA (INCONCLUSIVE — ไม่มี elimination · frontier tick-price ยัง open)
+- **reproduce:** python Scripts/tp1_tick_features.py ; python Scripts/tp1_card.py

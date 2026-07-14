@@ -1,0 +1,13 @@
+# tp1_tickfeat buildlog | spec=TP-1 v2 | N_TICKS=3000 BAND=0.25 SOFT_MIN_RATE=99.9 | rows=1486 | sha256=94c8e68cf8ec664982bdea5982e77fb7896e9ad8920d9ecc0376d91e27d08ce1
+[G1-SOFT 2012] bars-checked=352080 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2013] bars-checked=352048 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2014] bars-checked=349437 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2015] bars-checked=341663 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2016] bars-checked=354206 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2017] bars-checked=346242 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2018] bars-checked=352426 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2019] bars-checked=350897 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G1-SOFT 2020] bars-checked=355312 match=100.0000% (PASS) bad=0 bad-hour08-19=0 tick-only-min=0
+[G3] future-mask + shadow-sentinel invariance ✓ 54 entries (stratified ทุกปี)
+[M5] rows=1486 NaN-dropped-per-year={} skip-manifest=1 (a<240/no-bar: [('2012-06-13', 'a<240')])
+[FROZEN] tp1_tickfeat_2012_2020.csv rows=1486 sha256=94c8e68cf8ec6649…
