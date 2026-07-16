@@ -1,0 +1,13 @@
+# es2_tickdc buildlog | spec ES-2 v2 | δ=[0.1, 0.25, 0.5] SOFT_MIN=99.9 | rows=1486 | sha256=ac7ccab5c13024bcc16ea2d363268cf23bcdc6e3cf98e11ead20e293470d6a8b
+[G1-SOFT 2012] bars=352080 match=100.0000% bad=0 tick-only=0 · 56s
+[G1-SOFT 2013] bars=352048 match=100.0000% bad=0 tick-only=0 · 98s
+[G1-SOFT 2014] bars=349437 match=100.0000% bad=0 tick-only=0 · 135s
+[G1-SOFT 2015] bars=341663 match=100.0000% bad=0 tick-only=0 · 182s
+[G1-SOFT 2016] bars=354206 match=100.0000% bad=0 tick-only=0 · 261s
+[G1-SOFT 2017] bars=346242 match=100.0000% bad=0 tick-only=0 · 340s
+[G1-SOFT 2018] bars=352426 match=100.0000% bad=0 tick-only=0 · 407s
+[G1-SOFT 2019] bars=350897 match=100.0000% bad=0 tick-only=0 · 468s
+[G1-SOFT 2020] bars=355312 match=100.0000% bad=0 tick-only=0 · 560s
+[GUARDS] UNDEF==0 ✓ · slice-discipline ✓ 54 (power = smoke NEG-CTRL)
+[ROWS] total=1486 feature-complete=1486 nan-rows=0
+[FROZEN] es2_tickdc_2012_2020.csv rows=1486 sha256=ac7ccab5c13024bc…
