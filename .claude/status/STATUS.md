@@ -1,13 +1,13 @@
 # Trellis — Implementation Status
 
-**Last updated:** 2026-07-09
+**Last updated:** 2026-07-17
 
 > **build/stage เท่านั้น · ไม่มี result-metric** (ผลทั้งหมด → `Plan/TRELLIS-010_LEDGER.md` keyed by Claim-ID) · doctrine/mechanism → `Plan/TRELLIS-010_v3_offensive_reframe.md` · narrative ก่อน reframe → `Plan/TRELLIS-010_ARCHIVE_prereframe.md`
 > DoD (CLAUDE.md): commit ที่แตะ experiment → update CLAIM block + FRONTIER · `python Scripts/ledger_check.py` ต้องผ่าน
 
 ## Current Stage — TRELLIS-010 v3 Offensive Reframe (research: DIRECTION edge)
 - **frame:** หา additive DIRECTION edge (root = engine edge ไม่ใช่ capital) · เป้า: $100 รอด + กำไรมาก + เข้าทุกโอกาส
-- **สถานะล่าสุด:** ES-2 (tick-DC — form สุดท้ายของ in-hand event lane) = **KILL · L1** [LEDGER CLAIM-0018 — execution-review PASS 07-16] · **in-hand representation program ครบ 4 forms — จบทั้งชุด** · budget 4/40 family v3 · **รอ Win ตัดสิน next** (adaptive / discovery / monetize-v4 / forward-test / Stage-F-form) — ไม่ prescribe
+- **สถานะล่าสุด:** Card AD-1 (adaptive/rolling — Win เลือก) = **exploratory NO-DETECT readout · L1** [LEDGER CLAIM-0019 — execution-review PASS-with-changes 07-17 · F-1/F-2 applied] · budget **5/40** family v3 · design R1-R8 + adjudication 10 รอบ + RFLIP sweep (แผน = `Plan/TRELLIS-010_card_AD1_adaptive_rolling.md`) · **รอ Win:** สั่ง commit (STEP 5) + ตัดสิน next (detector-card [justified — M11] / discovery / monetize-v4 / forward-test / Stage-F)
 - **frontier + open/eliminated hypotheses:** LEDGER `## CURRENT FRONTIER`
 
 ## Research pipeline (✅ = จบ · ▶ = active — **status word อยู่ LEDGER ที่เดียว** · ดูสด = `/ledger status`)
@@ -29,6 +29,7 @@
 | TP-2 inference completion (card 2/40 · calibration-checked residual-perm · KILL · execution-review PASS) | ✅ | CLAIM-0016 |
 | ES-1 event-stream DC multi-scale (card 3/40 · calib S1+S2 · KILL · execution-review PASS) | ✅ | CLAIM-0017 |
 | ES-2 tick-DC event-stream (card 4/40 · overlap-audit 100% · calib · KILL · execution-review PASS) | ✅ | CLAIM-0018 |
+| AD-1 adaptive/rolling (card 5/40 · STAGE-1 NO-DETECT readout · RFLIP sweep · foreknowledge-disclosed · execution-review PASS) | ✅ | CLAIM-0019 |
 
 ## Tooling / Governance
 - **Research Traceability System** [CLAIM-0011] — `Scripts/ledger_check.py` (validate + `--emit-index` + `--self-test`)

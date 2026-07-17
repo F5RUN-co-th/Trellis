@@ -109,13 +109,17 @@ def build_dataset(ctx):
     return np.array(X), np.array(Y), meta
 
 
-def fit_signedR(X, rl, rs, iters=2000, lr=0.5, l2=2e-3):
+def fit_signedR(X, rl, rs, iters=2000, lr=0.5, l2=2e-3, rw=None):
     """maximize E[signed-R] = mean(p·rl + (1−p)·rs) · p=σ(Xw) · ∇ = mean((rl−rs)·p(1−p)·X)
-    (Engineer P1 · objective ที่ §9 สั่ง = expected signed-R · (rl−rs) = payoff-weight ในตัว)"""
+    (Engineer P1 · objective ที่ §9 สั่ง = expected signed-R · (rl−rs) = payoff-weight ในตัว)
+    rw = recency weight ต่อ trade (Card AD-1 §3.2 · extend-in-place ไม่ fork) —
+    rw=None = โค้ดเส้นเดิมทุก operation (bit-exact) · rw=ones ≡ เดิม (พิสูจน์ numeric 0.00e+00)"""
     w = np.zeros(X.shape[1]); d = rl - rs; n = len(rl)
+    dw = d if rw is None else rw * d
+    norm = n if rw is None else rw.sum()
     for _ in range(iters):
         p = 1.0 / (1.0 + np.exp(-np.clip(X @ w, -30, 30)))
-        w += lr * (X.T @ (d * p * (1 - p)) / n - l2 * w)
+        w += lr * (X.T @ (dw * p * (1 - p)) / norm - l2 * w)
     return w
 
 

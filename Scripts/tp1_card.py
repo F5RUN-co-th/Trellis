@@ -109,13 +109,14 @@ def folds(yr, dayix, Nemb):
     return out
 
 
-def fit_predict(X, keep, tr, te, rlt, rst, dd):
-    """mirror wf ของ 0010 (:152-159) เป๊ะ — abstain (keep==0) → baseline dir (v4)"""
+def fit_predict(X, keep, tr, te, rlt, rst, dd, rw=None):
+    """mirror wf ของ 0010 (:152-159) เป๊ะ — abstain (keep==0) → baseline dir (v4)
+    rw = recency weight (Card AD-1 §3.2 · extend-in-place) — rw=None = path เดิมทุก operation"""
     if keep.sum() == 0:
         return dd[te]
     mu, sd = X[tr][:, keep].mean(0), X[tr][:, keep].std(0) + 1e-9
     Xs = np.c_[np.ones(len(X)), (X[:, keep] - mu) / sd]
-    w = fit_signedR(Xs[tr], rlt, rst)
+    w = fit_signedR(Xs[tr], rlt, rst) if rw is None else fit_signedR(Xs[tr], rlt, rst, rw=rw)
     p = 1.0 / (1.0 + np.exp(-np.clip(Xs @ w, -30, 30)))
     return np.where(p >= 0.5, 1, -1)[te]
 
