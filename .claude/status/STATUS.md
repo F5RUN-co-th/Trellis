@@ -1,13 +1,13 @@
 # Trellis — Implementation Status
 
-**Last updated:** 2026-07-17
+**Last updated:** 2026-07-20
 
 > **build/stage เท่านั้น · ไม่มี result-metric** (ผลทั้งหมด → `Plan/TRELLIS-010_LEDGER.md` keyed by Claim-ID) · doctrine/mechanism → `Plan/TRELLIS-010_v3_offensive_reframe.md` · narrative ก่อน reframe → `Plan/TRELLIS-010_ARCHIVE_prereframe.md`
 > DoD (CLAUDE.md): commit ที่แตะ experiment → update CLAIM block + FRONTIER · `python Scripts/ledger_check.py` ต้องผ่าน
 
 ## Current Stage — TRELLIS-010 v3 Offensive Reframe (research: DIRECTION edge)
 - **frame:** หา additive DIRECTION edge (root = engine edge ไม่ใช่ capital) · เป้า: $100 รอด + กำไรมาก + เข้าทุกโอกาส
-- **สถานะล่าสุด:** Card AD-1 (adaptive/rolling — Win เลือก) = **exploratory NO-DETECT readout · L1** [LEDGER CLAIM-0019 — execution-review PASS-with-changes 07-17 · F-1/F-2 applied] · budget **5/40** family v3 · design R1-R8 + adjudication 10 รอบ + RFLIP sweep (แผน = `Plan/TRELLIS-010_card_AD1_adaptive_rolling.md`) · **commit 98605bf (STEP 5 ✓)** · **รอ Win ตัดสิน next:** detector-card [M11 justified · prior อ่อน] / fine-cadence-card [refit-cadence ยังไม่วัด · power-wall 14ไม้/เดือน<19feat] / discovery / monetize-v4 / forward-test / Stage-F
+- **สถานะล่าสุด:** Card AD-2 (rolling-recency — ปิด adaptive frontier ตามที่ Win เลือก) = **confirmatory KILL · L1** [LEDGER CLAIM-0020 — freeze-commit 999ebd9 ก่อนรัน · execution-review R8 PASS-with-changes 07-20] · budget **6/40** family v3 · design R1-R8 (v1 detector FAIL → rolling-recency + certify + estimation-first) · แผน = `Plan/TRELLIS-010_card_AD2_flip_detector.md` · **adaptive frontier: smooth [AD-1] + recency [AD-2] ปิดทั้งคู่ภายใน declared power** · **รอ Win ตัดสิน next:** detector-card [fold2016 trigger MET+caveats — eligible] / fine-cadence-card [refit-cadence ยังไม่วัด · power-wall] / discovery / monetize-v4 / forward-test / Stage-F
 - **frontier + open/eliminated hypotheses:** LEDGER `## CURRENT FRONTIER`
 
 ## Research pipeline (✅ = จบ · ▶ = active — **status word อยู่ LEDGER ที่เดียว** · ดูสด = `/ledger status`)
@@ -30,6 +30,7 @@
 | ES-1 event-stream DC multi-scale (card 3/40 · calib S1+S2 · KILL · execution-review PASS) | ✅ | CLAIM-0017 |
 | ES-2 tick-DC event-stream (card 4/40 · overlap-audit 100% · calib · KILL · execution-review PASS) | ✅ | CLAIM-0018 |
 | AD-1 adaptive/rolling (card 5/40 · STAGE-1 NO-DETECT readout · RFLIP sweep · foreknowledge-disclosed · execution-review PASS) | ✅ | CLAIM-0019 |
+| AD-2 rolling-recency (card 6/40 · confirmatory KILL · clean freeze-commit · certify N=200 · estimation-first · execution-review PASS) | ✅ | CLAIM-0020 |
 
 ## Tooling / Governance
 - **Research Traceability System** [CLAIM-0011] — `Scripts/ledger_check.py` (validate + `--emit-index` + `--self-test`)
