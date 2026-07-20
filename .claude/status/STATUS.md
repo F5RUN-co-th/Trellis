@@ -7,7 +7,7 @@
 
 ## Current Stage — TRELLIS-010 v3 Offensive Reframe (research: DIRECTION edge)
 - **frame:** หา additive DIRECTION edge (root = engine edge ไม่ใช่ capital) · เป้า: $100 รอด + กำไรมาก + เข้าทุกโอกาส
-- **สถานะล่าสุด:** Card AD-1 (adaptive/rolling — Win เลือก) = **exploratory NO-DETECT readout · L1** [LEDGER CLAIM-0019 — execution-review PASS-with-changes 07-17 · F-1/F-2 applied] · budget **5/40** family v3 · design R1-R8 + adjudication 10 รอบ + RFLIP sweep (แผน = `Plan/TRELLIS-010_card_AD1_adaptive_rolling.md`) · **รอ Win:** สั่ง commit (STEP 5) + ตัดสิน next (detector-card [justified — M11] / discovery / monetize-v4 / forward-test / Stage-F)
+- **สถานะล่าสุด:** Card AD-1 (adaptive/rolling — Win เลือก) = **exploratory NO-DETECT readout · L1** [LEDGER CLAIM-0019 — execution-review PASS-with-changes 07-17 · F-1/F-2 applied] · budget **5/40** family v3 · design R1-R8 + adjudication 10 รอบ + RFLIP sweep (แผน = `Plan/TRELLIS-010_card_AD1_adaptive_rolling.md`) · **commit 98605bf (STEP 5 ✓)** · **รอ Win ตัดสิน next:** detector-card [M11 justified · prior อ่อน] / fine-cadence-card [refit-cadence ยังไม่วัด · power-wall 14ไม้/เดือน<19feat] / discovery / monetize-v4 / forward-test / Stage-F
 - **frontier + open/eliminated hypotheses:** LEDGER `## CURRENT FRONTIER`
 
 ## Research pipeline (✅ = จบ · ▶ = active — **status word อยู่ LEDGER ที่เดียว** · ดูสด = `/ledger status`)
@@ -37,7 +37,6 @@
 
 ## Blockers / รอ Win
 - **next-experiment decision** — opportunity-validation verified แล้ว (Engineer 07-11) · options สด → LEDGER FRONTIER
-- clock-fix Gate 0 re-import 2025-26 (pre-reframe · ARCHIVE) — ค้างก่อนหน้า reframe
 
 ## EA / Modules (pre-reframe TRELLIS-003 build — frozen · ดู ARCHIVE)
 - reframe เปลี่ยน focus เป็น research · EA-build roadmap/modules/locked-decisions/blockers เดิม → `ARCHIVE_prereframe.md`
