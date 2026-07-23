@@ -7,7 +7,7 @@
 
 ## Current Stage — TRELLIS-010 v3 Offensive Reframe (research: DIRECTION edge)
 - **frame:** หา additive DIRECTION edge (root = engine edge ไม่ใช่ capital) · เป้า: $100 รอด + กำไรมาก + เข้าทุกโอกาส
-- **สถานะล่าสุด:** Card AD-2 (rolling-recency — ปิด adaptive frontier ตามที่ Win เลือก) = **confirmatory KILL · L1** [LEDGER CLAIM-0020 — freeze-commit 999ebd9 ก่อนรัน · execution-review R8 PASS-with-changes 07-20] · budget **6/40** family v3 · design R1-R8 (v1 detector FAIL → rolling-recency + certify + estimation-first) · แผน = `Plan/TRELLIS-010_card_AD2_flip_detector.md` · **adaptive frontier: smooth [AD-1] + recency [AD-2] ปิดทั้งคู่ภายใน declared power** · **รอ Win ตัดสิน next:** detector-card [fold2016 trigger MET+caveats — eligible] / fine-cadence-card [refit-cadence ยังไม่วัด · power-wall] / discovery / monetize-v4 / forward-test / Stage-F
+- **สถานะล่าสุด:** Card AD-3 (regime-detector — Win เลือก) = **STAGE-A KILL instrument-infeasible · L1 · budget-exempt** [LEDGER CLAIM-0021 — SNR wall · real d ไม่เคยถูกแตะ · เลขผล = CLAIM-0021 ที่เดียว] · budget คง **6/40** family v3 · แผน = `Plan/TRELLIS-010_card_AD3_regime_detector.md` · **adaptive frontier ปิด 3 แกน: smooth [AD-1] + recency [AD-2 confirmatory] + detector-instrument [AD-3] ภายใน declared power/feasibility** · residual คง: fold2016 NOT-adjudicated · P≈3.5 underpowered · fine-cadence · MONO · aperiodic · **รอ Win ตัดสิน next:** fine-cadence-card / discovery / monetize-v4 / forward-test / Stage-F
 - **frontier + open/eliminated hypotheses:** LEDGER `## CURRENT FRONTIER`
 
 ## Research pipeline (✅ = จบ · ▶ = active — **status word อยู่ LEDGER ที่เดียว** · ดูสด = `/ledger status`)
@@ -31,6 +31,7 @@
 | ES-2 tick-DC event-stream (card 4/40 · overlap-audit 100% · calib · KILL · execution-review PASS) | ✅ | CLAIM-0018 |
 | AD-1 adaptive/rolling (card 5/40 · STAGE-1 NO-DETECT readout · RFLIP sweep · foreknowledge-disclosed · execution-review PASS) | ✅ | CLAIM-0019 |
 | AD-2 rolling-recency (card 6/40 · confirmatory KILL · clean freeze-commit · certify N=200 · estimation-first · execution-review PASS) | ✅ | CLAIM-0020 |
+| AD-3 regime-detector (STAGE-A KILL instrument-infeasible · SNR wall · budget-exempt · R4 corrected) | ✅ | CLAIM-0021 |
 
 ## Tooling / Governance
 - **Research Traceability System** [CLAIM-0011] — `Scripts/ledger_check.py` (validate + `--emit-index` + `--self-test`)
