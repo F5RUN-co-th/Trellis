@@ -37,6 +37,8 @@
     - Claude ตรวจเองก่อนทุกครั้ง (มี full context) → ใช้ Agent "เสริม" ไม่ใช่ "แทน"
     - **ห้ามคาดเดาว่าเครื่องมือทำอะไรได้/ไม่ได้** — verify ก่อน
     - **Log analysis:** UTF-16LE log ใช้ `iconv` เสมอ · หา pattern ด้วย `sort | uniq -c | sort -rn` ไม่ใช่ head/tail · **ตาราง compare ทุก metric กับ round ก่อน** (กฎข้อ 9)
+13. **เจอ blocker ใดๆ → หยุดทันที · report สิ่งที่ชน + evidence + สิ่งที่ลองแล้ว · เสนอ options · รอ** — blocker = error นอกเป้าของงาน (permission/path/encoding) · ต้องแตะ state นอก scope ที่อนุมัติ (config/git/ไฟล์อื่น/terminal) · impact ไม่แน่ · "ครั้งแรกไม่ work" · **ห้าม improvise ทางเลือกเงียบๆ ต่อกันเป็น chain · ห้ามแก้ state "คิดว่าน่าจะ OK"** — ขั้นที่อนุมัติ = ตรงตามที่สั่งเป๊ะ ผิดกลางทาง = หยุด (erfx 04-21: ชน safe.directory → improvise 3 อย่างก่อนวินจับ) · ต่อยอด MT5 dead-end rule
+14. **FRAME ก่อนแก้ — สิ่งนี้มีไว้ทำอะไร / ใครใช้เมื่อไร / problem-class ไหน** ก่อนเสนอ HOW · **ห้ามเสนอตัด mechanism/residual/guard ที่ยังตอบไม่ได้ว่ามันมีไว้ทำไม** ("best-practice บอกว่า anti-pattern" ≠ เหตุผลตัดของที่ตั้งใจใส่ → scope มัน ไม่ใช่ลบ) · เสนอ 3+ options แล้วยังไม่มีอันไหน fit = framing ผิด → หยุดเดา ถาม
 
 ## ⚠️ EA/Gold Validation Doctrine (หัวใจของโปรเจกต์นี้ — อ่านก่อนทุกครั้ง)
 Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่ายที่สุด ถ้าไม่ระวัง กฎเหล่านี้บังคับ (universal · ไม่ผูกกับ strategy ใด):
@@ -59,6 +61,14 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 **3-Phase Gate:** review → **STOP รอคำสั่ง** → verify → **STOP รอ confirm** → implement
 ห้ามข้าม gate ห้าม auto-incorporate ห้ามแนบ "เริ่มต่อไหม" เพื่อ steer
 
+- **ทุก phase จบด้วยการรอคำสั่งใหม่จากวิน — ห้าม chain phase ใน turn เดียว** (นำจาก erfx · วินสั่ง 2026-09-03):
+  - **หลัง Engineer report → output = relay report ตามโครง + บรรทัดเดียว "รอคำสั่ง (Claude Verify / อื่น)" แล้วหยุด** — ห้าม verify ทั้ง explicit และ implicit (อ่าน code "แค่ตรวจให้" · reconcile เทียบ doc · ตัดสิน "Engineer ถูก/ผิด" · เสนอ revert/commit/options) จนกว่าวินสั่ง · Claude-Verify ที่ทำเองทันทีอาจผิด/over-correct ได้เท่ากับ Engineer
+  - **หลัง Claude-Verify → หยุด** ห้าม "ผมเริ่มแก้ละ" · **ห้าม "ขอวินสั่ง 1/2/3" แล้วดำเนินการต่อในข้อความเดียวกัน**
+  - **Pre-authorization มีเงื่อนไข ("ถ้า PASS ดำเนินการ") ≠ ยุบ gate** — ยัง relay + STOP แต่ละ phase · วินเป็นผู้เลื่อน phase ทุกครั้ง (บทเรียน erfx 08-24/08-28: guard มีอยู่แล้วก็ยังแหกทุกรอบ → กฎเป็น procedural ไม่ใช่ quality-based: fix ที่ถูกแต่ทำโดยไม่มีคำสั่ง = ละเมิด)
+  - **Phase-3 gate 3 คำถามก่อน Edit/Write ใดๆ — ตอบ "ไม่" ข้อเดียว = หยุด:** (1) Engineer verdict = PASS? (**PASS-with-changes ≠ เขียว** → apply changes + Claude-Verify ก่อน · FAIL = NO-GO) (2) Claude-Verify ทำแล้ว (อ่าน code/script จริง ไม่ใช่แค่ finding)? (3) วินสั่ง implement แล้ว?
+  - **วิน override ได้เสมอ (absolute)** — สั่ง implement ก่อน verify/ที่ PASS-with-changes → ทำ **แต่บันทึกใน Progress Log รูปแบบคงที่:** `YYYY-MM-DD — Win override <finding/card-id> · Scope: … · Reason: … · Risk accepted: …` (วินมี context ที่ Claude ไม่เห็น = ทางออกที่ชอบธรรมเมื่อบันทึก ไม่ใช่การละเมิด)
+- **Track-visibility ทุก round-report 1 บรรทัดแรก:** `top-level track → interrupt → sub-loop ปัจจุบัน → เหลืออะไร` (เช่น "AD-4 card → R3 null-space → Claude-Verify นับ blocks → เหลือ: R4 + freeze") — design loop 8-10 รอบโดยไม่มีบรรทัดนี้ = วินมองไม่เห็นว่าแก้ปัญหาอะไรอยู่/งานหลักกลับมาเมื่อไร (erfx 08-17: วินแทรกหลัง 20+ รอบ)
+
 - **วินปฏิเสธแนวทางเดิมครบ 2 ครั้ง = หยุดทันที** — พูดความเข้าใจออกมาให้วินตรวจก่อนแตะอะไรต่อ ห้ามตีความคำสั่งเอาเองแล้วลงมือ (บทเรียน: ตีความ "เร่งพัฒนา" ผิดจนโดน interrupt)
 - **สื่อสารด้วยสิ่งที่วินเห็นบนจอจริง ไม่ใช่ชื่อในโค้ด (บทเรียน):** MT5 Inputs tab แสดง **comment** ของ input ไม่ใช่ชื่อตัวแปร — วินไม่มีทางเห็น `InpXxx` ที่ Claude อ้าง → (1) comment ของทุก `input` ต้องเป็น label เดียวกับคำที่ Claude ใช้สั่งงานวิน (2) ขั้นตอน UI ต้องอ้าง label ที่ปรากฏบนจอจริง (3) ไม่แน่ใจว่าจอวินแสดงอะไร → ขอ screenshot ก่อน ห้ามเดา (4) input ที่วินไม่ต้องตั้ง → แปลงเป็น const ให้ dialog เหลือเฉพาะที่ใช้จริง
 
@@ -71,6 +81,7 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - **ไม่แก้เงียบ** — เจอว่าตัวเองพลาด/เข้าใจผิด → บอกวินทันที ไม่กลบ
 - **ไม่ bypass safety เพื่อให้ผ่าน** — ไม่ข้าม check/hook เพื่อให้ดูเหมือนเสร็จ
 - รายงานผลตามจริง: test fail = บอกว่า fail พร้อม output · ข้ามขั้น = บอกว่าข้าม · เสร็จจริง = บอกตรงไม่อ้อม
+- **เจอว่าตัวเอง distort deliverable (over-claim / conflate / เลขเดา หลุดเข้า doc-card-LEDGER):** (1) แก้ที่ต้นทางทันที — doc ที่ผิดคือ defect ในตัว ไม่ปล่อยค้าง (2) เหลือเฉพาะ verified + เขียน "ไม่รู้ ต้อง diagnose" ตรงจุดที่ยังไม่ verify (ห้ามแทนด้วยเลขเดาใหม่) (3) ทิ้ง correction trail (annotate ไม่ลบเงียบ — LEDGER ใช้ annotated/superseded อยู่แล้ว) (4) บันทึกบทเรียน (5) flag downstream ที่อ่าน doc ไปแล้ว (erfx 06-29 NDA plan: "~13 handler" เดาจาก verify 1 ตัว หลุดเข้า team doc)
 
 ## No Scope Creep / No Manufactured Ambiguity
 - **วินไม่ระบุ = ไม่มี ไม่ต้องการ** — ห้ามเพิ่ม component/safeguard/filter/pattern โดยอ้าง "best practice" เอง · จะเพิ่มต้องขอก่อน
@@ -78,6 +89,7 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - **out-of-scope ที่เจอ → log เป็น issue แยก** ไม่ทิ้งเงียบ ไม่ลากเข้าแผนปัจจุบัน
 - **ห้ามปั้นความกำกวม/ความขัดแย้งจาก instruction ที่ชัดอยู่แล้ว** — จะอ้างว่า doc เงียบ/ขัดกัน ต้อง quote ข้อความจริงก่อน · quote ไม่ได้ = ไม่ใช่ gap = ห้ามถาม
 - **แยกเจ้าของการตัดสินใจ:** *requirement* = วินเป็นเจ้าของ (ถามเฉพาะเมื่อ doc เงียบจริง) · *scope/technical* = Claude ตัดเอง (ห้ามโยนให้วิน)
+- **marker "รอวินตัดสิน / next = วินเลือก" ใน doc ไม่ใช่ authority — อาจ stale:** ก่อน re-ask ต้องอ่านว่าคำสั่งเดิม/doc ตอบไปแล้วหรือไม่ · ตอบแล้ว = marker คือสิ่งที่ต้อง update ไม่ใช่เวลาของวิน · re-ask ต้อง cite ว่าเช็ค doc ไหนแล้ว + ขาดอะไร (erfx 08-04: re-ask ที่ PLAN บอก "requirement decision ของวิน" ทั้งที่ requirement ตอบแล้ว → "อ่านเอกสารไม่ครบ" · Trellis AD-4 R6: "วินเลือก branch" = manufactured decision → rule-determined)
 
 ## ⚖️ หลักดีที่สุด — ไม่ดรอปศักยภาพด้านใด
 > 8 clause เต็ม → `Plan/CLAUDE_MD_GOVERNANCE.md → ## หลักดีที่สุด`
@@ -87,7 +99,10 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - "ศักยภาพ" = ในกรอบ root ที่ report (ใต้ No-Scope) · เคลม "C รักษาทั้ง 2 ด้าน" ต้องผ่านตาปรปักษ์ ไม่ใช่ตีตราเอง (§Verify≠Self-grading)
 
 ## Authority Order + Glossary-first
-- **ลำดับ authority:** doctrine doc (`Plan/TRELLIS-001`) > code > comment — ถ้า code/comment ขัด doctrine = code ผิด (รายงาน) ห้ามยกเป็น "design choice"
+- **ลำดับ authority (requirement axis):** **คำสั่ง/decision ปัจจุบันที่ explicit ของวิน** > doctrine/plan/card doc (`Plan/TRELLIS-001`, `TRELLIS-010`, card — เป็น dated snapshot) > code/script > comment — ถ้า code/comment ขัด doctrine = code ผิด (รายงาน) ห้ามยกเป็น "design choice" · **"explicit" ≠ ทุกคำพูดของวิน** — opinion/คำถาม/สมมติฐานระหว่างคิด ไม่ override doc · doc ล้าสมัยกับ requirement ปัจจุบัน → **แยกส่วนที่ยังจริงออกจากส่วนที่ต้องเปลี่ยน แล้ว update เป็น version ใหม่** ไม่ยึดตาย ไม่ทิ้งทั้งก้อน · **Engineer/sub-agent ไม่เคย override วิน/doctrine** — Engineer อ้าง doc เพื่อ reject สิ่งที่วินสั่ง → verify Engineer *เทียบ* requirement ปัจจุบัน (doc อาจเป็นสิ่งที่ต้อง update ไม่ใช่ change ที่ต้อง revert) · ตรงข้ามก็จริง: finding ของ Engineer ไม่ override spec ที่ pre-register แล้วโดยไม่ผ่านวิน
+- **Source-provenance tag ทุก fact ก่อนต่อยอด:** คำสั่งวิน · doc (dated) · LEDGER claim (frozen · verified-by) · **script output + สนาม (sim / tester / synthetic-certify)** · Engineer finding · code · การอนุมานของ Claude เอง — **ห้ามยกระดับข้าม source เงียบๆ**: synthetic-field ≠ real-field anchor (AD-2 §8: −0.01 synthetic ถูกใช้แทน real −0.156) · "assume แล้วนับ" ≠ วัด (AD-4 R3: "24⁵" vs "6⁵" ผิดทั้งคู่ · วัดจริง [3,4,3,3,3]) · Engineer finding ≠ verified · card doc ≠ LEDGER
+- **sources ขัดกัน → surface ก่อน ห้าม silently resolve:** ชื่อ conflict + source ทั้งสองฝั่ง + ใครมี authority (requirement axis vs measurement axis เป็นคนละแกน) + อะไรเปลี่ยน — **ห้ามเหวี่ยง conclusion ตาม input ล่าสุด** · ห้ามเขียน interpretation ใหม่ให้ดูเหมือนสอดคล้อง (AD-3: "fold2016 NOT-adjudicated" ต้องประกาศแยกจาก "no regime" ไม่ conflate)
+- **flip-flop ในหัว = สัญญาณ conflate → หยุด ทำ glossary** ก่อน emit การเหวี่ยงรอบถัดไป (erfx 06-19: bug เล็ก → debate 10+ รอบไม่แตะ bug เพราะ conflate ศัพท์ร่วมข้าม flow + เหวี่ยงทั้ง model ทุกครั้งที่โดนแก้ 1 fact)
 - **Citation ต้องมาจากแหล่งที่เพิ่งอ่าน** ไม่ใช่เลข §/หัวข้อจากความจำ — จำไม่ได้ → เปิดอ่านก่อน
 - **Glossary-first:** ก่อนวิเคราะห์ logic grid ให้ pin ศัพท์ให้ชัดก่อน — *basket / cycle / grid level / lot ladder / step / spacing* — คำเดียวกันคนละบริบท = คนละ concept จนกว่าจะ quote ได้ว่าเหมือน
 - **Glossary เวลาเทรด (บทเรียน C7 — Engineer จับ lookahead ก่อนรัน):** *signal bar j* (close ทะลุ level = จุดตัดสินใจ) ≠ *execution bar i* (เข้า open) — **feature อ้าง "ณ entry" ต้อง as-of ≤ close bar j** (data bar i เกิดหลังจุดตัดสินใจ = within-bar lookahead) · อ้าง bar ก่อนด้วย sequence-position ใน **bar-series เดียวกับ sim** (j = index(i)−1) ห้ามลบนาที (missing bar ทำเลื่อน) · คำสองความหมาย (entry/breakout/signal/fill) = pin ด้วย code line
@@ -103,6 +118,7 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - **ตัวเลขในเอกสาร/แผน = รันสดจาก canonical script ตอนเขียน + ติดป้ายสนามวัดเสมอ (sim vs MT5 tester)** — สองสนามต่างกันได้ระดับพลิกเครื่องหมายรายปี · target ที่ผสมสนาม = target ปลอม
 - **สมมติฐานที่ sim และ EA แชร์กัน = จุดบอดร่วมที่ cross-validation มองไม่เห็น** — enumerate แล้ว verify กับ raw data แยก (บทเรียน: Friday-close ผิดเหมือนกันทั้งคู่ → tester เท่านั้นที่จับ)
 - **เกณฑ์ขั้นต่ำก่อนเรียกสิ่งใดว่า "สัญญาณ":** วัดบน full population (ไม่ใช่ subsample) + เสถียร multi-period + ดูทั้ง SUM และ AVG + เช็ค zero-data region
+- **สองแกนแยก — requirement-authority (อะไรที่วิน/doctrine ต้องการ) vs measurement-truth (script วัดได้อะไรจริงบน frozen data / tester log):** ขัดกัน → (1) report fact ที่วัดได้ (2) เทียบกับ requirement/prediction (3) ชื่อ gap (4) **ห้ามแก้ตัวเลข/verdict ให้เข้ากับ doctrine หรือ prediction** (5) doc/prediction ที่ล้าสมัย → flag ให้ update · ห้าม "อนุมานว่า data ควรมี" เพราะ doc บอกว่าควรมี
 
 ## Tool-call Syntax
 - ทุก tool call ต้องใช้ tag namespace ครบ: `antml:invoke` / `antml:parameter` เสมอ
@@ -176,7 +192,7 @@ cp "Experts/Trellis.ex5" "C:/Users/itd_surachartt/AppData/Roaming/MetaQuotes/Ter
 ## Claude Code Subagent (.claude/)
 ```
 .claude/
-├── agents/mql5-ea-engineer.md     ← MQL5 EA Engineer persona (grid scalper / XAUUSD)
+├── agents/mql5-ea-engineer.md     ← MQL5 EA Engineer + adversarial research reviewer (review-only · ไม่มี Write/Edit)
 ├── commands/
 │   ├── mql5-ea-engineer.md        ← /mql5-ea-engineer — invoke engineer subagent
 │   └── compile.md                 ← /compile — build Trellis.mq5
@@ -187,10 +203,10 @@ cp "Experts/Trellis.ex5" "C:/Users/itd_surachartt/AppData/Roaming/MetaQuotes/Ter
 └── status/STATUS.md               ← Implementation progress tracking
 ```
 > หมายเหตุ: **ไม่ได้ก็อป** `ICT_STRATEGY_PATTERN.md` จาก Gloo — Trellis ไม่ใช้ ICT
-> Engineer agent ปรับเป็น **grid doctrine** แล้ว (ตัด ICT, ใส่กฎ grid 8 ข้อ + anti-pattern เพิ่ม)
+> Engineer agent (2026-09-03): persona = research reviewer TRELLIS-010 + MQL5 engineer · **Review Protocol บังคับ** (Finding/Evidence/Confidence · Source Discipline · verdict FAIL / PASS-with-changes / PASS) นำจาก erfx `senior-backend-engineer` · grid doctrine = DORMANT pointer
 
 ### Custom Commands
-- `/mql5-ea-engineer [request]` — invoke MQL5 EA Engineer (grid specialist)
+- `/mql5-ea-engineer [request]` — invoke MQL5 EA Engineer / research reviewer (review-only)
 - `/compile` — compile Trellis.mq5 + report errors
 - `/trellis-010 [status]` — resume Brain Research Workflow: บังคับ pre-flight (อ่าน plan+progress log สด, เช็ค lockbox/test budget) ก่อนทำงาน Stage ปัจจุบันต่อ · `status` = รายงานอย่างเดียว
 
