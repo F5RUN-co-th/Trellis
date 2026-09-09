@@ -15,6 +15,8 @@ checks: (a) cover (b) reproduce-resolves (c) required-fields (d) frontier/carrie
         (h) non-live claim cited ใน frontier ต้องมี annotation (→/DEAD/=live · กัน bare superseded-cite)
         (i) superseded cite arrow-target ต้องตรง status-target (SSOT=status · กัน denorm-without-sync)
         (j) status ต้องขึ้นต้นด้วย disposition token + superseded ต้องมี →target (enforce P4 · กัน silent false-negative)
+        (k) ASSET(imported N) ใน SCRIPT INDEX ต้อง == จำนวน importer จริงบน disk · bare `ASSET` (ไม่มีเลข) = row เขียนมือ → FAIL (กัน index stale เงียบ — AD-4 F4 รอบ 15:
+            stale 10/24 แถวขณะ validate PASS · fix = regenerate `--emit-index` ไม่ใช่แก้เลขมือ · เพิ่ม 2026-09-08 วินมอบเป็น technical)
 """
 import ast
 import re
@@ -95,8 +97,10 @@ def parse_ledger(text):
         if em:
             disp = em.group(1)
         cm = CLAIMID_RE.search(tail)
+        mi = re.search(r"ASSET\(imported (\d+)\)", tail)   # (k) เลข importer ที่ index ประกาศ (None = row ASSET ไม่มีเลข)
         index[name] = {"asset": "ASSET" in tail, "exp": disp,
-                       "claim": cm.group(0) if cm else None}
+                       "claim": cm.group(0) if cm else None,
+                       "imported_n": int(mi.group(1)) if mi else None}
     claims = {}  # CLAIM-NNNN -> {field: value}
     for cm in re.finditer(r"^###\s+(CLAIM-\d{4})\s*$(.*?)(?=^###\s+CLAIM-\d{4}|\Z)", text, re.M | re.S):
         cid, body = cm.group(1), cm.group(2)
@@ -141,6 +145,15 @@ def validate(scripts_dir, ledger_path):
     for f in idxset:
         if imported_by.get(f) and not index[f]["asset"]:
             fail(f"(g) `{f}` ถูก import ({len(imported_by[f])}) แต่ไม่มี ASSET role (live dep เสี่ยง archive)")
+    # (k) ASSET(imported N) ต้องตรง disk — index stale เงียบ = false sense of coverage (AD-4 F4 รอบ 15 · 10/24 stale ขณะ PASS)
+    for f in idxset & diskset:
+        n_doc = index[f].get("imported_n")
+        n_disk = len(imported_by.get(f, ()))
+        if n_doc is not None and n_doc != n_disk:
+            fail(f"(k) `{f}` ASSET(imported {n_doc}) แต่ disk = {n_disk} — regenerate `--emit-index` (ห้ามแก้เลขมือ)")
+        elif n_doc is None and index[f]["asset"]:
+            # emit-index ไม่เคยผลิต bare `ASSET` (ผลิต ASSET(imported N) เฉพาะเมื่อมี importer) → row แบบนี้ = เขียนมือ = bypass (k) (E8/F8 รอบ 20-21)
+            fail(f"(k) `{f}` ASSET ไม่มี (imported N) — row เขียนมือ · regenerate `--emit-index`")
     # (c) required fields non-empty
     for cid, fields in claims.items():
         for r in REQUIRED:
@@ -262,6 +275,24 @@ def self_test():
         _write(sd, "b", "import a\nif __name__ == '__main__':\n    a.f()\n")
         led.write_text("## SCRIPT INDEX\n- `a` :: EXPERIMENT=legacy→ARCHIVE\n- `b` :: EXPERIMENT=live→CLAIM-0001\n## CLAIMS\n" + good_claim, encoding="utf-8")
     run_case("(v) imported-no-asset→(g)", fx_v, "(g) `a`")
+
+    # (v-k) ASSET(imported 1) แต่ disk มี importer 2 → (k) FAIL · และเลขตรง → (k) ต้องไม่ fire (negative)
+    def fx_vk(sd, led):
+        _write(sd, "a", "def f():\n    pass\n")
+        _write(sd, "b", "import a\nif __name__ == '__main__':\n    a.f()\n")
+        _write(sd, "c", "from a import f\nif __name__ == '__main__':\n    f()\n")
+        led.write_text("## SCRIPT INDEX\n- `a` :: ASSET(imported 1)\n- `b` :: EXPERIMENT=live→CLAIM-0001\n- `c` :: EXPERIMENT=live→CLAIM-0001\n## CLAIMS\n" + good_claim, encoding="utf-8")
+    run_case("(v-k) imported-N-stale→(k)", fx_vk, "(k) `a` ASSET(imported 1) แต่ disk = 2")
+
+    def fx_vk2(sd, led):
+        fx_vk(sd, led)
+        led.write_text(led.read_text(encoding="utf-8").replace("ASSET(imported 1)", "ASSET(imported 2)"), encoding="utf-8")
+    run_case("(v-k2) imported-N-match→no (k)", fx_vk2, "(k) `a`", expect_present=False)
+
+    def fx_vk3(sd, led):
+        fx_vk(sd, led)
+        led.write_text(led.read_text(encoding="utf-8").replace("ASSET(imported 1)", "ASSET"), encoding="utf-8")
+    run_case("(v-k3) bare-ASSET→(k)", fx_vk3, "(k) `a` ASSET ไม่มี (imported N)")
 
     # (vi) frontier cite superseded claim แบบ bare → (h) FAIL
     def fx_vi(sd, led):

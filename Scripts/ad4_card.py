@@ -1,22 +1,13 @@
-"""Card AD-4 — fine-cadence quarterly refit (claim ยังไม่จอง — freeze pending)
-=====================================================================================
-Spec: Plan/TRELLIS-010_card_AD4_fine_cadence.md **design v3+R6** (ปรปักษ์ 6 รอบ)
-⛔ 2026-09-03: certify v1 (ad4_cert_out/) = KNOWN-DEFECT — card §6.1 (F1 null blocks 3-4 →
-  retention 27.8% · F2 calib-world ≠ H0 · F4 FAIL-loud ไม่ implement) · ห้ามใช้เป็น α*/power ·
-  design v4 (C1 circular-shift null + H0-cal world) รอ Engineer R7 → commit spec → certify v2
-Hypothesis: prefix ของ test year (เข้าเป็น training เพิ่มแบบ expanding รายไตรมาส) มี
-relationship-content เกิน volume/coverage หรือไม่ — expectation: recency-content ≤ 0 [AD-2]
-
-S1 (m=1) = agg[payoff(quarterly) − payoff(annual)] $/ไม้ · **estimand = Q2-Q4 rows เท่านั้น**
-  (Q1 = structural zero ทั้ง obs/null [R4-Issue-C]) · segment = equal-count quartiles (q=n//4 ·
-  remainder→Q4) · embargo dayix-based ตรง folds() [R1-FB-3]
-null = prefix-label block-permutation [C-fix]: คง X ทุกแถว (coverage-exact — mu/sd identical) ·
-  permute (rl,rs) คู่ per-row ด้วย π เดียวต่อ fold ต่อ draw บน prefix เต็ม (¾ ปี · b=B_LABEL=40
-  R/feature-ACF template [AD-1:76 firewall] · d-ACF = post-freeze descriptive เท่านั้น)
-branch [R6 — rule-determined 100% ไม่มี human-choice]: free-KILL ⟺ empirical max detection
-  ทุก swept cell < α*_dec (strict · tie→estimation) · มิฉะนั้น estimation + charge +1 ⇒ 7/40
-governance: SEARCH 2012-2020 · lockbox/guard ไม่แตะ · ⛔ quarterly บน real payoff = main เท่านั้น
-  (freeze-commit + FROZEN_CERT gate) · ทุกเลข emit จาก script นี้
+"""Card AD-4 — fine-cadence quarterly refit · design v5 + Alt-G/Alt-2 (card §0 NORMATIVE N1-N13 · SPEC_SHA ท้ายไฟล์)
+Spec: Plan/TRELLIS-010_card_AD4_fine_cadence.md (commit spec = freeze N11) · claim ยังไม่จอง
+null (§0 N1) = C1-full circular shift s ∈ {0..m−1} ของ payoff-tuple (rl,rs,pL,pS) บน prefix rows · global ทุก fold พร้อมกัน (Alt-G)
+  · annual arm refit ทุก fold ต่อ draw (Alt-2 · ไม่มี dispatch cache/refit) · statistic S1_rot operative + S1_evalorig descriptive (§0 N8)
+eligibility (§0 N2) = KS⁺ integer-lattice: ineligible ⟺ ks_units > KS_T_UNITS·100 · α*_dec (§0 N3) = min(q05 pooled N=400 ของ null ของ main, .05)
+contingency (§0 N5) mechanical · rule R6 (§0 N4 verbatim ของวิน) · gates RG1-RG15 (§4-v4 = SSOT) · worlds/N (§0 N6 ห้ามลด)
+⛔ certify v1 (ad4_cert_out/ · f99031e) = KNOWN-DEFECT (card §6.1 · F1 null-retention 27.8% · F2 calib-world ≠ H0 · F4 FAIL-loud ไม่ implement)
+  · code ของ v1 = checkout f99031e (card §7.1 :148) · ไฟล์นี้หลัง commit spec = v1 code + pin block เท่านั้น (decision path ยังเป็น v1 จนขั้น 2 implement)
+ขั้น 2 implement (ขอวินตาม CRITICAL · scope ไฟล์นี้ + tp1_card.py return_w): s1_quart(w, perms, segs, rotate_payoff, annual_fn=refit_annual)
+  · mode_regress RG1-RG15 · cert_chunk newline="\n" · cert_report_v2 · governance: SEARCH 2012-2020 · lockbox/guard ไม่แตะ · quarterly บน real payoff = main เท่านั้น
 modes: regress / cert_stable k0 k1 / cert_power [cell_i] / cert_report / main
 """
 import sys, time, os
@@ -222,6 +213,12 @@ def mode_main(ad):
     raise SystemExit("main: implement หลัง freeze (pattern AD-2 — estimation-primary + branch assert)")
 
 
+# ---- pin block (commit spec · card §7(11)(12)(12b) · §0 N2 · N11 freeze · วินสั่ง apply 2026-09-09) ----
+SPEC_SHA    = "6b373c55a2c08f0d7973f61e3584f02c1b062251301484044d0b0553d309d9d9"              # sha256(LF-normalized card ณ commit spec) · seal/check = Scripts/pin_ad4.py (--seal/--check) · verify = card_scan.py --require-pin · ห้ามเขียนกลับลง card
+KS_T_UNITS  = 23                     # eng16_ks.py part A · N=400 · B=200,000 · seed 20260903 · integer-lattice (t = 23/400)
+KS_ACHIEVED = 0.0475                 # achieved false-flag @t · integer convention · atom ที่ t = 1.26%
+RG14_TAGS   = tuple(f"ad4_rg14_w{k}" for k in range(50))   # §7(12b) W=50 · world = synth_stable_world(ad, _rng(tag, PERM_ROOT), rho=.10, nsig=4)
+
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "regress"
     ad = AD4.__new__(AD4)
@@ -239,3 +236,4 @@ if __name__ == "__main__":
         mode_main(ad)
     else:
         raise SystemExit(f"unknown mode {mode}")
+

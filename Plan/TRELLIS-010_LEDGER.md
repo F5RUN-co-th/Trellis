@@ -19,7 +19,7 @@ Hypothesis-Elimination-Matrix (qualitative · **ไม่มีเลข posteri
 | Direction มี skill ที่ **real EA exit** | v4-breakout-dir base−floor +0.582 CI-backed [CLAIM-0010] | **open (edge จริง · ceiling ยังไม่วัด)** |
 | Representation: **tick-price** (in-hand เหนือ OHLC-ceiling · DPI) | tickvol 0/7 [CLAIM-0007→0009] · spread dead [CLAIM-0008 DEAD] · TP-1 nested: gated 0/9 + perm 0.805 [CLAIM-0015→0016] · **TP-2 inference-completed 07-14: p(S1·GBM-med9)=0.398 (obs +0.1215 ≈ null-elevation +0.093 — "GBM 9/9 บวก" = mechanical) · p(S2)=0.063 · ไม่มี statistic ถึง α=0.0167** [CLAIM-0016] | **eliminated (scope: 6 features · linear+GBM · real exit · MDE~+0.28 — event-stream/richer form อยู่แถว nonlinear ที่ยัง open · ไม่ใช่ proven-zero)** |
 | Representation: nonlinear/event-stream/multi-scale | GBM บน 19-feat ตาย [CLAIM-0010] · ES-1: M1-DC = KILL [CLAIM-0017] · **ES-2 07-16: tick-DC = KILL** (p(S1)=0.857 [observed แย่กว่า null] · p(S2)=0.129 [เลข signal-like สุดของ event program — เหนือ null +0.15 แต่ไม่ถึง α] · baseline-28: tick เพิ่ม ~0 เหนือ M1-DC) [CLAIM-0018] | **in-hand event forms ครบ 4 (OHLC-GBM · tick-fixed-window · M1-DC · tick-DC) — ทดสอบแล้วทั้งหมด (qualitative note ไม่ใช่ falsification) · open เฉพาะ: event-functional นอก in-hand / richer nonlinear / ข้อมูลใหม่** |
-| Optimization: adaptive/rolling (concept-drift remedy) | Gate-A linear AUC 0.547 ลด static-prior [CLAIM-0007→0009] · **AD-1 STAGE-1 gate = NO-DETECT readout (c̄ 0.072 « t_bar 0.203 · exploratory/foreknowledge-disclosed — ไม่ใช่ confirmatory)** · RFLIP sweep (P&L-free · §9.1 held 5/5): decay-STOP ปลอดภัย periodic ทุก P (≤1.7%) · **rolling-arm false-STOP hole P≈H = 16.7/13.3% @ρ0.10 (measured)** [CLAIM-0019] · **AD-2 rolling-recency main 07-20 = confirmatory KILL (clean freeze-commit): S1 −0.64 · point−null −0.48 · p=0.965 — recent-300 แย่กว่า random-window 96.5% (descriptive controlled) · fold2016 trigger MET+3caveats [CLAIM-0020 L1]** · **AD-3 detector 07-20 = STAGE-A KILL instrument-infeasible (Page-CUSUM corrected: detection 0% ทุก cell ที่ FPR 1.7-6.3% — SNR wall signal 0.20 < noise 0.44 · budget-exempt) [CLAIM-0021 L1] — fold2016 = NOT adjudicated (residual คง)** | **open (scoped: smooth-adaptive บน 19-feat = no-local-relationship readout [power-scoped ρ*≈0.10 · H-agnostic — ครอบทุก H · ไม่ใช่ proof-of-absence] · residual มีจริง measured = rolling/detector follow-up card justified [วินตัดสิน priority · caveat: 16.7% ค้ำ residual-existence ไม่ใช่ real-world-applicability — real slope +0.04 flat · era-flip prior n=1] · ยังไม่เทส: aperiodic / P<1 / P≥9 / ρ<0.10 [mechanism: false-STOP conservative] / fine-cadence intra-year [§6-drop] / MONO-rotation-blind [§3.0 declared · self-mitigating unproven] / representation อื่น · ไม่ใช่ proven-zero) · **AD-4 fine-cadence 09-03: certify v1 = KNOWN-DEFECT (Engineer execution-review: null retention 27.8% exact · calib-world ≠ H0 · main stub) → B′ (วินอนุมัติ): ไม่ pin/ไม่จอง/ไม่ charge · design v4 = C1 circular-shift null + triple H0-cal/redundancy-probe/H1 + §1 non-redundant → Engineer R7 → commit spec → certify v2 · outcome pre-approved ทั้ง 2 ทาง [card §6.1/§7.1 · Progress Log 09-03 · ยังไม่มี claim]** |
+| Optimization: adaptive/rolling (concept-drift remedy) | Gate-A linear AUC 0.547 ลด static-prior [CLAIM-0007→0009] · **AD-1 STAGE-1 gate = NO-DETECT readout (c̄ 0.072 « t_bar 0.203 · exploratory/foreknowledge-disclosed — ไม่ใช่ confirmatory)** · RFLIP sweep (P&L-free · §9.1 held 5/5): decay-STOP ปลอดภัย periodic ทุก P (≤1.7%) · **rolling-arm false-STOP hole P≈H = 16.7/13.3% @ρ0.10 (measured)** [CLAIM-0019] · **AD-2 rolling-recency main 07-20 = confirmatory KILL (clean freeze-commit): S1 −0.64 · point−null −0.48 · p=0.965 — recent-300 แย่กว่า random-window 96.5% (descriptive controlled) · fold2016 trigger MET+3caveats [CLAIM-0020 L1]** · **AD-3 detector 07-20 = STAGE-A KILL instrument-infeasible (Page-CUSUM corrected: detection 0% ทุก cell ที่ FPR 1.7-6.3% — SNR wall signal 0.20 < noise 0.44 · budget-exempt) [CLAIM-0021 L1] — fold2016 = NOT adjudicated (residual คง)** | **open (scoped: smooth-adaptive บน 19-feat = no-local-relationship readout [power-scoped ρ*≈0.10 · H-agnostic — ครอบทุก H · ไม่ใช่ proof-of-absence] · residual มีจริง measured = rolling/detector follow-up card justified [วินตัดสิน priority · caveat: 16.7% ค้ำ residual-existence ไม่ใช่ real-world-applicability — real slope +0.04 flat · era-flip prior n=1] · ยังไม่เทส: aperiodic / P<1 / P≥9 / ρ<0.10 [mechanism: false-STOP conservative] / fine-cadence intra-year [§6-drop] / MONO-rotation-blind [§3.0 declared · self-mitigating unproven] / representation อื่น · ไม่ใช่ proven-zero) · **AD-4 fine-cadence 09-03: certify v1 = KNOWN-DEFECT (Engineer execution-review: null retention 27.8% exact · calib-world ≠ H0 · main stub) → B′ (วินอนุมัติ): ไม่ pin/ไม่จอง/ไม่ charge · design v4 → **v5 null → Alt-G global rotation (payoff-tuple circular-shift s∈{0..m−1} ทุก fold พร้อมกัน · annual arm refit ทุก fold ต่อ draw [Alt-2] · dual statistic S1_rot/S1_evalorig · triple+stress worlds · KS⁺ eligibility · PRIMARY-fixed C1-full · RG1-RG15) หลัง Engineer deep review 23 รอบ (instance ต่างกัน · รอบ 19 (14b) PASS · รอบ 20-23 commit-readiness F1-F13/E1-E15/F-A1-A11/F23-1-8 apply แล้ว · E15 ปิดรอบ 23 (Engineer เห็นตรงกัน → วินสั่ง apply pin block หลังเห็น patch) · Engineer commit-readiness review รอบ 24 = PASS-with-changes → apply F1 deps 7 claim +return_w · F2 ship `pin_ad4.py` · F3 pin block ก่อน `__main__` · F4/F5 record) + Claude-Verify ×31 · **pin sealed 09-09 (ผลรันหลัง pin — บันทึกที่นี่ + commit message เท่านั้น ห้ามเขียนกลับ card ตาม §3.5-v4 chunk bullet): `SPEC_SHA = 6b373c55a2c08f0d7973f61e3584f02c1b062251301484044d0b0553d309d9d9` (sha256 LF-normalized card) · `git hash-object card = 4b632f5c17f35392cbe3113e5bd28f52dbf2f7bc` · `card_scan.py --require-pin` → `spec-pin (J): SPEC_SHA == sha256(LF card) · KS_T_UNITS/KS_ACHIEVED/RG14_TAGS == card` · `SCAN PASS (0 hit)` · battery v10 150/150 · `KS_T_UNITS=23 · KS_ACHIEVED=0.0475 · RG14_TAGS=tuple(f"ad4_rg14_w{k}" for k in range(50))`** · §0 NORMATIVE N1-N13 (+N1a glossary) · RG1-RG15 · เกณฑ์ converge (14b) วินอนุมัติ 09-07 · sha LF-normalized (R1) · rule (k) `ledger_check.py` adopt (วินมอบ technical 09-08) → Engineer review รอบ 20 → commit spec (รอวิน) → วินรับทราบ Alt-G +8.6 CPU-h (envelope §7.1 = technical decision บันทึกใน card) → commit spec → certify v2 (3,080 draws · 7-10 ชม.)** · outcome pre-approved ทั้ง 2 ทาง [card §6.1/§7.1 · Progress Log 09-03 · ยังไม่มี claim]** |
 | Magnitude channel (label-agnostic) | in-sample MI 6/19 (**DIAGNOSTIC/overfit-floor** · de-cluster [5,1,6]) · OOS straddle-net-cost **dead** [CLAIM-0007→0009] · "+0.66 sturdier" เดิม = demoted no-artifact · day-mean not-detected [CLAIM-0013] · at-trigger ผ่าน intraday-features = **structurally blocked** [CLAIM-0014] | **open (เฉพาะ session-open form ที่ยังไม่เทส · prior บาง · priority ต่ำ)** |
 | Discovery: additive opp **realizable** ด้วย ex-ante trigger | validation 07-10: ceiling ยืน (+1.5..+4 · n~30) แต่ **0/7 trigger-config FWE** · anchor ลบ [CLAIM-0004] | **open (ceiling-only — กุญแจ = ex-ante discovery ไม่ใช่ trigger เพิ่ม)** |
 
@@ -32,7 +32,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 
 - **v4 "Dual Asian-Range Breakout" = 1 proven-behavior candidate** [CLAIM-0012] — canonical `dual_asian_sim.py` (§9:107) · WF-OOS +$876 · holdout EU-corrected **+$511.8 PF1.54** · **สถานะ = candidate ไม่ใช่ proven-edge** (bootstrap P(≤0)≈7.6%)
 - **h0 SEARCH dataset 2012-2020** (`Research/h0/*.csv` · +$532.8 field · reconciliation ปิดเป๊ะ) — field-tag ของ direction claims ทั้งหมด
-- **walker `brain_v1_run.py`** — canonical exit (trailing 1×R + overnight) · regression 1,487/1,487 exact · imported โดย 15 scripts
+- **walker `brain_v1_run.py`** — canonical exit (trailing 1×R + overnight) · regression 1,487/1,487 exact · imported โดย 22 scripts (disk-count 09-08 · ~~15~~ stale [F3 รอบ 19 — site ที่ rule (k) ไม่ครอบ])
 - **BASELINE H0:** ปีแพ้ 7 ปี (2012/14/17/18/19/22/23) รวม −$185.4 · 15.5y +$1,087.6 (WF config · `ea_catchup`) — search-window losers = 5 ปี −$135.2
 - **clock:** BT-clock = EET EU-DST · tester 2025/26 เดิม (−169/+330/+318) = artifact (UTC ดิบ) · holdout US-rule +802 = ตาย
 
@@ -42,39 +42,45 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 > **machine-generated skeleton** จาก `ledger_check.py --emit-index` (ASSET=import-scan · EXPERIMENT=`__main__`) · disposition = เติมเอง (ดุลพินิจ) · **ห้าม hand-list role** (DEFECT-10)
 > DISP ∈ live→CLAIM-NNNN | superseded→CLAIM-NNNN | legacy→ARCHIVE | reproduce-only(why) | self-test(why)
 
-- `ad1_card` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0019
+
+---
+
+- `ad1_card` :: ASSET(imported 3) :: EXPERIMENT=live→CLAIM-0019
 - `ad1_gate_calib` :: ASSET(imported 2) :: EXPERIMENT=live→CLAIM-0019
-- `ad2_card` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0020
+- `ad2_card` :: ASSET(imported 2) :: EXPERIMENT=live→CLAIM-0020
 - `ad3_card` :: EXPERIMENT=live→CLAIM-0021
 - `ad4_card` :: EXPERIMENT=reproduce-only(certify v1 known-defect card §6.1 · B′ 09-03 · design v4 → certify v2 → เปลี่ยนเป็น live→claim เมื่อ freeze-commit)
 - `asian_bo_sim` :: EXPERIMENT=legacy→ARCHIVE
 - `brain_v1_ceiling` :: EXPERIMENT=legacy→ARCHIVE
-- `brain_v1_run` :: ASSET(imported 15) :: EXPERIMENT=reproduce-only(canonical-walker · regression 1487/1487)
+- `brain_v1_run` :: ASSET(imported 22) :: EXPERIMENT=reproduce-only(canonical-walker · regression 1487/1487)
 - `c10_ms_features` :: EXPERIMENT=legacy→ARCHIVE
 - `c6_poke_features` :: EXPERIMENT=legacy→ARCHIVE
 - `c7_tick_features` :: EXPERIMENT=legacy→ARCHIVE
 - `c9_dc_features` :: EXPERIMENT=legacy→ARCHIVE
+- `card_scan` :: EXPERIMENT=self-test(doc-integrity tooling · N10/N13/(A)-(I) SSOT ของ PATTERNS · card AD-4 §0 N10/N13 · รันก่อน commit)
 - `diag_analyze` :: EXPERIMENT=legacy→ARCHIVE
 - `dir_features` :: ASSET(imported 1)
-- `direction_at_real_exit` :: ASSET(imported 2) :: EXPERIMENT=live→CLAIM-0010
-- `direction_predictor` :: ASSET(imported 4) :: EXPERIMENT=superseded→CLAIM-0005
-- `direction_predictor_v1` :: ASSET(imported 5) :: EXPERIMENT=superseded→CLAIM-0006
+- `direction_at_real_exit` :: ASSET(imported 9) :: EXPERIMENT=live→CLAIM-0010
+- `direction_predictor` :: ASSET(imported 6) :: EXPERIMENT=superseded→CLAIM-0005
+- `direction_predictor_v1` :: ASSET(imported 6) :: EXPERIMENT=superseded→CLAIM-0006
 - `discovery_probe` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0004
-- `opportunity_validation` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0013
 - `dual_asian_sim` :: ASSET(imported 7) :: EXPERIMENT=reproduce-only(v4-canonical numbers §9:107)
-- `es1_card` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0017
-- `es2_card` :: EXPERIMENT=live→CLAIM-0018
-- `es2_tick_dc_features` :: EXPERIMENT=live→CLAIM-0018
 - `edge_bar_mc` :: EXPERIMENT=live→CLAIM-0001
 - `edge_screen` :: EXPERIMENT=legacy→ARCHIVE
 - `edge_screen2` :: EXPERIMENT=legacy→ARCHIVE
+- `eng11_rg14_oc` :: EXPERIMENT=reproduce-only(pin RG14 paired-W OC · card AD-4 §4 RG14 · synthetic toy-moment MC)
+- `eng11_sigma` :: EXPERIMENT=reproduce-only(SUPERSEDED READING · 810-row ramp ×1.08-1.14 ⟪RETIRED⟫ รอบ 11 · เก็บเพื่อ reproduce เลขที่ถอนใน changelog เท่านั้น · operative = r13_sigma)
+- `eng16_ks` :: EXPERIMENT=reproduce-only(pin KS⁺ t=0.0575 · card AD-4 §0 N2 · discrete-Uniform MC B=200k)
 - `entry_features` :: EXPERIMENT=legacy→ARCHIVE
 - `entry_platform` :: ASSET(imported 8) :: EXPERIMENT=legacy→ARCHIVE
+- `es1_card` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0017
+- `es2_card` :: EXPERIMENT=live→CLAIM-0018
+- `es2_tick_dc_features` :: EXPERIMENT=live→CLAIM-0018
 - `exhaustion_fade` :: EXPERIMENT=live→CLAIM-0003
 - `fade_dataset` :: EXPERIMENT=live→CLAIM-0003
 - `gate1_mi_ceiling` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0007
 - `gate2_population` :: EXPERIMENT=live→CLAIM-0007
-- `gate_c_wf` :: ASSET(imported 3) :: EXPERIMENT=live→CLAIM-0007
+- `gate_c_wf` :: ASSET(imported 5) :: EXPERIMENT=live→CLAIM-0007
 - `gate_magnitude_oos` :: EXPERIMENT=live→CLAIM-0007
 - `gate_spread_mi` :: EXPERIMENT=live→CLAIM-0008
 - `grid_sim` :: ASSET(imported 3)
@@ -89,27 +95,30 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `h0_features` :: EXPERIMENT=reproduce-only(h0-dataset builder · carried +532.8)
 - `h0_join_pnl` :: EXPERIMENT=reproduce-only(h0 PnL-join · carried)
 - `holdout_exness` :: EXPERIMENT=reproduce-only(v4 holdout +511.8 clock-corrected)
+- `ks_oc` :: EXPERIMENT=reproduce-only(SUPERSEDED READING · KS⁺ threshold table float-convention 4.86% · authority = eng16_ks (integer-lattice + OC) · F-A8 รอบ 22)
 - `layer0_meanrev_pregate` :: EXPERIMENT=legacy→ARCHIVE
-- `magnitude_at_trigger` :: EXPERIMENT=live→CLAIM-0014
 - `layer1_null_test` :: EXPERIMENT=legacy→ARCHIVE
 - `layer2_real_data` :: EXPERIMENT=legacy→ARCHIVE
 - `layer2b_bar_null` :: EXPERIMENT=legacy→ARCHIVE
 - `ledger_check` :: EXPERIMENT=self-test(traceability tooling · --self-test fixtures+golden)
+- `magnitude_at_trigger` :: EXPERIMENT=live→CLAIM-0014
 - `mr_sim` :: EXPERIMENT=legacy→ARCHIVE
+- `mut_battery` :: EXPERIMENT=self-test(mutation battery ของ card_scan · tempdir mirror · exit 1 ถ้า MISSED)
 - `opportunity_unit` :: EXPERIMENT=live→CLAIM-0001
 - `opportunity_unit_v2` :: EXPERIMENT=superseded→CLAIM-0002
 - `opportunity_unit_v3` :: ASSET(imported 1) :: EXPERIMENT=superseded→CLAIM-0002
-- `opportunity_unit_v4` :: ASSET(imported 4) :: EXPERIMENT=live→CLAIM-0002
+- `opportunity_unit_v4` :: ASSET(imported 6) :: EXPERIMENT=live→CLAIM-0002
+- `opportunity_validation` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0013
+- `pin_ad4` :: EXPERIMENT=self-test(seal/check ของ pin block ad4_card.py · card AD-4 §7(11)(12)(12b) · commit spec · F2 รอบ 24)
+- `r13_sigma` :: EXPERIMENT=reproduce-only(σ-generator readout sd(log σ)/ramp-share · card AD-4 §7(5) · synthetic)
 - `stage0_join` :: ASSET(imported 2) :: EXPERIMENT=reproduce-only(stage0-join · carried h0)
 - `stage0_verify_import` :: EXPERIMENT=legacy→ARCHIVE
 - `stageb_pipeline` :: EXPERIMENT=legacy→ARCHIVE
 - `test_b_direction_decomp` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0009
-- `tp1_card` :: ASSET(imported 2) :: EXPERIMENT=superseded→CLAIM-0015
+- `tp1_card` :: ASSET(imported 7) :: EXPERIMENT=superseded→CLAIM-0015
 - `tp1_tick_features` :: ASSET(imported 1) :: EXPERIMENT=superseded→CLAIM-0015
-- `tp2_inference` :: ASSET(imported 1) :: EXPERIMENT=live→CLAIM-0016
+- `tp2_inference` :: ASSET(imported 2) :: EXPERIMENT=live→CLAIM-0016
 - `walk_forward` :: EXPERIMENT=reproduce-only(v4 anchored-WF +876)
-
----
 
 ## CLAIMS
 
@@ -254,7 +263,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **reproduce:** python Scripts/direction_at_real_exit.py
 
 ### CLAIM-0011
-- **observed:** Research Traceability System — `ledger_check.py` (validate + --emit-index · ast import-scan robust · check-list = docstring SSOT) · self-test + golden ALL PASS (count = --self-test output) · LEDGER/ARCHIVE/STATUS-trim/DoD
+- **observed:** Research Traceability System — `ledger_check.py` (validate + --emit-index · ast import-scan robust · check-list = docstring SSOT · **+(k) imported-N == disk 2026-09-08 [AD-4 F4 รอบ 15 · วินมอบ technical] · self-test count = `--self-test` output (ห้าม pin เลข · F-A5 รอบ 22)**) · self-test + golden ALL PASS (count = --self-test output) · LEDGER/ARCHIVE/STATUS-trim/DoD
 - **supported:** ปิด owner-problem 4 ข้อ (experiment-visibility/lineage/result-single-SoR/owner-audit) ด้วย mechanical enforcement 2 axis (ASSET import-scan · EXPERIMENT __main__)
 - **not-yet-supported:** disposition correctness (validator existence-only · semantic mis-tag ต้อง human-review) — residual limit
 - **evidence-level:** L1
@@ -314,7 +323,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **supported:** ใต้ 6 features + nested protocol นี้ — **ไม่พบ additive tick-price signal ผ่าน gated pipeline** (0/9 + perm-p 0.81) · verdict ตาม pre-registered asymmetric rule = **INCONCLUSIVE (gate-limited)** — forced-in มี 1/9 seed CI-positive → **ห้ามเรียก KILL / ห้าม eliminate frontier** (univariate sign-gate อาจกด conditional signal — เงื่อนไขที่ประกาศก่อนรัน)
 - **not-yet-supported:** "tick-price มี additive signal" (ไม่มีหลักฐาน CI-backed) · "tick-price ตาย" (gate-limited + GBM point-positive ทุก seed แต่ไม่ CI) · features/window/gate form อื่น · **prediction-score:** ทำนาย clean-null → ได้ INCONCLUSIVE — sub-outcome เป็น fact: aggregate −0.2352 ∈ [−0.30,+0.10] ✓ · gated 0/9 ✓ · perm>0.05 ✓ · GBM ทาย ≤0 ✗ (point บวกทุก seed) · **2/4 metric เบนเข้า weak-signal (GBM 9/9 point-positive + forced-in 1/9)** — ไม่นับเป็น "ถูก 3/4" (Engineer M-4: เกณฑ์ผิดที่ pre-register โดน forced-in ชนตามตัวอักษร)
 - **evidence-level:** L1 (Engineer execution-review 07-14: reproduce ทุก inferential number + feature spot-check โค้ดอิสระ — precedent CLAIM-0014)
-- **dependencies:** tp1_tick_features (frozen SHA) · tp1_card · direction_at_real_exit (build_rows/sign_gate/protocol) · brain_v1_run walker · dir_features · ticks eet 2012-2020
+- **dependencies:** tp1_tick_features (frozen SHA) · tp1_card (fit_predict+return_w [AD-4 ขั้น 2 · backward-compatible kwarg · ไม่ retro-touch verdict]) · direction_at_real_exit (build_rows/sign_gate/protocol) · brain_v1_run walker · dir_features · ticks eet 2012-2020
 - **invalidated-by:** gate form ที่เห็น conditional signal (multivariate/nested-gate) ให้ผลชัดทางใดทางหนึ่ง · feature set richer · execution-review พบ defect
 - **kind:** experiment
 - **status:** superseded→CLAIM-0016 (inference-completed · facts carried — ไม่ใช่ re-measured)
@@ -328,7 +337,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **supported:** **KILL ตาม pre-registration** — ไม่มี statistic ถึง α ใต้ null ที่ calibration-checked → frontier tick-price **eliminated ใน scope ที่เทส** · **"GBM point-positive 9/9" ของ CLAIM-0015 = mechanical null-elevation ไม่ใช่ weak-signal** (observed +0.1215 ≈ null mean +0.093 · p 0.40) · methodology ถาวร: nested-lift point-positivity ≠ signal
 - **not-yet-supported:** tick-price representation อื่น (event-stream/multi-scale/richer features — อยู่ frontier แถว nonlinear ที่ยัง open) · population อื่น · **ไม่ใช่ proven-zero** (sensitivity floor ≈ +0.28/ไม้เหนือ null — order-of-magnitude จาก calib draw เดียว ไม่ใช่ power analysis · Engineer MINOR-1) · prediction ผม 2/3: p(S1) ∈ [0.3,0.7] ✓ (0.3976) · ไม่มี p<α ✓ · **p(S2)>0.5 ✗ (จริง 0.0629 — forced-in observed ดีกว่า null ของมัน +0.20 = เลขที่ signal-like สุดของทั้ง arm แต่ไม่ถึง α · บันทึกตรงไม่ฝัง)**
 - **evidence-level:** L1 (Engineer execution-review 07-14: observed reproduce bit-exact ทุก seed · nulls B=50 sanity ตรง tail/mean · code-path audit ครบ — บาร์เดียวกับ CLAIM-0014/0015)
-- **dependencies:** tp1_card machinery (build_rows/sign_gate/fit_predict/PAY-cache) · tp1_tickfeat frozen SHA 94c8e68c · direction_at_real_exit · brain_v1_run walker · calibration demo in-script
+- **dependencies:** tp1_card machinery (build_rows/sign_gate/fit_predict/PAY-cache) (return_w [AD-4 ขั้น 2 · backward-compatible kwarg · ไม่ retro-touch verdict]) · tp1_tickfeat frozen SHA 94c8e68c · direction_at_real_exit · brain_v1_run walker · calibration demo in-script
 - **invalidated-by:** richer/event-stream representation ให้ผล CI-positive ที่ยัน calibrated-null ได้ · พบ mis-calibration ของ null ภายหลัง (เกิน resolution 20 draws) · execution-review พบ defect
 - **kind:** experiment
 - **status:** terminal (inference-completed · ปิด INCONCLUSIVE limbo ของ CLAIM-0015)
@@ -342,7 +351,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **supported:** **KILL ตาม pre-registration** — observed ทั้งสองนั่งบน null-mean ของตัวเองพอดี (S1 −0.143 vs −0.160 · S2 −0.127 vs −0.136) → DC multi-scale บน M1 closes **ไม่ add direction info เหนือ baseline ที่ real exit** · root-cause explanation: dc_align redundant กับ momentum block (linear-R² 0.04-0.19 · GBM-OOF 0.21-0.64) + os/dur/asym ไม่มี information เกิน composition — ไม่ใช่แค่ p≥α · **null-mean ES เป็นลบ (ต่างจาก TP-2 ที่บวก) = elevation เป็น per-feature-set** (methodology ถาวรต่อยอด CLAIM-0016)
 - **not-yet-supported:** event-stream form อื่น (tick-DC · event-functional อื่น · richer nonlinear — frontier แถว nonlinear ยัง open เฉพาะ form เหล่านั้น) · "event-stream ตายทั้งแนว" · proven-zero (**sensitivity-floor ≈ +0.07/+0.08 $/ไม้** — not-detected ≠ falsified ตาม CLAIM-0013) · **prediction held: 2-independent + 1-implied** (KILL ✓ · p∈[0.2,0.9] ทั้งคู่ ✓ [0.4446/0.4635] · "ไม่มี p<0.10" = implied โดย band-edge — Engineer M-1: เกณฑ์ nested ห้ามนับ "3/3")
 - **evidence-level:** L1 (Engineer execution-review 07-15: observed bit-exact ทุก seed + feature spot-check โค้ดอิสระ deviation 0.00e+00 + dissect mirror exact + null sanity B=50 — precedent CLAIM-0014/0015/0016)
-- **dependencies:** es1_card (dissect mirror c9_dc_features:51-82) · tp2_inference machinery (TP2 class/null_run/proj) · tp1_card folds/fit_predict · direction_at_real_exit build_rows · brain_v1_run walker · h0_tickfeat rjR (frozen SHA)
+- **dependencies:** es1_card (dissect mirror c9_dc_features:51-82) · tp2_inference machinery (TP2 class/null_run/proj) · tp1_card folds/fit_predict (return_w [AD-4 ขั้น 2 · backward-compatible kwarg · ไม่ retro-touch verdict]) · direction_at_real_exit build_rows · brain_v1_run walker · h0_tickfeat rjR (frozen SHA)
 - **invalidated-by:** event-form อื่นให้ผล CI-backed · calibration พบ mis-calibration ภายหลัง · execution-review พบ defect
 - **kind:** experiment
 - **status:** terminal (KILL scoped · ไม่มี middle branch ตาม pre-registration)
@@ -356,7 +365,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **supported:** **KILL ตาม pre-registration** — S1 แย่กว่า null ของตัวเอง (tick-DC เป็นภาระต่อ linear) · S2 เหนือ null แต่ p 0.13 ไม่ถึง α · root-cause: cross-corr tick↔M1 ต่ำที่ 0.1aw (0.12 = ใหม่จริง) แต่ **ความใหม่นั้นไม่มี direction information** (baseline-28 diag: increment เหนือ M1-DC ≈ 0) → **in-hand event forms ครบ 4 (OHLC-GBM · tick-fixed-window · M1-DC · tick-DC) ทดสอบแล้วทั้งหมด — จบ representation program ในมือ** (qualitative note ไม่ใช่ falsification ของ event-stream ทั้งแนว)
 - **not-yet-supported:** event-functional นอก in-hand (Hawkes/volume-clock/order-flow events) · richer nonlinear · ข้อมูลใหม่ (Stage-F-form) · **ไม่ใช่ proven-zero** (S2 sensitivity-floor ≈ +0.0726 — not-detected ≠ falsified) · **prediction: held 1-independent + band 1/2** (Engineer MINOR-1: "no p<0.10" ⇒ KILL โดยตรรกะ — นับแยกไม่ได้ [pattern นับ nested ซ้ำครั้งที่ 3 — TP-1/ES-1/ES-2 · เข้า memory แล้ว] · band: S1 ✓ · **S2 ✗ 0.1289 ต่ำกว่าขอบ — declared ไม่กลบ**)
 - **evidence-level:** L1 (Engineer execution-review 07-16: observed bit-exact ทุก seed · feature spot-check โค้ดอิสระ dev 4.99e-07 · null sanity B=40 · baseline-28 non-contamination พิสูจน์ 2 ทาง · warning benign-confirmed — precedent CLAIM-0015/16/17)
-- **dependencies:** es2_tick_dc_features (frozen SHA ac7ccab5) · es2_card (ES2⊂ES1⊂TP2 machinery) · es1_card (dissect/load_es/M1-DC สำหรับ baseline-28 diag) · tp1_tick_features manifest · brain_v1_run walker · h0_tickfeat rjR
+- **dependencies:** es2_tick_dc_features (frozen SHA ac7ccab5) · es2_card (ES2⊂ES1⊂TP2 machinery) → tp1_card fit_predict+return_w [AD-4 ขั้น 2 · backward-compatible kwarg · ไม่ retro-touch verdict] · es1_card (dissect/load_es/M1-DC สำหรับ baseline-28 diag) · tp1_tick_features manifest · brain_v1_run walker · h0_tickfeat rjR
 - **invalidated-by:** event-functional นอก in-hand ให้ผล CI-backed · calibration mis-specification ภายหลัง · execution-review พบ defect
 - **kind:** experiment
 - **status:** terminal (KILL scoped · ไม่มี middle branch)
@@ -370,7 +379,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **supported:** **exploratory NO-DETECT readout** — per-year feature→signed-R concordance ต่ำกว่า noise-floor ของ real data เอง (0.072 « 0.187) → smooth-adaptive (exp-decay H=480 · rolling K=300 · year-cadence) ไม่มี local relationship ให้ exploit บน 19-feat ที่ real exit · decay-primary STOP ปลอดภัยต่อ periodic-flip ทุก P ที่วัด
 - **not-yet-supported:** **DISCLOSURE (บังคับอ่านคู่ verdict):** (i) STAGE-1 เคยรัน 07-16 ผู้เขียนเห็นผล · งานถูกถอนตามคำสั่ง Win — reconstruction 07-17 reproduce MATCH (ii) prediction 07-16 = **VOID ทั้ง 3 เกณฑ์** (foreknowledge + ไม่มี committed timestamp — ไม่ score) → claim นี้ = readout **ไม่ใช่ confirmatory** (iii) "reproduce-only" ในที่นี้ = deterministic re-run ของ look ที่ charge แล้ว **ไม่ใช่** LEDGER-disposition budget-exempt [C1] (iv) STAGE-2 ไม่รัน (binding gate + instrument-mismatch ต่อ residual) (v) **frontier ไม่ปิด** — residual measured: rolling-arm hole P≈H → detector/rolling follow-up card justified [M11 · +1 ⇒ 6/40 ถ้ารัน · วินตัดสิน priority] · declared นอก sweep: aperiodic · P<1 · P≥9 · phase/duty · representation อื่น · **ρ<0.10 (retention-hole region — นอก §9.1)** — mechanism: signal อ่อนลง → Δ ทั้งสอง arm เล็กลงสู่ noise-floor → false-STOP คาด ≤ ที่วัด (rolling-hole non-monotonic peak ~ρ0.10: 16.7% > 8.3%@ρ0.15 — range ที่ pre-register bracket worst case · วัดจริง = scope detector follow-up [M11]) · card-level residual นอกกรอบ sweep: fine-cadence [§6-drop] · MONO-rotation-blind [§3.0 declared] — 7-angle เต็ม = FRONTIER row adaptive · ไม่ใช่ proven-zero
 - **evidence-level:** L1 (Engineer execution-review PASS-with-changes 07-17 — reproduce อิสระ 6/6 กลุ่มเลข · F-1 [stage1 derive→assert ในตัว — `Calib.from_arrays` กัน duplicate load · 3 จุด 177/188/190 · stage1 re-run เลขตรงเดิมทุกค่า] + F-2 [ρ-residual declare] applied · หมายเหตุ: L1 attest reproducibility+recording-integrity+disclosure — ไม่ใช่ confirmatory inference · S2-calib = เลขเดียวที่ reviewer ไม่ได้ re-run อิสระ (GBM-slow · trust ผ่าน S1-exact + regress GBM bit-exact))
-- **dependencies:** ad1_gate_calib · ad1_card · Scripts/ad1_src/* (reconstruction source 6 ไฟล์) · fit_signedR+rw · tp1_card fit_predict+rw · direction_at_real_exit build_rows · brain_v1_run walker
+- **dependencies:** ad1_gate_calib · ad1_card · Scripts/ad1_src/* (reconstruction source 6 ไฟล์) · fit_signedR+rw · tp1_card fit_predict+rw+return_w [AD-4 ขั้น 2 · backward-compatible kwarg · ไม่ retro-touch verdict] · direction_at_real_exit build_rows · brain_v1_run walker
 - **invalidated-by:** freeze-commit (STEP 5) ไม่เกิด · detector card พิสูจน์ exploitable drift จริง
 - **kind:** experiment
 - **status:** live
@@ -384,7 +393,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **supported:** **KILL — confirmatory (clean freeze-commit 999ebd9 10:38 ก่อน run 11:21 · git-verified):** main 07-20 — **S1 point = −0.6395 $/ไม้ · null-mean (run-time H0 center) = −0.1559 · point−null-mean = −0.4835 · MDE floor (null-q95) = +0.2560 · p = 0.9650 (B=1000 · escalation ไม่ trig — นอก band ถูกต้อง)** → recency (rolling-K300) ไม่กู้ lift บน real payoff ภายใน declared power · per-fold descriptive: 2016 +0.3057 · 2017 −0.1325 · 2018 −0.5036 · 2019 −0.7278 · 2020 −2.1271 (monotonic) · DIAG K600 −0.1611 · **adaptive frontier: smooth [AD-1 exploratory NO-DETECT] + recency [AD-2 confirmatory KILL] = ปิดทั้งคู่บน 19-feat ภายใน power ที่ประกาศ — ไม่ใช่ proof-of-absence**
 - **not-yet-supported:** **PREDICTION SCORING (R8 — ห้าม over-claim ทั้งสองทิศ):** KILL = **confirmatory-held** (p=0.965 ≥ α*_dec 0.05 · pre-registered decision) · point-anchor = **descriptive-MISSED** — point −0.64 ≪ null-mean −0.156 (คาด ≈) · **§8 misspec 2 จุด (บทเรียน methodology ถาวร):** (a) anchor pin เลข synthetic −0.01 ข้ามสนามมาใช้กับ real (−0.156) = **cross-field number ละเมิด "ติดป้ายสนามวัด"** — ที่ถูกต้อง anchor เชิงสัญลักษณ์ "≈ run-time null-mean" (b) **nesting invalid** — p≥α* bound แค่ upper tail · point≈null-mean → p≈0.5 ไม่ใช่ 0.965 (ความพลาดร่วม Engineer-G4 + Claude accept) — คู่บทเรียน CLAIM-0016 · **anti-recency = descriptive controlled เท่านั้น:** recent-300 แย่กว่า random-window n=300 เท่ากัน 96.5% (sample-size controlled) — inferential ได้แค่ "recent < random" ไม่ใช่ "expanding คือทางถูก" (p ไม่ได้ทดสอบ vs expanding) · opposite-tail ไม่ register — two-sided = fork ห้าม [G3] · **fold2016 trigger MET (+0.3057 > pooled q95 +0.2560) + 3 caveats บังคับ:** bar หลวม (per-fold point vs pooled-q95 — variance คนละระดับ) · positive เดียวใน 5 folds · = **detector follow-up eligible ให้วินจัดลำดับ ไม่ใช่ signal detected** · declared residuals: P≈3.5 underpowered (6.7%) · y-model-risk conservative · fine-cadence/MONO/aperiodic = FRONTIER
 - **evidence-level:** L1 (Engineer execution-review R8 07-20 PASS-with-changes [record wording — applied] — reproduce point/per-fold/K600 exact + integrity git-verified · Claude-Verify reproduce อิสระตรงทุกตัว · หมายเหตุ: **AD-2 L1 = confirmatory** [clean pre-registration] แข็งกว่า AD-1 L1 [exploratory])
-- **dependencies:** ad2_card · ad1_card (AD1 loader/folds/caches) · ad1_gate_calib (K_ROLL/Calib) · tp1_card fit_predict+rw · direction_at_real_exit · brain_v1_run walker
+- **dependencies:** ad2_card · ad1_card (AD1 loader/folds/caches) · ad1_gate_calib (K_ROLL/Calib) · tp1_card fit_predict+rw+return_w [AD-4 ขั้น 2 · backward-compatible kwarg · ไม่ retro-touch verdict] · direction_at_real_exit · brain_v1_run walker
 - **invalidated-by:** detector follow-up (ถ้าวินเปิด) พิสูจน์ regime-conditional lift จริง · defect ใหม่ใน machinery ที่กระทบ p/point
 - **kind:** experiment
 - **status:** live
@@ -399,7 +408,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - **supported:** **instrument-infeasibility (scoped):** online CUSUM-on-lagged-window-cosine @ρ0.10 · W viable {100,150} (W≥300 → windows/fold 2-4 = CUSUM degenerate) บน 19-feat — **root = SNR wall**: per-window signal-norm ρ√nsig = 0.20 < noise-norm √(NF/W) ≈ 0.44 @W=100 (cosine-noise sd≈0.23 ของ AD-1 — คำเตือน FB-1 "lethality sub-year W" ยืนด้วยเลข) · ไม่มี W ที่ SNR พอ ∧ windows พอ พร้อมกัน
 - **not-yet-supported:** **fold2016 anomaly = NOT adjudicated** — ไม่มี instrument feasible มาตัดสิน contiguity-vs-regime · **ห้ามอ่านเป็น "no regime structure"** (นั่นคือ outcome ของ STAGE-B ที่ไม่เคยเกิด) → คงเป็น declared residual · richer detector families (Markov-switching/LR-changepoint) = declared residual — ชน SNR wall เดียวกันที่ ρ0.10/W เดียวกัน (complexity-gate ไม่ให้ escalate) · **เลขรอบแรก (NOISE FPR 55.8/84.2% · det 20.8/32.5%) = confounded artifact ของ D1 zero-allowance + D2 STABLE-calibration — superseded ห้าม cite** (บันทึกใน lineage)
 - **evidence-level:** L1 (Engineer R4: ตั้งสมมติฐาน "premature" แล้ววัดหักล้างตัวเองด้วย corrected probe · Claude-Verify reproduce ตารางเต็ม 10 cells อิสระตรงเป๊ะ · official rerun N=120 deterministic)
-- **dependencies:** ad3_card · ad1_card/ad2_card loaders · ad1_gate_calib · synth worlds (STABLE/NOISE/SINGLE-FLIP/RFLIP)
+- **dependencies:** ad3_card · ad1_card/ad2_card loaders (→ tp1_card fit_predict+return_w [AD-4 ขั้น 2 · backward-compatible kwarg · ไม่ retro-touch verdict]) · ad1_gate_calib · synth worlds (STABLE/NOISE/SINGLE-FLIP/RFLIP)
 - **invalidated-by:** instrument ตระกูลใหม่ที่ทะลุ SNR wall ได้จริง (ต้องเปิด card ใหม่ + justification ว่าต่างเชิง information)
 - **kind:** experiment
 - **status:** live
