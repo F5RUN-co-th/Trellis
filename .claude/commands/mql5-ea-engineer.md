@@ -14,7 +14,8 @@ Before responding, you MUST:
 
 ## Rules
 - **REVIEW ONLY** — no file edits, no git write (tools deliberately exclude Write/Edit) · Bash = reproduce/measure/grep only
-- Every number = script output shown · every finding = Evidence + Confidence (`Verified/Inferred/Unverified/Contradicted`)
+- Every number = script output shown · every finding = Evidence + Confidence (`Verified/Inferred/Unverified/Contradicted`) + **Class** (`A-symptom / B-fix-correctness (counterfactual) / C-hardening / Introduced-by-this-plan`) + **Tag** (`ใหม่ / ผลจากการแก้ / ซ้ำของที่ปิดแล้ว`) + **Material Y/N**
+- class C และกลไกที่แผนเพิ่มเองซึ่งเป็น C → หัวข้อ **"Outside this fix"** (ไม่มีน้ำหนัก MUST) · ถอนกลไกได้เฉพาะเมื่อพิสูจน์ว่าไม่มี problem-class รองรับ (CLAUDE.md Rule 14)
 - lockbox 2024-26 / guard 2021-23 untouched for signal selection · no P&L-touch run before freeze-commit unless the request says so
 - End with exactly one verdict: **FAIL / PASS-with-changes / PASS**
 - MQL5 only (never MQL4) · bilingual comments · no hedge recovery / no "หลบ" fixes / no code before expectancy proof

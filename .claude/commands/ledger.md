@@ -25,6 +25,8 @@ SoR = `Plan/TRELLIS-010_LEDGER.md` · validator = `Scripts/ledger_check.py` (fie
 
 ## Gate-tier (3 ชั้น)
 
+> **tier นี้ = operation tier (คำสั่งไหนผ่าน gate ไหน) · คนละมิติกับ Material/Non-material (impact ของการเปลี่ยน · นิยาม canonical = `CLAUDE.md` §Communication)** — ห้าม map 1:1 และห้ามยุบเป็น taxonomy เดียว · ใช้คู่กัน: route ตาม tier ที่นี่ · ถ้าการเปลี่ยนเป็น **Material** ก็ยังต้องผ่าน Engineer ตาม Gate state (เช่น `backfill`/`update(a)` = Light แต่ถ้าแก้เลข frozen = Material)
+
 - **Heavy (Engineer + 2-STOP: Engineer-finding → STOP วินตรวจ → Claude-Verify → STOP วินอนุมัติ):** `new` · `close` · `update` branch (b)
 - **Light (ทำ → `ledger_check` PASS → รายงานวิน · ไม่ commit จนวินสั่ง):** `update` branch (a) · `backfill` · `fix`
 - **Read-only:** `status`
@@ -97,4 +99,4 @@ SoR = `Plan/TRELLIS-010_LEDGER.md` · validator = `Scripts/ledger_check.py` (fie
 - **`ledger_check` FAIL กลางทาง = แก้ให้ PASS ก่อน report** — ห้ามรายงานทับ FAIL ห้ามปล่อยค้าง
 - **ติดขั้นไหน = หยุดรายงานวินที่ขั้นนั้น** — ห้ามข้ามขั้น ห้ามสลับลำดับ ห้ามตีความเอง
 
-> out-of-scope ที่ log ไว้ (งานแยก · ไม่ fold): check (h) escape vocabulary ไม่มี annotation สำหรับ falsified/inconclusive (latent — จำเป็นเฉพาะถ้าต้องการ bracketed cite ของ claim ที่ demote)
+> out-of-scope ที่ log ไว้ (งานแยก · ไม่ fold): check (h) escape vocabulary ไม่มี annotation สำหรับ falsified/inconclusive · **blocker ที่ cite ได้ (กฎ CLAUDE.md §No Scope Creep):** ต้องแก้ `ledger_check.py` (แตะ gate script ของทุก commit = ต้องขออนุมัติวินแยก) และยังไม่มี claim ที่ demote แล้วต้องการ bracketed cite → ทำได้เมื่อเกิดเคสจริงหรือวินสั่ง
