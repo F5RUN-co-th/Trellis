@@ -115,7 +115,7 @@ Structural cause ไม่ใช่ symptom · ยืนยันไม่ได
 
 ## Key Files
 - `Plan/TRELLIS-010_brain_research_workflow.md` — plan + Progress Log · `Plan/TRELLIS-010_LEDGER.md` — single SoR ของผล (CURRENT FRONTIER · CLAIM blocks · SCRIPT INDEX) · `Plan/TRELLIS-010_card_*.md` — card designs
-- `Plan/TRELLIS-001_design_doctrine.md` — doctrine (grid §3 DORMANT) · `Plan/CLAUDE_MD_GOVERNANCE.md` — หลักดีที่สุด 8 clause
+- `Plan/TRELLIS-001_design_doctrine.md` — doctrine (grid §3 DORMANT) · หลักดีที่สุด (ไม่ดรอปศักยภาพ) = `CLAUDE.md` §⚖️ หลักดีที่สุด
 - `Scripts/` — รายชื่อ script ที่ live/superseded อ่านจาก **SCRIPT INDEX ใน LEDGER** (machine-generated) ไม่ใช่จากไฟล์นี้ · gate ของทุก commit = `python Scripts/ledger_check.py`
 - `Experts/Trellis.mq5` + `Include/*.mqh` — EA (frozen pre-reframe)
 - `.claude/patterns/` — INDICATOR / TRADE / RISK · `../Gloo/Docs/MQL5_Reference.md` — MQL5 signatures (reuse)
