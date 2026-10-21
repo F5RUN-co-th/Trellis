@@ -83,7 +83,7 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - **สื่อสารด้วยสิ่งที่วินเห็นบนจอจริง ไม่ใช่ชื่อในโค้ด (บทเรียน):** MT5 Inputs tab แสดง **comment** ของ input ไม่ใช่ชื่อตัวแปร — วินไม่มีทางเห็น `InpXxx` ที่ Claude อ้าง → (1) comment ของทุก `input` ต้องเป็น label เดียวกับคำที่ Claude ใช้สั่งงานวิน (2) ขั้นตอน UI ต้องอ้าง label ที่ปรากฏบนจอจริง (3) ไม่แน่ใจว่าจอวินแสดงอะไร → ขอ screenshot ก่อน ห้ามเดา (4) input ที่วินไม่ต้องตั้ง → แปลงเป็น const ให้ dialog เหลือเฉพาะที่ใช้จริง
 
 - **วินสั่ง "Engineer review"** → Engineer รายงาน: (1) ปัญหา + evidence (code line/log line) (2) root cause analysis (ไม่ใช่ symptom) (3) solution แบบ Production-Ready/Best Practice — **ห้าม workaround**
-- **วินสั่ง "Claude Verify"** → Claude: (1) วิเคราะห์ทุก finding ด้วย evidence จาก code/log จริง (2) เห็นทางที่ดีกว่า (ไม่ดรอปศักยภาพ → §หลักดีที่สุด) → เสนอ (3) เห็นด้วย → ต้อง verify ได้จริงว่า root cause + production-ready — **ห้าม rubber-stamp · ห้ามยอมรับ workaround แม้ Engineer เสนอ**
+- **วินสั่ง "Claude Verify"** → Claude: (1) วิเคราะห์ทุก finding ด้วย evidence จาก code/log จริง (2) เห็นทางที่ดีกว่า (ไม่ดรอปศักยภาพ → §หลักดีที่สุด) → เสนอ (3) เห็นด้วย → ต้อง verify ได้จริงว่า root cause + production-ready — **ห้าม rubber-stamp · ห้ามยอมรับ workaround แม้ Engineer เสนอ** · **รูปแบบ output (2026-10-21 · วินอนุมัติ):** หนึ่งแถวต่อหนึ่ง finding (ห้ามรวมแถว) · ทุกแถวมี `file:line`/output ที่ Claude เปิดเองในรอบนี้ + ผลตรวจ**ข้ออ้าง** (ตรรกะ/ความหมายถูกไหม) แยกจากการตรวจว่าบรรทัดมีอยู่ · ข้อที่ไม่ได้ตรวจเขียน "ไม่ได้ตรวจ" (บทเรียน: รับ "กฎขัดกัน" ของ Engineer โดยเช็คแค่ว่าบรรทัดมีอยู่ · รวม 6 finding เป็นแถวเดียว "จริงตามที่อ้าง")
 - **ตอบคำถามทั่วไป** → ห้ามคาดเดา/แต่งเติม · ไม่รู้ → "ไม่รู้" ตรงๆ (evidence-required = Working Rule 7)
 
 ## Honest Reporting (ความซื่อสัตย์เหนือความน่าประทับใจ)
@@ -142,6 +142,12 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 ## Tool-call Syntax
 - ทุก tool call ต้องใช้ tag namespace ครบ: `antml:invoke` / `antml:parameter` เสมอ
 - เขียน `<invoke>` / `<parameter>` เปล่า (ขาด `antml:`) = ระบบ parse ไม่ออก → กลายเป็นข้อความ ไม่ execute (ประกาศ "ทำต่อ" แต่ tool ไม่ทำงาน) — เช็ค tag เปิด/ปิดก่อนยิงทุกครั้ง
+
+## สนามรัน — Execution venue (บังคับ · วินสั่ง 2026-10-21)
+- **test / simulate / งานคำนวณทั้งหมด → 172.31.1.19** (selftest · accept · probe · smoke · regress · RG14 · certify · sim ใดๆ ที่ใช้ CPU/RAM) · รันผ่าน `Scripts/host19_run.py` ใต้ `/home/dev-ai/trellis-test/` เท่านั้น · เครื่อง local memory น้อย (RG14 Windows ถูก kill 22/50 · 27/50)
+- **ไม่รบกวน erfx บน .19:** ห้ามแตะ/ls/grep `~/erfx-test`, `~/erfx-ab` · ห้าม `ls ~` · ไม่แก้ dotfile/system/systemd/linger · tmux เฉพาะ `-L <socket ตัวเอง>` · ไฟล์ probe ใต้ `/home/dev-ai/trellis-test/probe_*` หรือ `/tmp/trlrev.*` แล้วลบ · runner รันด้วย nice 19 + choom 1000 (`host19_run.py`)
+- **local (เครื่องวิน) = เฉพาะสิ่งที่ต้องใช้ของบนเครื่องนี้:** package manifest+tar (git worktree + M1 ใน repo Gloo) · แก้เอกสาร/code · `ledger_check` / `card_scan` · **ไม่รัน background poll loop ยาว** (รอผลด้วย status check ครั้งเดียว)
+- **การนำไปใช้จริง = MT5 บนเครื่องวิน** (compile · deploy · Strategy Tester GUI ที่วินรันเอง · live/demo) ตาม § ถัดไป
 
 ## MT5 Backtest / Tester Workflow (บังคับ)
 - **Headless `terminal64.exe /config` ไม่ทำงานบนเครื่องนี้** — terminal restart ตัวเอง `launched with C:\` ทิ้ง config + LiveUpdate (auto-update) ดัก disable ไม่ได้ · **ห้ามลอง headless ซ้ำ** (ดู memory `reference-mt5-tester-workflow`)

@@ -109,16 +109,22 @@ def folds(yr, dayix, Nemb):
     return out
 
 
-def fit_predict(X, keep, tr, te, rlt, rst, dd, rw=None):
+def fit_predict(X, keep, tr, te, rlt, rst, dd, rw=None, return_w=False):
     """mirror wf ของ 0010 (:152-159) เป๊ะ — abstain (keep==0) → baseline dir (v4)
-    rw = recency weight (Card AD-1 §3.2 · extend-in-place) — rw=None = path เดิมทุก operation"""
+    rw = recency weight (Card AD-1 §3.2 · extend-in-place) — rw=None = path เดิมทุก operation
+    return_w (Card AD-4 §7(2c) · 2026-09-09 · วินอนุมัติ · backward-compatible): True → คืน (dp, w_vec)
+      w_vec = weight vector ของ fit_signedR (pre-sign · float · รวม intercept) · default False = path เดิมทุก operation
+      abstain (keep==0) + return_w=True → raise (ไม่มี w ให้คืน · RG3/RG15 AD-4) · default path คืน dd[te] เหมือนเดิม"""
     if keep.sum() == 0:
+        if return_w:
+            raise ValueError("fit_predict(return_w=True): abstain path (keep.sum()==0) ไม่มี w_vec")
         return dd[te]
     mu, sd = X[tr][:, keep].mean(0), X[tr][:, keep].std(0) + 1e-9
     Xs = np.c_[np.ones(len(X)), (X[:, keep] - mu) / sd]
     w = fit_signedR(Xs[tr], rlt, rst) if rw is None else fit_signedR(Xs[tr], rlt, rst, rw=rw)
     p = 1.0 / (1.0 + np.exp(-np.clip(Xs @ w, -30, 30)))
-    return np.where(p >= 0.5, 1, -1)[te]
+    dp = np.where(p >= 0.5, 1, -1)[te]
+    return (dp, w) if return_w else dp
 
 
 def payoff(dp, pL, pS, te):

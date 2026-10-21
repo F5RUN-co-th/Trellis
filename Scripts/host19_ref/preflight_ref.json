@@ -1,0 +1,64 @@
+{
+ "created": "2026-10-20 15:17:46",
+ "venue_emit": {
+  "python": "3.11.7",
+  "executable": "C:\\Program Files\\Python311\\python.exe",
+  "isolated": 0,
+  "numpy": "2.3.2",
+  "scipy": "1.17.1",
+  "numpy_file": "C:\\Users\\itd_surachartt\\AppData\\Roaming\\Python\\Python311\\site-packages\\numpy\\__init__.py",
+  "scipy_file": "C:\\Users\\itd_surachartt\\AppData\\Roaming\\Python\\Python311\\site-packages\\scipy\\__init__.py",
+  "dispatch_found": [
+   "SSSE3",
+   "SSE41",
+   "POPCNT",
+   "SSE42",
+   "AVX",
+   "F16C",
+   "FMA3",
+   "AVX2"
+  ],
+  "baseline": [
+   "SSE",
+   "SSE2",
+   "SSE3"
+  ],
+  "exp_f64": "AVX2",
+  "openblas": {
+   "numpy": {
+    "lib": "libscipy_openblas64_-860d95b1c38e637ce4509f5fa24fbf2a.dll",
+    "corename": "Haswell",
+    "threads": 1,
+    "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24"
+   },
+   "scipy": {
+    "lib": "libscipy_openblas-64eda39e79589aedb16f58e5547eb599.dll",
+    "corename": "Haswell",
+    "threads": 1,
+    "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24"
+   }
+  },
+  "float_repr": "short",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "machine": "AMD64"
+ },
+ "identity": {
+  "closure_sha": "9ed0224ca89c7d90058532f60383629b6db88e171d3d70140361fa1e384f1ace",
+  "SPEC_SHA": "98f2e73b2202f77d29c102e27103afa57cca9ff39fd837fb11ce0ebddaf82bbb",
+  "card_sha_runtime": "98f2e73b2202f77d29c102e27103afa57cca9ff39fd837fb11ce0ebddaf82bbb",
+  "n": 1486,
+  "NF": 19,
+  "Nemb": 2,
+  "fold_sizes": "[155,174,160,158,163]",
+  "prefix_sizes": "[114,129,120,117,120]",
+  "X_sha": "8713e7e517c52899c813ce222432c43d6c22099bc41a055508400dcd4d7d17fe",
+  "dayix_sha": "ae5d603f5b7929cc8dde8053ef025b01f4c5071743cc05850b4d46a588224ec6",
+  "h0_sha_lf": {
+   "h0_day_facts_2012_2020.csv": "4b146bf9d22e043bc419db69ad437ad61b44723079fbb6434028dcb4c6a41027",
+   "h0_pokefeat_2012_2020.csv": "8c9a945da90e5b8ba25008af2cc6628da5a911d5033048e0e97b52119771b4ed",
+   "h0_dcfeat_2012_2020.csv": "06528c37f9736a5376680a24b67730ba247f343b09d149400fdef9560576f406"
+  }
+ },
+ "X_npy": "preflight_ref_X.npy",
+ "X_npy_sha": "66a909340d89dd301878c9cc34f11c1407a19f10c4c7ae7bba62b42b399fc7db"
+}

@@ -229,7 +229,7 @@ def main():
     HTOK = {
         "RG13(ข) quantifier": (r"(∀|∃)\**\s*fold ≥2017", lambda m: m.group(1)),
         "fold 2016 annual arm": (r"fold 2016 (refit ≡ cache|refit == cache|= +cache|= +DIR_EXP_LIN +cache)", lambda m: "refit≡cache" if "refit" in m.group(1) else "cache-dispatch"),
-        "annual_fn default": (r"annual_fn=(\w+)\)", lambda m: m.group(1)),
+        "annual_fn default": (r"annual_fn=(\w+)[,)]", lambda m: m.group(1)),   # v6: §7(3) signature ต่อด้วย , detail/folds
         "RG10 comparator": (r"dp == (dpA_draw|DIR_EXP_LIN)", lambda m: m.group(1)),
         "R6 cell-scope": (r"(?:7 (?:POWER_CELLS|cells) \**ของ \**|rule R6 บน )(PRIMARY|null ของ main|C1-\w+|b=7)", lambda m: m.group(1)),
     }

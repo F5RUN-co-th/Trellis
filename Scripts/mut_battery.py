@@ -94,7 +94,7 @@ def battery(R, SCAN, M):
     # (H) duplicate-operative (must be caught by (H) specifically)
     mut("(J) §4 RG13(ข) ∀→∃ (retired quantifier · N10)", s.replace("∧ **∀** fold ≥2017 `w_vec` ≠ `W_EXP_LIN[i]` — ทุก fold ≥2017 base มีแถวหมุนโดย", "∧ **∃** fold ≥2017 `w_vec` ≠ `W_EXP_LIN[i]` — ทุก fold ≥2017 base มีแถวหมุนโดย", 1), need="N10 FAIL")
     mut("(H) reintroduce 'fold 2016 = DIR_EXP_LIN cache' in §4 RG10", s.replace("fold 2016 refit ≡ cache โดยโครงสร้าง —", "fold 2016 = `DIR_EXP_LIN` cache —", 1), need="DUP-OPERATIVE FAIL")
-    mut("(H) annual_fn default cache in §7(3)", s.replace("rotate_payoff=True, annual_fn=refit_annual)` [sync (2b)", "rotate_payoff=True, annual_fn=cache_annual)` [sync (2b)", 1), need="DUP-OPERATIVE FAIL")
+    mut("(H) annual_fn default cache in §7(3)", s.replace("rotate_payoff=True, annual_fn=refit_annual, detail=False, folds=None)` [sync (2b)", "rotate_payoff=True, annual_fn=cache_annual, detail=False, folds=None)` [sync (2b)", 1), need="DUP-OPERATIVE FAIL")
     # (H′) N7 invariant
     mut("(H′) restate assert in N7", s.replace("N7 ถือเฉพาะ **raise-class**", "N7 ถือเฉพาะ **raise-class** · RG11 `assert array_equal(where(segm)[0], seg)`", 1), need="N7 FAIL")
     # (I) derived
@@ -123,11 +123,11 @@ def battery(R, SCAN, M):
     mut("(K) ลบ token power_1 CRLF (ไม่ครบ 2 convention)", s.replace("power_1 `49a26d47…fb52a` · ", "", 1), need="RECORD-SHA FAIL")
     import hashlib
     ad4_src = io.open(os.path.join(M, "Scripts", "ad4_card.py"), encoding="utf-8").read()
-    PIN = ('\n# --- pin block (battery dry-run) ---\nSPEC_SHA = "%s"\nKS_T_UNITS = 23\nKS_ACHIEVED = 0.0475\nRG14_TAGS = tuple(f"ad4_rg14_w{k}" for k in range(50))\n')
+    PIN = ('\n# --- pin block (battery dry-run) ---\nSPEC_SHA = "%s"\nKS_T_UNITS = 23\nKS_ACHIEVED = 0.0475\nRG14_TAGS = tuple(f"ad4_rg14_w{k}" for k in range(50, 100))\n')
     good = ad4_src + PIN % hashlib.sha256(s.encode("utf-8")).hexdigest()
     mut_script("(J) dry-run pin block ถูก → PASS + ==", good, expect=(0,), need="spec-pin (J): SPEC_SHA == sha256(LF card)")
     mut_script("(J) pin KS_T_UNITS=99", good.replace("KS_T_UNITS = 23", "KS_T_UNITS = 99", 1), need="SPEC-PIN FAIL (J): KS_T_UNITS")
-    mut_script("(J) pin RG14_TAGS range(7)", good.replace("range(50)", "range(7)"), need="SPEC-PIN FAIL (J): RG14_TAGS")   # replace ทุก occurrence — pin จริงมี range(50) อยู่แล้ว (ast: assignment สุดท้ายชนะ)
+    mut_script("(J) pin RG14_TAGS range(7)", good.replace("range(50, 100)", "range(7)"), need="SPEC-PIN FAIL (J): RG14_TAGS")   # replace ทุก occurrence — pin จริงมี range(50, 100) อยู่แล้ว (ast: assignment สุดท้ายชนะ)
     mut_script("(J) SPEC_SHA ปลอม", ad4_src + PIN % ("0" * 64), need="SPEC-PIN FAIL (J): SPEC_SHA")
     # v10 รอบ 23 — (K) fail-closed + --require-pin
     l149_line = next(l for l in L if l.startswith("- **SHA-256 `Scripts/ad4_cert_out/`"))
