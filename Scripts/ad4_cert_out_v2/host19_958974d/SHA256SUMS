@@ -1,0 +1,28 @@
+# host19_958974d = สำเนา byte-exact ของ B บน 172.31.1.19 (S1 958974d · closure 9ed0224c · SPEC_SHA 98f2e73b) · ดึงกลับ 2026-10-22 ผ่าน tar · sha คำนวณบน .19 ก่อนดึง แล้ว sha256sum --strict -c บน local ผ่าน 22/22
+# convention: sha256 ของ raw bytes = git blob (.gitattributes `Scripts/ad4_cert_out_v2/** -text` · ไม่แปลง eol) · v1 Scripts/ad4_cert_out/ ใช้ card_scan (K) แบบ LF+CRLF dual (คนละ convention)
+# layout = <rundir> ของ host19_run.py (run/ + repo/Scripts/ad4_cert_out_v2/) + manifest.json + driver/out + accept out · ห้ามวางไฟล์ใดเพิ่มใต้ run/ (judge glob run/*.log)
+# accept บน archive: host19_accept.py <this dir> ผ่านได้เฉพาะเมื่อ closure ของ repo ที่รัน = 9ed0224c (import ad4_card จาก repo ที่รัน · host19_accept.py:60-64) · closure เปลี่ยนแล้ว INVALID = ถูกต้อง · รันบน .19 ตาม CLAUDE.md §สนามรัน
+# b_958974d.sh เก็บ byte-exact (ห้ามแก้) · ข้อจำกัด: exit ท้ายสุด = 0 เสมอ (echo ตัวสุดท้าย) · ตัดสินจาก "<mode> exit=" ใน .out · บรรทัด stray (pgrep -af trellis-test) จับ shell อื่นที่ cmdline มีคำนี้ได้ = ไม่ใช่ gate (gate = kill-orphan)
+# accept_958974d.out = host19_accept.py run_958974d --local-ck <checkpoint_v6_local_9ed0224c_22of50.json sha256 11f92be2…> · rc=0 (PIPESTATUS[0])
+837ce58cee8f95343be22993a1bd48fb2ed9019df48b32850841b00878e215e8  accept_958974d.out
+3a52e1027a80beb9b755dfd7b8f4e048b7c72c11722047b885382434275f2cd1  b_958974d.out
+f439594d6604623d811a7246ae2bc41c73229f761251569b3b7745461945f07e  b_958974d.sh
+3ee0a9717a6ed3f4360c0eccd147a6bd3eedba15abfac56aa870b06f54cae3e2  manifest.json
+8f190b62f5d2e05177cde042e8ad435b1cf15c8e920a7fbee9b6a4860e391963  repo/Scripts/ad4_cert_out_v2/regress_receipt.json
+9bd34b7734194455d893453840ea6307e0df285b0fd3cc16f471ebf1fc0ce329  repo/Scripts/ad4_cert_out_v2/rg14/checkpoint_v6.json
+72abb68538807892c54ba0eb69b11ddd4a38779567ec32b7dcc63881a1745927  run/current
+3850e9c61b3d9758e0f4c29918e44f5b79a7e44086c6d110bd52376e89f3d5dd  run/preflight.1.hb
+c49179c78031f33a098e1639624e86ee98c8fe36b193fe81fe0fba8cab141010  run/preflight.1.log
+d06b63c67ee2a07ba455cb87bfc11c8b13ceb3b5316d61226b9c79040cbe8eda  run/regress.1.hb
+02794bdc508ef63b012de85d7fee65cf7609c8c1cc765989404317993a7ea10d  run/regress.1.log
+423fd74f10f7cdad54836338e095b924152a590ac20115209d34c6cf9673b4e0  run/rg14.1.hb
+eb673b5651c8a24be29586ab290ad3637440783d4150f8040196a67dd3e80272  run/rg14.1.log
+007573e539763f14dc3e990966b273525b5c5eedf7acf392388fda371a49ddfa  run/super.1792570145849500680.err
+007573e539763f14dc3e990966b273525b5c5eedf7acf392388fda371a49ddfa  run/super.1792570175840205811.err
+007573e539763f14dc3e990966b273525b5c5eedf7acf392388fda371a49ddfa  run/super.1792571422040849134.err
+b584d0cc4112634e92295d44ae3f7df0f9b5626c0477c3376750b22fcf542220  run/venue.2d9ea3c4-3e85-4af6-8945-cee3469cbf0e.json
+9c3f2e6d35d90d30fc34c04c435e466fa0725278eb31a0708ba94af966995a13  run/venue.2d9ea3c4-3e85-4af6-8945-cee3469cbf0e.out
+a4f1262f706c905b83818029c2234d945a9a2c4b2b02dcecb8303d4de297591a  run/venue.44a3e5e7-af1c-4d82-af76-db38fd876c1c.json
+7c3450170ee01dcbda3f628a17d00b55ff0e26f81860d801e0d2f3c59776c366  run/venue.44a3e5e7-af1c-4d82-af76-db38fd876c1c.out
+5db2e6e5d24507afca6b6c79cf8c83f9e3f4c5aec51622d9c5fe88d58ac2881c  run/venue.a94ef3a0-79c2-4bb4-90f4-9a446598f1c0.json
+e85a05d3bf816f31e8ec7a740d9611896b2e643e8a1753f1df2dcda26a219064  run/venue.a94ef3a0-79c2-4bb4-90f4-9a446598f1c0.out

@@ -1,0 +1,21 @@
+cmd: python -W error::RuntimeWarning Scripts/ad4_card.py regress --skip-rg14 · start 2026-09-24 15:43:48
+[SETUP] n=1486 NF=19 folds=['2016', '2017', '2018', '2019', '2020'] (ตัด ['2015'] pre-registered) Nemb=2d α=0.0250
+[AD4] v2 · SPEC_SHA 98f2e73b2202… · card_sha_runtime 98f2e73b2202… · closure 9ed0224ca89c… · threads=1 · quarterly-on-real ⛔ (synthetic เท่านั้น)
+[AST] annual_fn call-site ≠ refit_annual = mode_regress เท่านั้น · positional ≤2 · ไม่มี */**args · def refit_annual 1 แห่ง · ไม่มี rebind/alias · self-test 7 mutation caught ✓
+[RG9] tag universe n=5871 · crc32 unique ✓ · birthday P(collision)=0.400% (emit · ไม่ pin)
+[RG2] trm(Q1) ≡ tr(fold) 5/5 ✓
+[RG1] segment-0 payoff identity บน production path (segs=(0,)) ทุก fold ✓
+[RG5] identity-π ≡ obs (float equality) · rotate True/False · s=0 และ π=arange ✓ · obs=+0.00132
+[RG3] X-untouched ✓ · [RG4] 4-tuple π เดียวกัน + rs=−rl ✓ · [RG6] embargo ✓ · [RG10] two-arm invariant (605 แถว dp==dpA → Δ=0.0) ✓ · [RG11] index ✓
+[RG13] (ก) s=0: refit ≡ cache (dpA + w_vec) ทุก fold ✓ · (ข) s≠0: fold 2016 w_vec == cache ∧ ∀ fold ≥2017 w_vec ≠ cache ✓
+[RG15] fit_predict default ≡ return_w[0] · sha256 == baseline 3763a8488c61… · keep=zeros → dd[te] · return_w+zeros → raise ✓
+[RG12] ks_units int ✓ · boundary ks_units == KS_T_UNITS·100 = 2300 → eligible (> strict) ✓
+[RG12] v6 C′: natural ties (engrg12_stable_2 · n_ties=24 atom_max=24 p_ge=0.62 p_gt=0.38) ไม่ raise ✓ · rule B0=99/19/9 ✓ · collapse ที่สร้าง รหัส 1 (obs≡0) / 2 (obs=+0.0054) / 3 hi (+0.0088 → p=1) / 3 lo (-0.0002 → p=.05): stable → raise · h0cal/main → flag + p_ge ✓
+[RG7] oracle stable k=0: p=0.190000 nm=-0.000147 ✓ (73s)
+[RG7] oracle stable k=1: p=0.040000 nm=0.020019 ✓ (146s)
+[RG7] oracle flip0 k=0: p=0.520000 nm=0.000571 ✓ (235s)
+[worlds] H0-C prefix rows=600 (labels noise) · stress σ: sd(log σ)=0.960 max/med=7.3 ramp_share=0.577
+[smoke] p_one(H0-C · B0=19) obs=+0.0054 p=0.20 null_mean=-0.0004 n_distinct=19 · schema keys=39
+[RG14] SKIPPED (--skip-rg14) — regress ยังไม่ครบ RG1-RG15 · ต้องรัน `rg14` แยก
+[regress] RG1-RG13 · RG15 PASS · RG14 SKIPPED
+[receipt] regress ✓ · closure 9ed0224ca89c… · SPEC_SHA 98f2e73b2202… · regress=True rg14=False

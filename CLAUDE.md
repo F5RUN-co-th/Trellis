@@ -144,7 +144,7 @@ Strategy บน Gold + lot scaling "ระเบิดบัญชี" ง่า
 - เขียน `<invoke>` / `<parameter>` เปล่า (ขาด `antml:`) = ระบบ parse ไม่ออก → กลายเป็นข้อความ ไม่ execute (ประกาศ "ทำต่อ" แต่ tool ไม่ทำงาน) — เช็ค tag เปิด/ปิดก่อนยิงทุกครั้ง
 
 ## สนามรัน — Execution venue (บังคับ · วินสั่ง 2026-10-21)
-- **test / simulate / งานคำนวณทั้งหมด → 172.31.1.19** (selftest · accept · probe · smoke · regress · RG14 · certify · sim ใดๆ ที่ใช้ CPU/RAM) · รันผ่าน `Scripts/host19_run.py` ใต้ `/home/dev-ai/trellis-test/` เท่านั้น · เครื่อง local memory น้อย (RG14 Windows ถูก kill 22/50 · 27/50)
+- **test / simulate / งานคำนวณทั้งหมด → 172.31.1.19** (selftest · accept · probe · smoke · regress · RG14 · certify · sim ใดๆ ที่ใช้ CPU/RAM) · workload (preflight · regress · RG14 · pilot · certify) รันผ่าน `Scripts/host19_run.py` เท่านั้น · งานเบาที่ runner ไม่มีโหมด (selftest · accept · probe) รันตรงด้วย `nice -n 19 python/bin/python3.11 -I -B` · ทั้งหมดใต้ `/home/dev-ai/trellis-test/` · artifact ที่สร้างหลังรันห้ามอยู่ใน `run_<x>/` · เครื่อง local memory น้อย (RG14 Windows ถูก kill 22/50 · 27/50)
 - **ไม่รบกวน erfx บน .19:** ห้ามแตะ/ls/grep `~/erfx-test`, `~/erfx-ab` · ห้าม `ls ~` · ไม่แก้ dotfile/system/systemd/linger · tmux เฉพาะ `-L <socket ตัวเอง>` · ไฟล์ probe ใต้ `/home/dev-ai/trellis-test/probe_*` หรือ `/tmp/trlrev.*` แล้วลบ · runner รันด้วย nice 19 + choom 1000 (`host19_run.py`)
 - **local (เครื่องวิน) = เฉพาะสิ่งที่ต้องใช้ของบนเครื่องนี้:** package manifest+tar (git worktree + M1 ใน repo Gloo) · แก้เอกสาร/code · `ledger_check` / `card_scan` · **ไม่รัน background poll loop ยาว** (รอผลด้วย status check ครั้งเดียว)
 - **การนำไปใช้จริง = MT5 บนเครื่องวิน** (compile · deploy · Strategy Tester GUI ที่วินรันเอง · live/demo) ตาม § ถัดไป

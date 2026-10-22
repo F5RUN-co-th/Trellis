@@ -1,0 +1,8 @@
+[accept] b_start=2026-10-21 08:09:09 (UTC · derived)
+  preflight.1.log: OK (child_class=OK · rc=0)
+  regress.1.log: OK (child_class=OK · rc=0)
+  rg14.1.log: PASS (child_class=PASS · rc=0)
+  ตรวจครบ: fingerprint คงที่ · card/SPEC/closure · receipt หลัง B start · 50 world มีบรรทัดสดตรง checkpoint
+[accept] STATE = PASS
+[report 22-world · ไม่ใช่ gate] world ที่ int ไม่ตรง: 0/22 · max d_ulp (sd/q95) ต่อ world: w50=0, w51=0, w52=0, w53=0, w54=0, w55=0, w56=0, w57=0, w58=0, w59=0, w60=0, w61=0, w62=0, w63=0, w64=0, w65=0, w66=0, w67=0, w68=0, w69=0, w70=0, w71=0
+  ตีความ: .19 ต่าง Windows = residual ข้าม venue · ห้ามอ้างเทียบเท่าถ้า int ไม่ตรง
