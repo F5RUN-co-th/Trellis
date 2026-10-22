@@ -1,0 +1,47 @@
+[run] start mode=regress att=1 ts=2026-10-21 08:09:39 run_id=44a3e5e7-af1c-4d82-af76-db38fd876c1c oom_kill=0 seq=78 ns=1792570175840205811 boot_id=b6d8e87a-426b-434a-9608-eb4131b63eaf sup=3006172:2234908674 bt=22349086852049792
+[venue] {"python": "3.11.7", "executable": "/home/dev-ai/trellis-test/python/bin/python3.11", "isolated": 1, "numpy": "2.3.2", "scipy": "1.17.1", "numpy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/numpy/__init__.py", "scipy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/scipy/__init__.py", "dispatch_found": ["SSSE3", "SSE41", "POPCNT", "SSE42", "AVX", "F16C", "FMA3", "AVX2"], "baseline": ["SSE", "SSE2", "SSE3"], "exp_f64": "AVX2", "openblas": {"numpy": {"lib": "libscipy_openblas64_-8fb3d286.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}, "scipy": {"lib": "libscipy_openblas-6cdc3b4a.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}}, "float_repr": "short", "platform": "Linux-6.8.0-94-generic-x86_64-with-glibc2.39", "machine": "x86_64", "host_sha": "ad6c36b6fc0a00328afea8c59eca04e76e130faa35353be722e32c49dbaa2b1d", "libc": "glibc 2.39", "sha_libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0", "sha_libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"}
+Core: Haswell
+[SETUP] n=1486 NF=19 folds=['2016', '2017', '2018', '2019', '2020'] (ตัด ['2015'] pre-registered) Nemb=2d α=0.0250
+[AD4] v2 · SPEC_SHA 98f2e73b2202… · card_sha_runtime 98f2e73b2202… · closure 9ed0224ca89c… · threads=1 · quarterly-on-real ⛔ (synthetic เท่านั้น)
+[AST] annual_fn call-site ≠ refit_annual = mode_regress เท่านั้น · positional ≤2 · ไม่มี */**args · def refit_annual 1 แห่ง · ไม่มี rebind/alias · self-test 7 mutation caught ✓
+[RG9] tag universe n=5871 · crc32 unique ✓ · birthday P(collision)=0.400% (emit · ไม่ pin)
+[RG2] trm(Q1) ≡ tr(fold) 5/5 ✓
+[RG1] segment-0 payoff identity บน production path (segs=(0,)) ทุก fold ✓
+[RG5] identity-π ≡ obs (float equality) · rotate True/False · s=0 และ π=arange ✓ · obs=+0.00132
+[RG3] X-untouched ✓ · [RG4] 4-tuple π เดียวกัน + rs=−rl ✓ · [RG6] embargo ✓ · [RG10] two-arm invariant (605 แถว dp==dpA → Δ=0.0) ✓ · [RG11] index ✓
+[RG13] (ก) s=0: refit ≡ cache (dpA + w_vec) ทุก fold ✓ · (ข) s≠0: fold 2016 w_vec == cache ∧ ∀ fold ≥2017 w_vec ≠ cache ✓
+[RG15] fit_predict default ≡ return_w[0] · sha256 == baseline 3763a8488c61… · keep=zeros → dd[te] · return_w+zeros → raise ✓
+[RG12] ks_units int ✓ · boundary ks_units == KS_T_UNITS·100 = 2300 → eligible (> strict) ✓
+[RG12] v6 C′: natural ties (engrg12_stable_2 · n_ties=24 atom_max=24 p_ge=0.62 p_gt=0.38) ไม่ raise ✓ · rule B0=99/19/9 ✓ · collapse ที่สร้าง รหัส 1 (obs≡0) / 2 (obs=+0.0054) / 3 hi (+0.0088 → p=1) / 3 lo (-0.0002 → p=.05): stable → raise · h0cal/main → flag + p_ge ✓
+[RG7] oracle stable k=0: p=0.190000 nm=-0.000147 ✓ (153s)
+[RG7] oracle stable k=1: p=0.040000 nm=0.020019 ✓ (305s)
+[RG7] oracle flip0 k=0: p=0.520000 nm=0.000571 ✓ (455s)
+[worlds] H0-C prefix rows=600 (labels noise) · stress σ: sd(log σ)=0.960 max/med=7.3 ramp_share=0.577
+[smoke] p_one(H0-C · B0=19) obs=+0.0054 p=0.20 null_mean=-0.0004 n_distinct=19 · schema keys=39
+[RG14] SKIPPED (--skip-rg14) — regress ยังไม่ครบ RG1-RG15 · ต้องรัน `rg14` แยก
+[regress] RG1-RG13 · RG15 PASS · RG14 SKIPPED
+[receipt] regress ✓ · closure 9ed0224ca89c… · SPEC_SHA 98f2e73b2202… · regress=True rg14=False
+	Command being timed: "/home/dev-ai/trellis-test/python/bin/python3.11 -u -I -B -W error::RuntimeWarning Scripts/ad4_card.py regress --skip-rg14"
+	User time (seconds): 1240.77
+	System time (seconds): 1.67
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 20:42.54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1602956
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 357845
+	Voluntary context switches: 1
+	Involuntary context switches: 2336
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 72
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[run] end rc=0 oom_kill=0 seq=78 cause=child-exit viol=- note=environ-unreadable=2

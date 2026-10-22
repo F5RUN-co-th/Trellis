@@ -9,6 +9,8 @@ Scripts/*.ex5
 # Logs
 compile.log
 *.log
+# record ของ Scripts/ad4_cert_out_v2/ (log ของ run บน .19) ต้อง track — คู่กับ .gitattributes -text
+!Scripts/ad4_cert_out_v2/**/*.log
 
 # MetaEditor temp files
 *.tmp
