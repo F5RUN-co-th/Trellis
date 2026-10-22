@@ -1,0 +1,1 @@
+{"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22344486800064206, "cause": "state", "left": [], "mode": "t-exit0", "ns0": 1792565575787942770, "pid": 2870187, "rc": 77, "reason": "$ROOT/seq หายทั้งที่มี record 71 ไฟล์ (seq reset) · ห้ามเริ่ม · ตรวจ/คืน seq ด้วยมือ", "run_id": null, "seq": null, "seq_seen": 0, "ts": "2026-10-21 06:52:55", "viol": []}

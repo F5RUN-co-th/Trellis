@@ -1,0 +1,1 @@
+{"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22338319290789314, "cause": "pre-lock-assert", "left": [], "mode": "preflight", "ns0": 1792559408293961997, "pid": 2863644, "rc": 77, "reason": "['TRELLIS_TEST_KILLFAIL'] ใน mode preflight", "run_id": null, "seq": null, "seq_seen": 12, "ts": "2026-10-21 05:10:08", "viol": []}

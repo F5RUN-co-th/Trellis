@@ -1,0 +1,34 @@
+=== preflight
+[run] supervisor pid=2870656 ns=1792565624522593442 mode=preflight
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=3'] log=preflight.1.log
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+exit=0
+=== regress
+[run] supervisor pid=2870715 ns=1792565653324938482 mode=regress
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=3'] log=regress.1.log
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+exit=0
+=== rg14 (abort หลัง checkpoint 3/50)
+[abort] honored run_id=b338fc8d-329f-48fe-b543-b237d96ea15d
+abort exit=0
+front exit=77
+[run] supervisor pid=2922444 ns=1792566983517793225 mode=rg14
+[run] end rc=143 cause=abort viol=- note=['environ-unreadable=4'] log=rg14.1.log
+[run] label verdict=ABORT child_class=ABORT (honored (บรรทัด + .taken)) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+=== compare checkpoint (float เต็ม) กับ smoke A2
+ad4_rg14_w50 EQUAL {}
+ad4_rg14_w51 EQUAL {}
+ad4_rg14_w52 EQUAL {}
+A2 keys ['ad4_rg14_w50', 'ad4_rg14_w51', 'ad4_rg14_w52'] new keys ['ad4_rg14_w50', 'ad4_rg14_w51', 'ad4_rg14_w52']
+=== kill-orphan sweep หลัง series
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(2870540, 'systemd'), (2870541, '(sd-pam)'), (2870650, 'sshd')]
+[kill-orphan] ไม่มีเป้า
+sweep exit=0
+=== end lines
+preflight.1.log: [run] end rc=0 oom_kill=0 seq=74 cause=child-exit viol=- note=environ-unreadable=3
+regress.1.log: [run] end rc=0 oom_kill=0 seq=75 cause=child-exit viol=- note=environ-unreadable=3
+rg14.1.log: [run] end rc=143 oom_kill=0 seq=76 cause=abort viol=- note=environ-unreadable=4
+=== gates
+none
+=== stray
+none

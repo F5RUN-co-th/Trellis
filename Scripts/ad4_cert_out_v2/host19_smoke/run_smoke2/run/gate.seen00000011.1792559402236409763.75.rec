@@ -1,0 +1,1 @@
+{"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22338313235919998, "cause": "lock-busy", "left": [], "mode": "t-exit0", "ns0": 1792559402236409763, "pid": 2863630, "rc": 75, "reason": "global lock ไม่ว่าง", "run_id": null, "seq": null, "seq_seen": 11, "ts": "2026-10-21 05:10:02", "viol": []}

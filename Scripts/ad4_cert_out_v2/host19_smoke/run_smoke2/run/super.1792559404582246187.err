@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/dev-ai/trellis-test/run_smoke2/repo/Scripts/host19_run.py", line 424, in _step
+    fn()
+  File "/home/dev-ai/trellis-test/run_smoke2/repo/Scripts/host19_run.py", line 444, in s2
+    if self.test_flag("TRELLIS_TEST_RAISE_AFTER_REAP"): raise RuntimeError("TRELLIS_TEST_RAISE_AFTER_REAP")
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: TRELLIS_TEST_RAISE_AFTER_REAP

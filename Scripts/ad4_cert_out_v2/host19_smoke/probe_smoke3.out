@@ -1,0 +1,307 @@
+
+=== A t-exit0
+[run] supervisor pid=2869482 ns=1792565360745601413 mode=t-exit0
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=2', 'no-leaf-check'] log=t-exit0.1.log
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE A exit=0
+
+=== B t-raise
+[run] supervisor pid=2869488 ns=1792565364286799680 mode=t-raise
+[run] end rc=1 cause=child-exit viol=- note=['environ-unreadable=2', 'no-leaf-check'] log=t-raise.1.log
+[run] label verdict=INVALID child_class=INVALID (rc=1) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE B exit=1
+
+=== C t-137
+[run] supervisor pid=2869544 ns=1792565367872862645 mode=t-137
+[run] end rc=137 cause=child-exit viol=- note=['environ-unreadable=2', 'no-leaf-check'] log=t-137.1.log
+[run] label verdict=INVALID child_class=INVALID (rc=137) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE C exit=137
+
+=== D t-bg
+[run] supervisor pid=2869551 ns=1792565371747216799 mode=t-bg
+[run] end rc=0 cause=child-exit viol=['leftover'] note=['environ-unreadable=2', 'no-leaf-check'] log=t-bg.1.log
+[run] label verdict=INVALID child_class=OK (viol=leftover) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE D exit=77
+
+=== E t-escape
+[run] supervisor pid=2869559 ns=1792565375403806736 mode=t-escape
+[run] end rc=143 cause=viol-teardown viol=['escape'] note=['environ-unreadable=2'] log=t-escape.1.log
+[run] label verdict=INVALID child_class=INVALID (viol=escape) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE E exit=77
+
+=== F t-envclr
+[run] supervisor pid=2869567 ns=1792565379365982380 mode=t-envclr
+[run] end rc=143 cause=viol-teardown viol=['escape'] note=['environ-unreadable=2'] log=t-envclr.1.log
+[run] label verdict=INVALID child_class=INVALID (viol=escape) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE F exit=77
+
+=== G t-pause
+[run] supervisor pid=2869575 ns=1792565383556465296 mode=t-pause
+[run] end rc=143 cause=deadline-stall viol=- note=['environ-unreadable=2'] log=t-pause.1.log
+[run] label verdict=INVALID child_class=INVALID (cause=deadline-stall) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE G exit=77
+
+=== Y t-spawnfail (argv[0] ไม่มี)
+[run] supervisor pid=2869641 ns=1792565407407726878 mode=t-spawnfail
+[run] end rc=77 cause=spawn-fail viol=- note=['environ-unreadable=2', 'spawn-FileNotFoundError'] log=t-spawnfail.1.log
+[run] label verdict=INVALID child_class=INVALID (cause=spawn-fail) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE Y exit=77
+
+=== H abort
+[abort] honored run_id=61e43ee6-b284-4430-9751-b98fb1532df0
+CASE H_client exit=0
+CASE H exit=77
+[run] supervisor pid=2869648 ns=1792565411216829597 mode=t-sleep
+[run] end rc=143 cause=abort viol=- note=['environ-unreadable=2'] log=t-sleep.1.log
+[run] label verdict=ABORT child_class=ABORT (honored (บรรทัด + .taken)) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+
+=== I TERM
+CASE I exit=77
+[run] supervisor pid=2869658 ns=1792565421412720051 mode=t-sleep
+[run] end rc=143 cause=signal viol=- note=['environ-unreadable=2'] log=t-sleep.2.log
+[run] label verdict=INVALID child_class=INVALID (cause=signal) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+
+=== R TERM×200
+CASE R exit=77
+[run] supervisor pid=2869721 ns=1792565429506286238 mode=t-sleep
+[run] end rc=143 cause=signal viol=- note=['environ-unreadable=2'] log=t-sleep.3.log
+[run] label verdict=INVALID child_class=INVALID (cause=signal) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+R end lines: 1
+
+=== S HUP
+CASE S exit=77
+[run] supervisor pid=2869736 ns=1792565437652871870 mode=t-sleep
+[run] end rc=143 cause=signal viol=- note=['environ-unreadable=2'] log=t-sleep.4.log
+[run] label verdict=INVALID child_class=INVALID (cause=signal) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+
+=== T killpg child
+CASE T exit=143
+[run] supervisor pid=2869746 ns=1792565445791375717 mode=t-sleep
+[run] end rc=143 cause=child-exit viol=- note=['environ-unreadable=2'] log=t-sleep.5.log
+[run] label verdict=INVALID child_class=INVALID (rc=143) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+
+=== J lock busy
+[run] supervisor pid=2869825 ns=1792565461919491495 mode=t-exit0
+[run] gate rc=75 cause=lock-busy reason=global lock ไม่ว่าง viol=[]
+CASE J exit=75
+CASE J_first exit=77
+
+=== K RAISE_AFTER_REAP
+[run] supervisor pid=2869828 ns=1792565464307818273 mode=t-exit0
+[run] end rc=0 cause=child-exit viol=['internal'] note=['environ-unreadable=2', 'no-leaf-check'] log=t-exit0.2.log
+[run] label verdict=INVALID child_class=OK (viol=internal) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE K exit=77
+[run] end rc=0 oom_kill=0 seq=52 cause=child-exit viol=internal note=environ-unreadable=2,no-leaf-check
+"state": "exited"
+
+=== N TEST env ใน mode จริง
+[run] supervisor pid=2869839 ns=1792565467942647730 mode=preflight
+[run] gate rc=77 cause=pre-lock-assert reason=['TRELLIS_TEST_KILLFAIL'] ใน mode preflight viol=[]
+CASE N exit=77
+
+=== P launcher SIGCHLD=IGN
+[run] supervisor pid=2869841 ns=1792565468192969892 mode=t-raise
+[run] end rc=1 cause=child-exit viol=- note=['environ-unreadable=2', 'no-leaf-check'] log=t-raise.2.log
+[run] label verdict=INVALID child_class=INVALID (rc=1) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE P exit=1
+
+=== Q t-* นอก run_smoke*
+[run] mode t-exit0 ใช้ได้เฉพาะ RUNDIR run_smoke*
+CASE Q exit=77
+
+=== Z tmp ค้างก่อน start
+[run] supervisor pid=2869855 ns=1792565471905433323 mode=t-exit0
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=2', 'no-leaf-check'] log=t-exit0.3.log
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE Z exit=0
+run_smoke3/run/t-exit0.3.log
+
+=== L KILLFAIL
+CASE L exit=77
+[run] supervisor pid=2869864 ns=1792565475838295437 mode=t-ignterm
+[run] end rc=143 cause=abort viol=['killfail', 'leftover'] note=['environ-unreadable=2'] log=t-ignterm.1.log
+[run] label verdict=INVALID child_class=INVALID (viol=killfail,leftover) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+[run] gate rc=77 cause=stale-run reason=run 743704c3-eb95-406f-b88f-0400af5831e9 ไม่ resolved และ supervisor ตาย → kill-orphan ก่อน viol=[]
+CASE L_next exit=77
+[run] gate rc=77 cause=stale-run reason=run 743704c3-eb95-406f-b88f-0400af5831e9 ไม่ resolved และ supervisor ตาย → kill-orphan ก่อน viol=[]
+CASE L_next2 exit=77
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+[kill-orphan] 743704c3-eb95-406f-b88f-0400af5831e9: kill 1 · orphan.rec → /home/dev-ai/trellis-test/run_smoke3
+CASE L_ko exit=0
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE L_after exit=0
+
+=== L2 KILLFAIL ตัวรอดล้าง env → kill ผ่าน left= เท่านั้น
+CASE L2 exit=77
+[run] supervisor pid=2869943 ns=1792565520567105877 mode=t-envclr
+[run] end rc=143 cause=viol-teardown viol=['escape'] note=['environ-unreadable=2'] log=t-envclr.2.log
+[run] label verdict=INVALID child_class=INVALID (viol=escape) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+[kill-orphan] ไม่มีเป้า
+CASE L2_ko exit=0
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE L2_after exit=0
+
+=== M kill -9 supervisor
+CASE M exit=77
+[run] supervisor pid=2870024 ns=1792565538467413010 mode=t-sleep
+[run] ไม่มี record ของ ns=1792565538467413010 (supervisor rc=137) · ดู run/super.1792565538467413010.err
+[abort] E77:run-died run_id=7c138ad6-c93f-4516-a4ce-da2b3232d560 (supervisor ตาย · start ถัดไปจะได้ stale-run → kill-orphan)
+CASE M_abort exit=77
+[run] gate rc=77 cause=stale-run reason=run 7c138ad6-c93f-4516-a4ce-da2b3232d560 ไม่ resolved และ supervisor ตาย → kill-orphan ก่อน viol=[]
+CASE M_next exit=77
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+[kill-orphan] 7c138ad6-c93f-4516-a4ce-da2b3232d560: kill 2 · orphan.rec → /home/dev-ai/trellis-test/run_smoke3
+CASE M_ko exit=0
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE M_after exit=0
+
+=== V abort ระหว่าง venue
+CASE V exit=77
+[run] supervisor pid=2870051 ns=1792565550865911404 mode=t-exit0
+[run] gate rc=77 cause=abort reason=ระหว่าง venue: abort viol=[]
+V new LOG: 0
+
+=== W TERM ระหว่าง venue
+CASE W exit=77
+[run] supervisor pid=2870115 ns=1792565553598531426 mode=t-exit0
+[run] gate rc=77 cause=signal reason=ระหว่าง venue: signal viol=[]
+W new LOG: 0
+
+=== W2 kill -9 ระหว่าง venue → stale → kill-orphan → 0
+CASE W2 exit=77
+[run] gate rc=77 cause=stale-run reason=run 80ff0c28-14cf-4bbe-a1d4-d880a260661c ไม่ resolved และ supervisor ตาย → kill-orphan ก่อน viol=[]
+CASE W2_next exit=77
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+[kill-orphan] 80ff0c28-14cf-4bbe-a1d4-d880a260661c: kill 1 · orphan.rec → /home/dev-ai/trellis-test/run_smoke3
+CASE W2_ko exit=0
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE W2_after exit=0
+
+=== X orphan ข้าม RUNDIR (C3)
+[run] gate rc=77 cause=orphan-env reason=มี process ที่ถือ TRELLIS_RUN_ID ['4dcc1aff-d4ce-4825-b51d-e848f70c7fa6'] → kill-orphan viol=[]
+CASE X_2b exit=77
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+[kill-orphan] 4dcc1aff-d4ce-4825-b51d-e848f70c7fa6: kill 2 · orphan.rec → /home/dev-ai/trellis-test/run_smoke3
+CASE X_ko exit=0
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE X_2b_after exit=0
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+CASE X_after exit=0
+
+=== F11 left= ของ boot อื่น ต้องไม่ถูก kill
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+[kill-orphan] uF11: kill 0 · orphan.rec → /home/dev-ai/trellis-test/run_smoke3n
+CASE F11_ko exit=0
+F11 sleeper alive (คาด)
+
+=== SEQ seq หายทั้งที่มี record
+[run] gate rc=77 cause=state reason=$ROOT/seq หายทั้งที่มี record 71 ไฟล์ (seq reset) · ห้ามเริ่ม · ตรวจ/คืน seq ด้วยมือ viol=[]
+CASE SEQ exit=77
+
+=== OLD dir format เก่า (run_smoke2f)
+[run] host19_run.py ต้องอยู่ใน /home/dev-ai/trellis-test/run_smoke2f/repo/Scripts (ได้ /home/dev-ai/trellis-test/run_smoke3/repo/Scripts/host19_run.py)
+CASE OLD exit=77
+=== super.err ของ OLD
+
+=== end lines
+t-137.1.log: [run] end rc=137 oom_kill=0 seq=40 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-bg.1.log: [run] end rc=0 oom_kill=0 seq=41 cause=child-exit viol=leftover note=environ-unreadable=2,no-leaf-check
+t-envclr.1.log: [run] end rc=143 oom_kill=0 seq=43 cause=viol-teardown viol=escape note=environ-unreadable=2
+t-envclr.2.log: [run] end rc=143 oom_kill=0 seq=59 cause=viol-teardown viol=escape note=environ-unreadable=2
+t-escape.1.log: [run] end rc=143 oom_kill=0 seq=42 cause=viol-teardown viol=escape note=environ-unreadable=2
+t-exit0.1.log: [run] end rc=0 oom_kill=0 seq=38 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-exit0.2.log: [run] end rc=0 oom_kill=0 seq=52 cause=child-exit viol=internal note=environ-unreadable=2,no-leaf-check
+t-exit0.3.log: [run] end rc=0 oom_kill=0 seq=54 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-exit0.4.log: [run] end rc=0 oom_kill=0 seq=58 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-exit0.5.log: [run] end rc=0 oom_kill=0 seq=60 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-exit0.6.log: [run] end rc=0 oom_kill=0 seq=63 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-exit0.7.log: [run] end rc=0 oom_kill=0 seq=68 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-exit0.8.log: [run] end rc=0 oom_kill=0 seq=72 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-ignterm.1.log: [run] end rc=143 oom_kill=0 seq=55 cause=abort viol=killfail,leftover left=2869868:2234439014 note=environ-unreadable=2
+t-pause.1.log: [run] end rc=143 oom_kill=0 seq=44 cause=deadline-stall viol=- note=environ-unreadable=2
+t-raise.1.log: [run] end rc=1 oom_kill=0 seq=39 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-raise.2.log: [run] end rc=1 oom_kill=0 seq=53 cause=child-exit viol=- note=environ-unreadable=2,no-leaf-check
+t-sleep.1.log: [run] end rc=143 oom_kill=0 seq=46 cause=abort viol=- note=environ-unreadable=2
+t-sleep.2.log: [run] end rc=143 oom_kill=0 seq=47 cause=signal viol=- note=environ-unreadable=2
+t-sleep.3.log: [run] end rc=143 oom_kill=0 seq=48 cause=signal viol=- note=environ-unreadable=2
+t-sleep.4.log: [run] end rc=143 oom_kill=0 seq=49 cause=signal viol=- note=environ-unreadable=2
+t-sleep.5.log: [run] end rc=143 oom_kill=0 seq=50 cause=child-exit viol=- note=environ-unreadable=2
+t-sleep.6.log: [run] end rc=143 oom_kill=0 seq=51 cause=abort viol=- note=environ-unreadable=2
+t-sleep.7.log: [venue] {"python": "3.11.7", "executable": "/home/dev-ai/trellis-test/python/bin/python3.11", "isolated": 1, "numpy": "2.3.2", "scipy": "1.17.1", "numpy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/numpy/__init__.py", "scipy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/scipy/__init__.py", "dispatch_found": ["SSSE3", "SSE41", "POPCNT", "SSE42", "AVX", "F16C", "FMA3", "AVX2"], "baseline": ["SSE", "SSE2", "SSE3"], "exp_f64": "AVX2", "openblas": {"numpy": {"lib": "libscipy_openblas64_-8fb3d286.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}, "scipy": {"lib": "libscipy_openblas-6cdc3b4a.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}}, "float_repr": "short", "platform": "Linux-6.8.0-94-generic-x86_64-with-glibc2.39", "machine": "x86_64", "host_sha": "ad6c36b6fc0a00328afea8c59eca04e76e130faa35353be722e32c49dbaa2b1d", "libc": "glibc 2.39", "sha_libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0", "sha_libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"}
+t-sleep.8.log: [venue] {"python": "3.11.7", "executable": "/home/dev-ai/trellis-test/python/bin/python3.11", "isolated": 1, "numpy": "2.3.2", "scipy": "1.17.1", "numpy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/numpy/__init__.py", "scipy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/scipy/__init__.py", "dispatch_found": ["SSSE3", "SSE41", "POPCNT", "SSE42", "AVX", "F16C", "FMA3", "AVX2"], "baseline": ["SSE", "SSE2", "SSE3"], "exp_f64": "AVX2", "openblas": {"numpy": {"lib": "libscipy_openblas64_-8fb3d286.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}, "scipy": {"lib": "libscipy_openblas-6cdc3b4a.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}}, "float_repr": "short", "platform": "Linux-6.8.0-94-generic-x86_64-with-glibc2.39", "machine": "x86_64", "host_sha": "ad6c36b6fc0a00328afea8c59eca04e76e130faa35353be722e32c49dbaa2b1d", "libc": "glibc 2.39", "sha_libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0", "sha_libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"}
+t-spawnfail.1.log: [run] end rc=77 oom_kill=0 seq=45 cause=spawn-fail viol=- note=environ-unreadable=2,spawn-FileNotFoundError
+=== gates
+gate.00000056.1792565505975924556.77.rec: "cause": "stale-run"
+gate.00000057.1792565506223445236.77.rec: "cause": "stale-run"
+gate.00000062.1792565546636196163.77.rec: "cause": "stale-run"
+gate.00000064.1792565550865911404.77.rec: "cause": "abort"
+gate.00000065.1792565553598531426.77.rec: "cause": "signal"
+gate.00000067.1792565554980450793.77.rec: "cause": "stale-run"
+gate.seen00000000.1792565575787942770.77.rec: "cause": "state"
+gate.seen00000051.1792565461919491495.75.rec: "cause": "lock-busy"
+gate.seen00000052.1792565467942647730.77.rec: "cause": "pre-lock-assert"
+=== super.err non-empty
+--- super.1792565360745601413.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565364286799680.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565367872862645.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565371747216799.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565375403806736.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565379365982380.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565383556465296.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565407407726878.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565411216829597.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565421412720051.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565429506286238.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565437652871870.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565445791375717.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565453899333953.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565464307818273.err
+  File "/home/dev-ai/trellis-test/run_smoke3/repo/Scripts/host19_run.py", line 433, in s2
+    if self.test_flag("TRELLIS_TEST_RAISE_AFTER_REAP"): raise RuntimeError("TRELLIS_TEST_RAISE_AFTER_REAP")
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: TRELLIS_TEST_RAISE_AFTER_REAP
+--- super.1792565468192969892.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565471905433323.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565475838295437.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565516880895940.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565520567105877.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565534816552046.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565538467413010.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565547238011543.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565550865911404.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565553598531426.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565554345904144.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565555579136905.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565559448014666.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+--- super.1792565571646980549.err
+[run] environ อ่านไม่ได้ (same uid): [(2869351, 'systemd'), (2869352, '(sd-pam)')]
+=== stray
+none

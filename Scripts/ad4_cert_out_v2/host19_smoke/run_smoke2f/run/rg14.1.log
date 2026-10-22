@@ -1,0 +1,14 @@
+[run] start mode=rg14 att=1 ts=2026-10-21 05:37:49 run_id=03d0b465-6a53-4d21-85a7-b3cd24118cf8 oom_kill=0 seq=37 ns=1792561065608765478 boot_id=b6d8e87a-426b-434a-9608-eb4131b63eaf sup=2866358:2233997651
+[venue] {"python": "3.11.7", "executable": "/home/dev-ai/trellis-test/python/bin/python3.11", "isolated": 1, "numpy": "2.3.2", "scipy": "1.17.1", "numpy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/numpy/__init__.py", "scipy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/scipy/__init__.py", "dispatch_found": ["SSSE3", "SSE41", "POPCNT", "SSE42", "AVX", "F16C", "FMA3", "AVX2"], "baseline": ["SSE", "SSE2", "SSE3"], "exp_f64": "AVX2", "openblas": {"numpy": {"lib": "libscipy_openblas64_-8fb3d286.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}, "scipy": {"lib": "libscipy_openblas-6cdc3b4a.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}}, "float_repr": "short", "platform": "Linux-6.8.0-94-generic-x86_64-with-glibc2.39", "machine": "x86_64", "libc": "glibc 2.39", "sha_libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0", "sha_libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"}
+Core: Haswell
+[SETUP] n=1486 NF=19 folds=['2016', '2017', '2018', '2019', '2020'] (ตัด ['2015'] pre-registered) Nemb=2d α=0.0250
+[AD4] v2 · SPEC_SHA 98f2e73b2202… · card_sha_runtime 98f2e73b2202… · closure 9ed0224ca89c… · threads=1 · quarterly-on-real ⛔ (synthetic เท่านั้น)
+[AST] annual_fn call-site ≠ refit_annual = mode_regress เท่านั้น · positional ≤2 · ไม่มี */**args · def refit_annual 1 แห่ง · ไม่มี rebind/alias · self-test 7 mutation caught ✓
+[RG9] tag universe n=5871 · crc32 unique ✓ · birthday P(collision)=0.400% (emit · ไม่ pin)
+Core: Haswell
+  [RG14] identity: v5-local base untouched ทุก fold · local-refit ≡ local-cache (3 draws) ✓
+  [RG14] world 1/50 Δsd=+0.00019 Δq95=+0.00158 · distinct 99/99 atom 1/1 · 405s (checkpoint 1/50)
+  [RG14] world 2/50 Δsd=+0.00357 Δq95=+0.00380 · distinct 99/99 atom 1/1 · 791s (checkpoint 2/50)
+  [RG14] world 3/50 Δsd=+0.00083 Δq95=+0.00631 · distinct 99/99 atom 1/1 · 1175s (checkpoint 3/50)
+[OPERATOR-ABORT] smoke2f: ครบ 3 world (เทียบ A2) ts=2026-10-21 05:58:09 ns=1792562289130993703
+[run] end rc=143 oom_kill=0 seq=37 cause=abort viol=- note=environ-unreadable=3
