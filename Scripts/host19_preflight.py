@@ -259,8 +259,13 @@ def mode_check(ref_path, manifest_path):
     print(f"[preflight] PASS · manifest {len(man['files'])} files · X_sha {ident['X_sha'][:12]}… · closure {ident['closure_sha'][:12]}…")
 
 
-def mode_venue(strict, out):
+def mode_venue(strict, out, key=None, mode=None):
     v = venue(strict_paths=strict)
+    if key is not None:                                                     # หลังวัด fingerprint (Z-2 · import ad4_card ไม่กระทบค่าใน v)
+        import host19_state as S
+        bad = S.check_key(key, mode, os.environ)
+        if bad: raise VenueError("key ✗ " + key + " · " + " · ".join(bad))   # → venue rc ≠ 0 → gate 77 venue-fail (ไม่มี attempt)
+        print(f"[venue] key ✓ {key}")
     if not out: print(json.dumps(v, ensure_ascii=False)); return
     if not os.path.isabs(out): raise VenueError(f"--out ต้องเป็น absolute path: {out}")
     v = dict(v, run_id=os.environ.get("TRELLIS_RUN_ID"), pid=os.getpid())   # supervisor ตรวจ run_id/pid ตรงกับ child ที่ spawn
@@ -278,6 +283,7 @@ def parse_args(argv):
     e = sp.add_parser("emit"); e.add_argument("--out", required=True)
     c = sp.add_parser("check"); c.add_argument("--ref", required=True); c.add_argument("--manifest", required=True)
     v = sp.add_parser("venue"); v.add_argument("--strict", action="store_true"); v.add_argument("--out")
+    v.add_argument("--key"); v.add_argument("--post-mode", dest="post_mode", choices=("pilot", "cert_v2"))   # ไม่ใช้ --mode (ชน dest ของ subparser)
     return ap.parse_args(argv[1:])
 
 
@@ -290,7 +296,9 @@ def main(argv):
         if a.mode == "manifest": mode_manifest(a.out, a.treeish, a.repo, a.tar, a.same_blobs_as)
         elif a.mode == "emit": mode_emit(a.out)
         elif a.mode == "check": mode_check(a.ref, a.manifest)
-        elif a.mode == "venue": mode_venue(a.strict, a.out)
+        elif a.mode == "venue":
+            if (a.key is None) != (a.post_mode is None): raise VenueError("--key กับ --post-mode ต้องมาคู่กัน")
+            mode_venue(a.strict, a.out, a.key, a.post_mode)
     except VenueError as e:
         print(f"[preflight] VENUE FAIL: {e}"); return EXIT_VENUE
     except DataError as e:

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """host19_state — นิยามร่วมที่เดียว (single source) ของ supervisor host19_run.py · front · kill-orphan · host19_accept.py
-(spec = Plan/TRELLIS-010_brain_research_workflow.md Progress Log 2026-10-21 · supervisor spec r12)
+(spec = Plan/TRELLIS-010_host19_supervisor.md · r13 + §13 pilot/cert_v2 (r14) · Progress Log 2026-10-21/22)
 
-ในไฟล์นี้: grammar ของบรรทัด LOG (START_RE/END_RE · fmt_end) · enum cause/viol · classifier ราย attempt + judge ของ series ·
+ในไฟล์นี้: grammar ของบรรทัด LOG (START_RE/END_RE · fmt_end) · enum cause/viol · key ของ post-B + post_deadline · classifier ราย attempt + judge ของ series ·
 attempt_label (front/selftest/smoke ใช้ตัวเดียว) · resolved() · exit_code() (กฎ G-1) · valid_rundir() · child_env() · /proc helpers
 ห้าม import ad4_card หรือ numpy ที่ระดับ module (supervisor assert "numpy" not in sys.modules · front เรียก attempt_label)
 import บน Windows ได้: fcntl / /proc ใช้เฉพาะใน function
@@ -19,13 +19,15 @@ TEST_ENV = ("TRELLIS_TEST_KILLFAIL", "TRELLIS_TEST_RAISE_AFTER_REAP")      # fau
 # ---------------------------------------------------------------- grammar ของ LOG (ฝั่งเขียนและฝั่งอ่านใช้ชุดเดียว)
 START_PREFIX = re.compile(r"^\[run\] start ")
 START_RE = re.compile(r"^\[run\] start mode=(\S+) att=(\d+) ts=(\S+ \S+) run_id=(\S+) oom_kill=(\d+) seq=(\d+) ns=(\d+) "
-                      r"boot_id=(\S+) sup=(\d+):(\d+) bt=(\d+)$")             # grammar r13: bt = CLOCK_BOOTTIME ns ตอนได้ lock (seq++)
+                      r"boot_id=(\S+) sup=(\d+):(\d+) bt=(\d+)(?: args=(\S+))?$")   # r13: bt = CLOCK_BOOTTIME ns ตอนได้ lock · r14: args= เฉพาะ POST_MODES (optional → อ่าน LOG r13 ได้)
 END_PREFIX = re.compile(r"^\[run\] end ")
 END_RE = re.compile(r"^\[run\] end rc=(-?\d+) oom_kill=(\d+) seq=(\d+) cause=(\S+) viol=(\S+)(?: left=(\S+))?(?: note=(\S+))?$")
 RE_VENUE = re.compile(r"^\[venue\] (\{.*\})\s*$")
 RE_LIVE = re.compile(r"^\s+\[RG14\] world (\d+)/50 Δsd=([+-]\d+\.\d{5}) Δq95=([+-]\d+\.\d{5}) · distinct (\d+)/(\d+) atom (\d+)/(\d+) ")
 RE_AD4 = re.compile(r"^\[AD4\] v2 · SPEC_SHA (\w+)… · card_sha_runtime (\w+)… · closure (\w+)…")
 RE_TB_LAST = re.compile(r"^(\w[\w.]*(?:Error|Exception|Collapse|Exit))\b")
+RE_CHUNK = re.compile(r"^\[cert_v2\] (\w+)/(\w+) cell=(\S+) draws (\d+)\.\.(\d+) → (\S+) · ")   # บรรทัดสรุปของ cert_chunk (ad4_card.py:578)
+CERT_SUFFIX = "/repo/Scripts/ad4_cert_out_v2/"                              # re-root path ของ .19 → <run_dir>/repo/Scripts/ad4_cert_out_v2/ (archive ใช้ได้)
 ABORT_LINE = "[OPERATOR-ABORT] "
 FAILLOUD_MSGS = ("collapse (n_distinct=1)", "v5-local:", "positive control:")
 FP_KEYS = ("python", "executable", "numpy", "scipy", "dispatch_found", "baseline", "exp_f64", "openblas", "libc",
@@ -37,6 +39,70 @@ CAUSE_LOG = ("child-exit", "abort", "signal", "deadline-stall", "deadline-wall",
 CAUSE_GATE = ("lock-busy", "resources", "state", "orphan-env", "stale-run", "venue-fail", "venue-exit", "viol-teardown",
               "pre-lock-assert", "signal", "abort", "deadline-wall", "internal-error")
 VIOLS = ("escape", "leftover", "killfail", "internal")
+
+# post-B (§13 spec): pilot/cert_v2 ต่อจาก rg14 PASS ใน RUNDIR เดียว · ระบุ chunk ด้วย key <variant>/<world>/<cell|->/<k0>/<k1>
+POST_MODES = ("pilot", "cert_v2")
+PILOT_KEY = "c1full/h0pilot/-/0/30"                                         # card :88 (pilot 30 draws) · ad4_card.py:516 · seed ad4_v2_h0pilot_{k}
+KEY_TOKEN = re.compile(r"^[a-z0-9_]+$")
+POST_CPU_STALL, POST_WALL_BASE, POST_WALL_PER_DRAW = 1800, 3600, 600        # G-1: wall = BASE + n·PER_DRAW (≈5.5× ของ ~109 s/draw card :88)
+
+
+def parse_key(key):
+    """key → (variant, world, cell|None, k0, k1) · รูปผิด → ValueError (front คืน 77 · judge ถือว่า record ผิด)"""
+    parts = key.split("/") if isinstance(key, str) else []
+    if len(parts) != 5: raise ValueError(f"key ต้องมี 5 ส่วน: {key!r}")
+    v, w, c, k0, k1 = parts
+    if not (KEY_TOKEN.match(v) and KEY_TOKEN.match(w)): raise ValueError(f"variant/world ต้องเป็น [a-z0-9_]+: {key!r}")
+    if not (c == "-" or c.isdigit()) or not (k0.isdigit() and k1.isdigit()) or int(k0) >= int(k1):
+        raise ValueError(f"cell ต้องเป็นตัวเลขหรือ '-' · k0 < k1 ตัวเลข: {key!r}")
+    return v, w, (None if c == "-" else int(c)), int(k0), int(k1)
+
+
+def key_from_args(args):
+    """CLI ของ cert_v2: <variant> <world> [cell] <k0> <k1> (เท่า ad4_card.py:1129-1132) → key (ValueError ถ้ารูปผิด)"""
+    if len(args) == 4: v, w, k0, k1 = args; c = "-"
+    elif len(args) == 5: v, w, c, k0, k1 = args
+    else: raise ValueError(f"cert_v2 ต้องมี args 4 หรือ 5 ตัว ได้ {len(args)}")
+    key = "/".join((v, w, c, k0, k1)); parse_key(key)
+    return key
+
+
+def post_n(world):
+    """N ต่อ world ของ chunk header — **ซ้ำโดยเจตนา** จาก ad4_card.py:513 (header_fields ต้องมี ad = data · supervisor/venue ไม่โหลด) ·
+    anti-drift: host19_accept.py --selftest เทียบกับ CERT_N/CERT_N_POWER ของ ad4_card ครบทุก world"""
+    return 50 if world == "flip" else (30 if world == "h0pilot" else 200)
+
+
+def post_env(key):
+    """env เพิ่มของ venue + child หลัก (Y-1): h0stress บน variant ≠ c1full = contingency N5(2) → AD4_CONTINGENCY (ad4_card.py:548) · ไม่อยู่ใน FP_KEYS"""
+    if key is None: return {}
+    v, w, _, _, _ = parse_key(key)
+    return {"AD4_CONTINGENCY": v} if w == "h0stress" and v != "c1full" else {}
+
+
+def check_key(key, mode, environ):
+    """post-B key ตรงค่าที่ ad4_card ลงทะเบียนไว้ (แหล่งเดียว · spec §13 Y-2) → [เหตุผลที่ผิด] (ว่าง = ผ่าน)
+    import ad4_card ใน function เท่านั้น: เรียกจาก venue child (host19_preflight venue --key) และ selftest · supervisor ไม่เรียก (numpy ห้ามใน supervisor)"""
+    from ad4_card import VARIANTS, WORLDS, POWER_CELLS, CERT_N, CERT_N_POWER
+    v, w, c, k0, k1 = parse_key(key)
+    bad = []
+    if v not in VARIANTS: bad.append(f"variant {v} ∉ {VARIANTS}")
+    if w not in WORLDS: bad.append(f"world {w} ∉ {WORLDS}")
+    if mode == "pilot" and key != PILOT_KEY: bad.append(f"pilot key ต้องเป็น {PILOT_KEY}")
+    if mode == "cert_v2" and w == "h0pilot": bad.append("world h0pilot ใช้ mode pilot เท่านั้น")
+    if (w == "flip") != (c is not None): bad.append("cell ต้องมีเฉพาะ world flip")
+    if c is not None and not 0 <= c < len(POWER_CELLS): bad.append(f"cell {c} ∉ 0..{len(POWER_CELLS) - 1}")
+    n = post_n(w)
+    if n != (CERT_N_POWER if w == "flip" else (30 if w == "h0pilot" else CERT_N)): bad.append(f"post_n({w})={n} ≠ ad4_card.py:513 (drift)")
+    if k1 > n: bad.append(f"k1 {k1} > N {n} ของ {w}")
+    if w == "h0stress" and v != "c1full" and environ.get("AD4_CONTINGENCY") != v: bad.append(f"h0stress {v} ต้องมี AD4_CONTINGENCY={v}")
+    return bad
+
+
+def post_deadline(key):
+    """(cpu_stall s, wall_cap s) ของ pilot/cert_v2 · ที่เดียว (runner + selftest)"""
+    _, _, _, k0, k1 = parse_key(key)
+    return POST_CPU_STALL, POST_WALL_BASE + (k1 - k0) * POST_WALL_PER_DRAW
 
 
 class ToolError(Exception):
@@ -57,8 +123,10 @@ def fmt_end(rc, oom, seq, cause, viol, left=(), note=()):
     return s
 
 
-def fmt_start(mode, att, ts, run_id, oom, seq, ns, boot_id, sup_pid, sup_st, bt):
+def fmt_start(mode, att, ts, run_id, oom, seq, ns, boot_id, sup_pid, sup_st, bt, args=None):
     s = f"[run] start mode={mode} att={att} ts={ts} run_id={run_id} oom_kill={oom} seq={seq} ns={ns} boot_id={boot_id} sup={sup_pid}:{sup_st} bt={bt}"
+    assert (args is not None) == (mode in POST_MODES), (mode, args)
+    if args is not None: parse_key(args); s += f" args={args}"
     assert START_RE.match(s), s
     return s
 
@@ -120,10 +188,14 @@ def read_attempt(path):
     lines = raw.split("\n")
     if not lines or not START_PREFIX.match(lines[0]): raise ToolError(f"{path}: ไม่มีบรรทัด [run] start")
     m = START_RE.match(lines[0])
-    if not m: raise ToolError(f"{path}: start line ไม่ตรง grammar r13 (ต้องมี seq= … bt=) · log format เก่า")
-    mode, att, ts, run_id, oom0, seq, ns, boot_id, sp, sst, bt = m.groups()
+    if not m: raise ToolError(f"{path}: start line ไม่ตรง grammar r13/r14 (ต้องมี seq= … bt=) · log format เก่า")
+    mode, att, ts, run_id, oom0, seq, ns, boot_id, sp, sst, bt, args = m.groups()
+    if (args is not None) != (mode in POST_MODES): raise ToolError(f"{path}: args= ต้องมีเฉพาะ mode {POST_MODES} (mode={mode})")
+    if args is not None:
+        try: parse_key(args)
+        except ValueError as e: raise ToolError(f"{path}: {e}")
     a = {"path": path, "mode": mode, "att": int(att), "ts": ts, "run_id": run_id, "oom0": int(oom0), "seq": int(seq),
-         "ns": int(ns), "boot_id": boot_id, "sup": (int(sp), int(sst)), "bt": int(bt), "lines": lines, "end": None, "venue": None}
+         "ns": int(ns), "boot_id": boot_id, "sup": (int(sp), int(sst)), "bt": int(bt), "args": args, "lines": lines, "end": None, "venue": None}
     last = next((l for l in reversed(lines) if l.strip()), "")
     if END_PREFIX.match(last) and raw.endswith("\n"):                        # end line = บรรทัดสุดท้ายที่ไม่ว่าง ∧ ปิดด้วย LF (raw text)
         a["end"] = parse_end(last)                                           # ไม่ match grammar (partial write) → None
@@ -157,7 +229,59 @@ def last_exc(lines):
     return "?", ""
 
 
-def _child_exit_class(a, t, exc):
+def chunk_attested(a, rundir):
+    """post-B attempt: บรรทัดสรุป [cert_v2] ตรง key ของ start line ∧ ไฟล์ chunk มีอยู่ (re-root path ด้วย CERT_SUFFIX) → (bool, why)"""
+    v, w, c, k0, k1 = parse_key(a["args"])
+    ms = [m for m in (RE_CHUNK.match(l) for l in a["lines"]) if m]
+    if len(ms) != 1: return False, f"บรรทัดสรุป [cert_v2] ต้องมี 1 บรรทัด ได้ {len(ms)}"   # cert_chunk พิมพ์ครั้งเดียวต่อ chunk (ad4_card.py:578)
+    mv, mw, mc, m0, m1, path = ms[0].groups()
+    if (mv, mw, mc, int(m0), int(m1)) != (v, w, "None" if c is None else str(c), k0, k1 - 1):
+        return False, f"บรรทัดสรุป {mv}/{mw}/cell={mc}/{m0}..{m1} ไม่ตรง key {a['args']}"
+    if CERT_SUFFIX not in path: return False, f"path ไม่มี {CERT_SUFFIX}: {path}"
+    local = os.path.join(rundir, "repo", "Scripts", "ad4_cert_out_v2", *path.split(CERT_SUFFIX, 1)[1].split("/"))
+    if not os.path.isfile(local): return False, f"ไม่มีไฟล์ chunk {local}"
+    return True, f"chunk {os.path.basename(local)}"
+
+
+RETRYABLE = ("INFRA", "ABORT")      # รันซ้ำ key เดิมได้ 1 ครั้งหลัง: invalid-infra (ตาราง (6)) · operator abort ที่ honored (ตาราง (5) "ไม่รันซ้ำอัตโนมัติ" ≠ ห้ามรันซ้ำ)
+
+
+def key_ok(cls):
+    """กติกาเดียวของ post-B ต่อ key (judge + gate · spec §13 D-6): attempt ตัวท้าย OK ∧ ≤ 2 attempt ∧ ตัวก่อนหน้า ∈ RETRYABLE (รันซ้ำ tag เดิมได้ 1 ครั้ง)"""
+    return bool(cls) and cls[-1] == "OK" and len(cls) <= 2 and all(c in RETRYABLE for c in cls[:-1])
+
+
+def pilot_ok(post):
+    """post = attempt ของ POST_MODES ที่มี a["cls"] แล้ว (เรียงตาม seq) → seq ของ pilot attempt ที่ทำให้ PILOT_KEY ผ่าน key_ok · None = ยังไม่ผ่าน
+    card :144 ลำดับ = pilot ก่อน certify → cert_v2 ทุก attempt ต้องมี seq มากกว่าค่านี้ (judge) และ runner gate ก่อน spawn cert_v2"""
+    xs = [a for a in post if a["mode"] == "pilot" and a["args"] == PILOT_KEY]
+    return xs[-1]["seq"] if key_ok([a["cls"] for a in xs]) else None
+
+
+def may_spawn(mode, key, atts):
+    """gate คู่ของ judge (ที่เดียว · runner gates() เรียกก่อน venue/LOG) · atts = ทุก attempt ของ RUNDIR ที่มี a["cls"] แล้ว → (ok, why)
+    (a) mode ของ B หลังมี post-B attempt = ย้ายจุดตัดของ judge → ห้าม (b) post: ประวัติ cls ของ key = [] หรือ [x ∈ RETRYABLE] (D-6 · key_ok)
+    (c) cert_v2: pilot_ok · world ≠ h0pilot (d) cert_v2: [k0,k1) ไม่ทับ key อื่นของ (variant, world, cell) เดียวกันที่มี attempt ใดๆ
+    (read_chunks ad4_card.py:605-607 continuity → k ซ้ำ = report ล้มถาวร)"""
+    post = [a for a in atts if a["mode"] in POST_MODES]
+    if mode not in POST_MODES:
+        return (False, f"มี post-B attempt แล้ว {len(post)} ตัว · mode {mode} ของ B หลัง post-B = series ใช้ไม่ได้") if post else (True, "")
+    hist = [a["cls"] for a in post if a["mode"] == mode and a["args"] == key]
+    if not (hist == [] or (len(hist) == 1 and hist[0] in RETRYABLE)):
+        return False, f"key {key} มีประวัติ {hist} · รันซ้ำได้ 1 ครั้งหลัง {'/'.join(RETRYABLE)} เท่านั้น (D-6)"
+    if mode == "cert_v2":
+        v, w, c, k0, k1 = parse_key(key)
+        if w == "h0pilot": return False, "world h0pilot ใช้ mode pilot เท่านั้น"
+        if pilot_ok(post) is None: return False, f"ยังไม่มี pilot ({PILOT_KEY}) ที่ผ่าน · cert_v2 ต้องตามหลัง pilot (card :144)"
+        for a in post:
+            if a["mode"] != "cert_v2" or a["args"] == key: continue
+            v2, w2, c2, a0, a1 = parse_key(a["args"])
+            if (v2, w2, c2) == (v, w, c) and a0 < k1 and k0 < a1:
+                return False, f"ช่วง [{k0},{k1}) ทับ {a['args']} (k ซ้ำใน series {v}/{w}/{c})"
+    return True, ""
+
+
+def _child_exit_class(a, t, exc, rundir):
     e = a["end"]
     if a["mode"] == "rg14":
         if "RG14 raise: upper t-CI" in t: return "RAISE"
@@ -168,6 +292,7 @@ def _child_exit_class(a, t, exc):
         if a["mode"] == "regress" and "[regress] RG1-RG13 · RG15 PASS · RG14 SKIPPED" in t: return "OK"
         if a["mode"] == "rg14" and "[RG14] PASS (ไม่ raise)" in t: return "PASS"
         if a["mode"] == "preflight" and "[preflight] PASS" in t: return "OK"
+        if a["mode"] in POST_MODES and chunk_attested(a, rundir)[0]: return "OK"
         if a["mode"].startswith("t-"): return "OK"                          # smoke mode ของ supervisor เอง
     return "INVALID"
 
@@ -186,7 +311,9 @@ def classify_attempt(a, rundir, gates=None, orphans=None):
     if e is None: return "INVALID", None, "supervisor-died (ไม่มี end line ครบ grammar + LF)"
     t = "\n".join(a["lines"]); exc, _ = last_exc(a["lines"])
     abort_line = any(l.startswith(ABORT_LINE) for l in a["lines"]); taken = taken_exists(rundir, a["run_id"])
-    if e["cause"] == "child-exit" and not abort_line and not taken: cc, why = _child_exit_class(a, t, exc), f"rc={e['rc']}"
+    if e["cause"] == "child-exit" and not abort_line and not taken:
+        cc, why = _child_exit_class(a, t, exc, rundir), f"rc={e['rc']}"
+        if a["mode"] in POST_MODES and e["rc"] == 0: why += " · " + chunk_attested(a, rundir)[1]
     elif e["cause"] == "abort" and abort_line and taken: cc, why = "ABORT", "honored (บรรทัด + .taken)"
     elif e["cause"] == "abort" or abort_line or taken: cc, why = "INVALID", f"abort ไม่ครบ (cause={e['cause']} line={abort_line} taken={taken})"
     else: cc, why = "INVALID", f"cause={e['cause']}"
@@ -208,24 +335,30 @@ def fp(a): return None if a["venue"] is None else {k: a["venue"].get(k) for k in
 
 
 def judge(run_dir, b_start, rg14_tags, spec_sha, closure):
-    """verdict ของ series (ตาราง state (1)–(8)) · ลำดับเดิมของ host19_accept.py judge ทุกขั้น · ใช้ตอนจบ B บน Windows เท่านั้น"""
-    atts = read_attempts(run_dir)
+    """verdict ของ series · B-part (ตาราง state (1)–(8) · ลำดับเดิมทุกขั้น) คำนวณบน prefix จนถึง attempt สุดท้ายของ B (preflight/regress/rg14) ·
+    post-B (pilot/cert_v2 · spec §13) หลังจุดตัด: ทุก key ต้อง OK (INFRA ก่อนหน้าได้ 1 ครั้งต่อ key) → ไม่งั้น POST_FAIL ·
+    fingerprint เดียวทั้ง series · รันบน .19 (CLAUDE.md §สนามรัน) หรือบน archive ที่ track แล้ว (path re-root ด้วย CERT_SUFFIX)"""
+    atts_all = read_attempts(run_dir)
     notes = []
-    if not atts: return "INVALID", ["ไม่มี log"]
+    if not atts_all: return "INVALID", ["ไม่มี log"]
     gates, orphans = read_gates(run_dir), read_orphans(run_dir)
-    by = {m: [a for a in atts if a["mode"] == m] for m in ("preflight", "regress", "rg14")}
-    for a in atts:
+    for a in atts_all:
         c, cc, why = classify_attempt(a, run_dir, gates, orphans); a["cls"] = c
         notes.append(f"{os.path.basename(a['path'])}: {c} (child_class={cc} · {why})")
     for g in gates: notes.append(f"gate {os.path.basename(g['_path'])}: rc={g.get('rc')} cause={g.get('cause')} reason={g.get('reason')}")
     for o in orphans: notes.append(f"orphan {os.path.basename(o['_path'])}: id={o.get('id')}")
+    cut = max((i for i, a in enumerate(atts_all) if a["mode"] not in POST_MODES), default=None)   # attempt สุดท้ายของ B (ไม่ใช่ rg14 PASS ตัวแรก: ตาราง state เดิมตัดสินที่ attempt สุดท้าย)
+    if cut is None: return "INVALID", notes + ["ไม่มี attempt ของ B (มีแต่ post-B)"]
+    atts, post = atts_all[:cut + 1], atts_all[cut + 1:]
+    if any(a["mode"] in POST_MODES for a in atts): return "INVALID", notes + ["post-B attempt (pilot/cert_v2) ก่อน attempt สุดท้ายของ B"]
+    by = {m: [a for a in atts if a["mode"] == m] for m in ("preflight", "regress", "rg14")}
     last = atts[-1]
     if last["cls"] in ("ABORT", "INFRA", "FAILLOUD", "REGRESS_FAIL", "INVALID"): return last["cls"], notes
     if any(a["cls"] == "REGRESS_FAIL" for a in by["regress"]): return "REGRESS_FAIL", notes
     if not any(a["cls"] == "OK" for a in by["preflight"]): return "INVALID", notes + ["ไม่มี preflight PASS"]
     if not any(a["cls"] == "OK" for a in by["regress"]): return "INVALID", notes + ["ไม่มี regress PASS"]
     if last["mode"] != "rg14" or last["cls"] not in ("PASS", "RAISE"): return "INVALID", notes + ["attempt สุดท้ายไม่ใช่ rg14 PASS/raise"]
-    fps = [fp(a) for a in atts]
+    fps = [fp(a) for a in atts_all]                                         # B-part + post-B = fingerprint ชุดเดียว (gate pilot+certify)
     if any(f is None for f in fps): return "INVALID", notes + ["attempt ไม่มี [venue]"]
     if any(f != fps[0] for f in fps): return "NEWDIR", notes + ["env fingerprint ต่างข้าม attempt"]
     for a in by["regress"] + by["rg14"]:
@@ -260,7 +393,21 @@ def judge(run_dir, b_start, rg14_tags, spec_sha, closure):
         e = ck[rg14_tags[k - 1]]
         exp = (f"{e['dsd']:+.5f}", f"{e['dq95']:+.5f}", str(e["nd_alt2"]), str(e["nd_v5local"]), str(e["atom_alt2"]), str(e["atom_v5local"]))
         if val != exp: return "INVALID", notes + [f"world {k}: บรรทัดสด {val} ≠ checkpoint {exp}"]
-    return last["cls"], notes + ["ตรวจครบ: fingerprint คงที่ · card/SPEC/closure · receipt หลัง B start · 50 world มีบรรทัดสดตรง checkpoint"]
+    notes.append("ตรวจครบ: fingerprint คงที่ · card/SPEC/closure · receipt หลัง B start · 50 world มีบรรทัดสดตรง checkpoint")
+    if not post: return last["cls"], notes
+    if last["cls"] != "PASS": return "INVALID", notes + [f"post-B หลัง rg14 {last['cls']}"]
+    keys = {}
+    for a in post: keys.setdefault(a["args"], []).append(a)
+    p_seq, bad = pilot_ok(post), []
+    for k, xs in keys.items():
+        cls = [x["cls"] for x in xs]
+        ok, why = key_ok(cls), ""
+        if ok and k != PILOT_KEY and (p_seq is None or xs[0]["seq"] < p_seq):   # card :144: pilot ก่อน certify
+            ok, why = False, " (ไม่มี pilot OK ก่อนหน้า)"
+        notes.append(f"post-B {k}: {' → '.join(cls)} → {'OK' if ok else 'ไม่ผ่าน'}{why}")
+        if not ok: bad.append(k)
+    if bad: return "POST_FAIL", notes + [f"B-part PASS · post-B ไม่ผ่าน {bad}"]
+    return "PASS", notes + [f"B-part PASS · post-B OK {len(keys)} key"]
 
 
 # ---------------------------------------------------------------- resolved · exit (G-1)

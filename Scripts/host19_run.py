@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-"""host19_run — ทางเข้าเดียวของ preflight/regress/RG14 บน 172.31.1.19 (แทน host19_run.sh · spec = supervisor spec r12 · Progress Log 2026-10-21)
+"""host19_run — ทางเข้าเดียวของ workload บน 172.31.1.19 (แทน host19_run.sh · spec = Plan/TRELLIS-010_host19_supervisor.md r13 + §13 (r14))
 
-usage   PY -I -B Scripts/host19_run.py <rundir> <mode> [reason]
-  mode  preflight | regress | rg14            งานจริง (front → supervisor แยก session → child chain)
+usage   PY -I -B Scripts/host19_run.py <rundir> <mode> [...]
+  mode  preflight | regress | rg14            series B (front → supervisor แยก session → child chain)
+        pilot                                  post-B: ad4_card.py pilot 0 30 (key ตายตัว c1full/h0pilot/-/0/30 · ไม่รับ args)
+        cert_v2 <variant> <world> [cell] <k0> <k1>   post-B: 1 chunk ต่อการเรียก (certify v2 = serial · spec §13 D-1)
         abort "<reason>"                       ขอ abort run ที่กำลังรันใน RUNDIR นี้
         kill-orphan                            กู้ orphan/stale (ต้องไม่มี supervisor ที่ยัง alive)
         t-<name>                               smoke ของ supervisor เอง (เฉพาะ RUNDIR run_smoke*)
 exit    = กฎ G-1 (host19_state.exit_code): rc จริงของ child ถ้า cause=child-exit ∧ viol ว่าง · อื่น 77 · gate 75 lock ไม่ว่าง / 76 ทรัพยากร / 77
-ป้ายราย attempt ที่พิมพ์ = ใช้ตัดสินไปต่อ/หยุด/รันซ้ำเท่านั้น (ตาราง (2)–(6),(8)) · verdict ของ series = host19_accept.py ตอนจบ B บน Windows
+ป้ายราย attempt ที่พิมพ์ = ใช้ตัดสินไปต่อ/หยุด/รันซ้ำเท่านั้น (ตาราง (2)–(6),(8)) · verdict ของ series = host19_accept.py บน .19 (CLAUDE.md §สนามรัน)
 """
 import os, sys, signal, time, json, io, uuid, traceback, threading, glob, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -18,11 +20,18 @@ SELF = os.path.abspath(__file__)
 SIGS = (signal.SIGTERM, signal.SIGHUP, signal.SIGINT, signal.SIGQUIT, signal.SIGCHLD, signal.SIGTSTP)
 STOP_SIGS = (signal.SIGTERM, signal.SIGHUP, signal.SIGINT, signal.SIGQUIT)
 TICK = 0.2
-CMDS = {
-    "preflight": lambda rd: ["Scripts/host19_preflight.py", "check", "--ref", "Scripts/host19_ref/preflight_ref.json",
-                             "--manifest", os.path.join(rd, "manifest.json")],
-    "regress": lambda rd: ["-W", "error::RuntimeWarning", "Scripts/ad4_card.py", "regress", "--skip-rg14"],
-    "rg14": lambda rd: ["Scripts/ad4_card.py", "rg14"],
+def _cert_argv(key):
+    v, w, c, k0, k1 = S.parse_key(key)
+    return ["Scripts/ad4_card.py", "cert_v2", v, w] + ([] if c is None else [str(c)]) + [str(k0), str(k1)]
+
+
+CMDS = {                                                                    # (rundir, key) → argv ของ child หลัก · key = None นอก POST_MODES
+    "preflight": lambda rd, key: ["Scripts/host19_preflight.py", "check", "--ref", "Scripts/host19_ref/preflight_ref.json",
+                                  "--manifest", os.path.join(rd, "manifest.json")],
+    "regress": lambda rd, key: ["-W", "error::RuntimeWarning", "Scripts/ad4_card.py", "regress", "--skip-rg14"],
+    "rg14": lambda rd, key: ["Scripts/ad4_card.py", "rg14"],
+    "pilot": lambda rd, key: ["Scripts/ad4_card.py", "pilot", "0", "30"],     # = S.PILOT_KEY (card :88)
+    "cert_v2": lambda rd, key: _cert_argv(key),
 }
 T_CMDS = {                                                                  # smoke ของ supervisor (§11) · python -c ใน child chain จริง
     "t-sleep": "import time; time.sleep(600)",
@@ -37,7 +46,7 @@ T_CMDS = {                                                                  # sm
     "t-spawnfail": "print('ไม่ควรรัน')",                                          # argv[0] ถูกแทนด้วย SPAWNFAIL_BIN → Popen raise = spawn-fail จริง
 }
 SPAWNFAIL_BIN = "/nonexistent/trellis-spawnfail"
-DEADLINE = {"rg14": (1800, 72 * 3600), "regress": (1800, 72 * 3600), "preflight": (600, 2 * 3600)}   # (cpu_stall s, wall_cap s)
+DEADLINE = {"rg14": (1800, 72 * 3600), "regress": (1800, 72 * 3600), "preflight": (600, 2 * 3600)}   # (cpu_stall s, wall_cap s) · POST_MODES = S.post_deadline(key)
 T_DEADLINE = (20, 600)
 VENUE_WALL = 120
 LEAF_WAIT = 60
@@ -54,8 +63,11 @@ class Gate(Exception):
 
 # ====================================================================================== supervisor
 class Supervisor:
-    def __init__(self, rundir, mode, ns0):
+    def __init__(self, rundir, mode, ns0, key=None):
         self.rundir, self.mode, self.ns0 = rundir, mode, ns0
+        self.key = S.PILOT_KEY if mode == "pilot" else key                  # key ของ post-B (None นอก POST_MODES)
+        if (self.key is not None) != (mode in S.POST_MODES): raise ValueError(f"key/mode ไม่เข้ากัน: {mode} {key}")
+        if self.key is not None: S.parse_key(self.key)
         self.repo = os.path.join(rundir, "repo")
         self.pid = os.getpid()
         self.cause, self.viol, self.note, self.left = None, set(), [], []
@@ -318,6 +330,19 @@ class Supervisor:
             if rec.get("regress") is not True: raise Gate(77, "state", "ไม่มี receipt regress=true")
             if self.next_att() == 1 and os.path.exists(os.path.join(cert, "rg14", "checkpoint_v6.json")):
                 raise Gate(77, "state", "มี checkpoint ก่อน rg14 ครั้งแรก")
+        if self.mode in S.POST_MODES:                                       # G-4: closure/SPEC ตรวจที่ child (ad4_card.py require_receipt) · chunk ซ้ำ = child assert
+            try: rec = S.read_json(os.path.join(cert, "regress_receipt.json"))
+            except (FileNotFoundError, ValueError): rec = {}
+            if rec.get("regress") is not True or rec.get("rg14") is not True: raise Gate(77, "state", "ไม่มี receipt regress=true ∧ rg14=true")
+        if not self.mode.startswith("t-"):                                  # gate คู่ของ judge ที่เดียว (S.may_spawn: B หลัง post · ประวัติ key · pilot ก่อน cert · k ทับ)
+            try:
+                gs, os_ = S.read_gates(self.rundir), S.read_orphans(self.rundir)
+                atts = S.read_attempts(self.rundir)
+                for a in atts: a["cls"] = S.classify_attempt(a, self.rundir, gs, os_)[0]
+            except (S.ToolError, ValueError, OSError) as e:
+                raise Gate(77, "state", f"อ่าน record ของ RUNDIR ไม่ได้: {type(e).__name__}: {e}")
+            ok, why = S.may_spawn(self.mode, self.key, atts)
+            if not ok: raise Gate(77, "state", why)
         found, unread = S.trellis_env_procs(exclude=(self.pid,))
         ids = {e["TRELLIS_RUN_ID"] for _, e in found}
         if unread:
@@ -340,13 +365,15 @@ class Supervisor:
         self.write_current("running")
         bid, st = S.boot_id(), self.my_st()
         env = S.child_env(self.run_id, self.pid, st, bid, self.rundir)
+        env.update(S.post_env(self.key))                                    # Y-1 contingency (venue + child หลักเห็นค่าเดียวกัน)
         for k in S.TEST_ENV:
             if self.test_flag(k): env[k] = "1"
         # venue
         vjson = S.run_path(self.rundir, f"venue.{self.run_id}.json"); vout = S.run_path(self.rundir, f"venue.{self.run_id}.out")
         vfd = os.open(vout, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
         try:
-            venue = self.spawn([S.PY, "-I", "-B", "Scripts/host19_preflight.py", "venue", "--strict", "--out", vjson], env, vfd)
+            venue = self.spawn([S.PY, "-I", "-B", "Scripts/host19_preflight.py", "venue", "--strict", "--out", vjson]
+                               + (["--key", self.key, "--post-mode", self.mode] if self.key else []), env, vfd)
         finally:
             os.close(vfd)
         why = self.wait_child(venue, VENUE_WALL, VENUE_WALL, main=False)
@@ -360,13 +387,15 @@ class Supervisor:
         except (FileNotFoundError, ValueError):
             pass
         if venue.returncode != 0 or not vj or vj.get("run_id") != self.run_id or vj.get("pid") != venue.pid:
-            raise Gate(77, "venue-fail", f"venue rc={venue.returncode}", venue_rc=venue.returncode, venue_out=vout)
+            try: tail = next((l.strip() for l in reversed(io.open(vout, encoding="utf-8", errors="replace").read().splitlines()) if l.strip()), "")
+            except OSError: tail = ""
+            raise Gate(77, "venue-fail", f"venue rc={venue.returncode} · {tail[:300]}", venue_rc=venue.returncode, venue_out=vout)   # Z-3
         if S.descendants(self.pid):
             self.kill_all(); self.viol.add("leftover"); raise Gate(77, "venue-exit", "descendant ค้างหลัง venue")
         self.drain()
         # child หลัก: LOG ⟺ พยายาม spawn · LOG ปรากฏพร้อม start + [venue] ครบ (tmp → link) หรือไม่ปรากฏเลย
         att = self.next_att()
-        cmd = ["-c", T_CMDS[self.mode]] if self.mode.startswith("t-") else CMDS[self.mode](self.rundir)
+        cmd = ["-c", T_CMDS[self.mode]] if self.mode.startswith("t-") else CMDS[self.mode](self.rundir, self.key)
         argv = ["/usr/bin/choom", "-n", "1000", "--", "/usr/bin/nice", "-n", "19", "/usr/bin/time", "-v", S.PY, "-u", "-I", "-B"] + cmd
         if self.mode == "t-spawnfail": argv[0] = SPAWNFAIL_BIN
         final = S.run_path(self.rundir, f"{self.mode}.{att}.log"); tmp = f"{final}.{self.ns0}.tmp"   # tmp ชื่อไม่ซ้ำ: tmp ค้างไม่ล็อก att
@@ -374,7 +403,7 @@ class Supervisor:
         vj.pop("run_id", None); vj.pop("pid", None)
         fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_APPEND, 0o644)
         try:
-            os.write(fd, (S.fmt_start(self.mode, att, ts(), self.run_id, self.oom0, self.seq, self.ns0, bid, self.pid, st, self.bt) + "\n"
+            os.write(fd, (S.fmt_start(self.mode, att, ts(), self.run_id, self.oom0, self.seq, self.ns0, bid, self.pid, st, self.bt, self.key) + "\n"
                           + "[venue] " + json.dumps(vj, ensure_ascii=False) + "\n").encode())
             os.fsync(fd)
             os.link(tmp, final)                                             # EEXIST = ล้ม (เท่า O_EXCL)
@@ -388,7 +417,8 @@ class Supervisor:
         finally:
             os.close(fd)                                                    # ผู้เขียน LOG ระหว่างรัน = child chain เท่านั้น
         self.write_current("running", log=os.path.basename(self.log_path), att=att)
-        cpu_stall, wall = T_DEADLINE if self.mode.startswith("t-") else DEADLINE[self.mode]
+        cpu_stall, wall = (T_DEADLINE if self.mode.startswith("t-") else S.post_deadline(self.key) if self.mode in S.POST_MODES
+                           else DEADLINE[self.mode])
         why = self.wait_child(self.child, cpu_stall, wall, main=True)
         self.set_cause("child-exit" if why == "exit" else why)
 
@@ -478,7 +508,7 @@ class Supervisor:
 
 
 # ====================================================================================== front · client modes
-def front_run(rundir, mode):
+def front_run(rundir, mode, key=None):
     rd = rundir
     os.makedirs(S.run_path(rd, ""), mode=0o755, exist_ok=True)
     if mode.startswith("t-") and not os.path.basename(rd).startswith(S.SMOKE_PREFIX):
@@ -487,10 +517,10 @@ def front_run(rundir, mode):
     signal.signal(signal.SIGCHLD, signal.SIG_DFL)
     if S.sig_masks(os.getpid())[1] & S.mask_of([signal.SIGCHLD]): print("[run] SIGCHLD ยัง ignore"); return 77
     errf = open(S.run_path(rd, f"super.{ns0}.err"), "ab")
-    p = subprocess.Popen([S.PY, "-I", "-B", SELF, "--super", rd, mode, "--ns", str(ns0)], start_new_session=True,
-                         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=errf, close_fds=True)
+    p = subprocess.Popen([S.PY, "-I", "-B", SELF, "--super", rd, mode, "--ns", str(ns0)] + (["--args", key] if key else []),
+                         start_new_session=True, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=errf, close_fds=True)
     errf.close()
-    print(f"[run] supervisor pid={p.pid} ns={ns0} mode={mode}")
+    print(f"[run] supervisor pid={p.pid} ns={ns0} mode={mode}" + (f" args={key}" if key else ""))
     try:
         r = p.wait()
     except KeyboardInterrupt:
@@ -604,7 +634,8 @@ def front_kill_orphan(rd):
 def main(argv):
     if len(argv) >= 6 and argv[1] == "--super":
         signal.pthread_sigmask(signal.SIG_BLOCK, SIGS)                     # บรรทัดแรกของ supervisor
-        return Supervisor(argv[2], argv[3], int(argv[5])).run()
+        key = argv[7] if len(argv) == 8 and argv[6] == "--args" else None   # front validate แล้ว (S.key_from_args)
+        return Supervisor(argv[2], argv[3], int(argv[5]), key).run()
     if len(argv) < 3: print(__doc__); return 77
     try:
         rd = S.valid_rundir(argv[1])
@@ -612,7 +643,17 @@ def main(argv):
         print(f"[run] {e}"); return 77
     if os.path.realpath(SELF) != os.path.join(rd, "repo", "Scripts", "host19_run.py"):
         print(f"[run] host19_run.py ต้องอยู่ใน {rd}/repo/Scripts (ได้ {SELF})"); return 77
-    mode, reason = argv[2], (argv[3] if len(argv) > 3 else "")
+    mode, rest = argv[2], argv[3:]
+    if mode == "cert_v2":                                                   # K-1: args → key (validate รูป · variant/world จริง = child assert)
+        try:
+            key = S.key_from_args(rest)
+            if S.parse_key(key)[1] == "h0pilot": raise ValueError("world h0pilot ใช้ mode pilot เท่านั้น")
+        except ValueError as e: print(f"[run] cert_v2 args: {e}"); return 77
+        return front_run(rd, mode, key)
+    if mode == "pilot":
+        if rest: print("[run] pilot ไม่รับ args (key ตายตัว " + S.PILOT_KEY + ")"); return 77
+        return front_run(rd, mode)
+    reason = rest[0] if rest else ""
     if any(ord(c) < 32 for c in reason) or S.ABORT_LINE.strip() in reason: print("[run] REASON มี control char หรือ token ต้องห้าม"); return 77
     if mode == "abort":
         if not reason: print("[abort] ต้องมีเหตุผล"); return 77

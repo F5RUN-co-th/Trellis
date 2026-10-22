@@ -49,7 +49,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `ad1_gate_calib` :: ASSET(imported 2) :: EXPERIMENT=live→CLAIM-0019
 - `ad2_card` :: ASSET(imported 2) :: EXPERIMENT=live→CLAIM-0020
 - `ad3_card` :: EXPERIMENT=live→CLAIM-0021
-- `ad4_card` :: ASSET(imported 3) :: EXPERIMENT=reproduce-only(certify v1 known-defect card §6.1 · B′ 09-03 · design v4 → certify v2 → เปลี่ยนเป็น live→claim เมื่อ freeze-commit)
+- `ad4_card` :: ASSET(imported 4) :: EXPERIMENT=reproduce-only(certify v1 known-defect card §6.1 · B′ 09-03 · design v4 → certify v2 → เปลี่ยนเป็น live→claim เมื่อ freeze-commit)
 - `ad4_report_fixture` :: EXPERIMENT=self-test(fixture chunk สังเคราะห์ของ cert_report_v2 · card AD-4 §7(7) · ครอบ: eligibility KS⁺ (ขอบ = t · pooled ไม่ใช่ครึ่งเดียว) + collapse h0cal/h0val · ลำดับ N5 (pending/contingency/exit 2) · α*_dec (cap/ต่ำกว่า cap/linear) · rank threshold · R6 strict · tie-loss + scope-tag · collision assert · ไม่ครอบ: pooling-invariant · staging · N11 card_sha assert · h0stress · readout NON-OP อื่น · mutation 12/12 · นอก CLOSURE_FILES)
 - `asian_bo_sim` :: EXPERIMENT=legacy→ARCHIVE
 - `brain_v1_ceiling` :: EXPERIMENT=legacy→ARCHIVE
@@ -99,7 +99,7 @@ data-artifact + เลข frozen ที่ current-frame พึ่ง (methodolo
 - `host19_accept` :: EXPERIMENT=self-test(จัดสถานะ run regress/RG14 บน .19 ตามตาราง state Progress Log 2026-10-20 · `--selftest` positive control + mutation ต่อ predicate · เจ้าของ verdict ของ series + report 22-world · classifier/judge = host19_state (2026-10-21) · ไม่ใช่ gate วิจัย)
 - `host19_preflight` :: EXPERIMENT=self-test(ตัวตน input/env สำหรับ .19 · manifest จาก git blob ของ treeish + tar · reference จาก header_fields() · assert venue ที่วัดได้ · `venue --out` · Progress Log 2026-10-20/21)
 - `host19_run` :: EXPERIMENT=self-test(supervisor ทางเข้าเดียวของ preflight/regress/RG14 บน .19 · แทน `host19_run.sh` a47b192c (superseded · ไม่อยู่ใน manifest) · smoke2 บน .19 = gate · Progress Log 2026-10-21)
-- `host19_state` :: ASSET(imported 2)
+- `host19_state` :: ASSET(imported 3)
 - `ks_oc` :: EXPERIMENT=reproduce-only(SUPERSEDED READING · KS⁺ threshold table float-convention 4.86% · authority = eng16_ks (integer-lattice + OC) · F-A8 รอบ 22)
 - `layer0_meanrev_pregate` :: EXPERIMENT=legacy→ARCHIVE
 - `layer1_null_test` :: EXPERIMENT=legacy→ARCHIVE
