@@ -1,0 +1,1 @@
+{"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22430653550253561, "cause": "state", "left": [], "mode": "cert_v2", "ns0": 1792651742540536803, "pid": 3021140, "rc": 77, "reason": "ไม่มี receipt regress=true ∧ rg14=true", "run_id": null, "seq": 81, "seq_seen": 80, "ts": "2026-10-22 06:49:02", "viol": []}

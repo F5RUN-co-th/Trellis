@@ -1,0 +1,1 @@
+{"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22433027103657486, "cause": "state", "left": [], "mode": "pilot", "ns0": 1792654116079209366, "pid": 3022800, "rc": 77, "reason": "key c1full/h0pilot/-/0/30 มีประวัติ ['INVALID'] · รันซ้ำได้เฉพาะหลัง INFRA 1 ครั้ง (D-6)", "run_id": null, "seq": 85, "seq_seen": 84, "ts": "2026-10-22 07:28:36", "viol": []}

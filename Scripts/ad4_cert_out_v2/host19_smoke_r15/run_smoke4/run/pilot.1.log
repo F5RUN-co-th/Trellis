@@ -1,0 +1,38 @@
+[run] start mode=pilot att=1 ts=2026-10-22 06:49:17 run_id=3abae298-48a0-4fa7-bf51-d0334ed74db4 oom_kill=0 seq=82 ns=1792651754163949910 boot_id=b6d8e87a-426b-434a-9608-eb4131b63eaf sup=3021232:2243066506 bt=22430665177518232 args=c1full/h0pilot/-/0/30
+[venue] {"python": "3.11.7", "executable": "/home/dev-ai/trellis-test/python/bin/python3.11", "isolated": 1, "numpy": "2.3.2", "scipy": "1.17.1", "numpy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/numpy/__init__.py", "scipy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/scipy/__init__.py", "dispatch_found": ["SSSE3", "SSE41", "POPCNT", "SSE42", "AVX", "F16C", "FMA3", "AVX2"], "baseline": ["SSE", "SSE2", "SSE3"], "exp_f64": "AVX2", "openblas": {"numpy": {"lib": "libscipy_openblas64_-8fb3d286.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}, "scipy": {"lib": "libscipy_openblas-6cdc3b4a.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}}, "float_repr": "short", "platform": "Linux-6.8.0-94-generic-x86_64-with-glibc2.39", "machine": "x86_64", "host_sha": "24c34c7c1d2d1f97504630e5ee0c872b888b098421cafb111c1ad03f76a62c36", "libc": "glibc 2.39", "sha_libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0", "sha_libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"}
+Core: Haswell
+Traceback (most recent call last):
+  File "/home/dev-ai/trellis-test/run_smoke4/repo/Scripts/ad4_card.py", line 1123, in <module>
+    AD1.__init__(ad)
+  File "/home/dev-ai/trellis-test/run_smoke4/repo/Scripts/ad1_card.py", line 55, in __init__
+    rows = build_rows(load_ctx())
+                      ^^^^^^^^^^
+  File "/home/dev-ai/trellis-test/run_smoke4/repo/Scripts/brain_v1_run.py", line 92, in load_ctx
+    with open(DATA / f"XAUUSD_M1_{y}.csv", newline="") as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'D:/workspace/Doc/T.me/R&D/Gloo/Data/XAUUSD_M1_2011.csv'
+Command exited with non-zero status 1
+	Command being timed: "/home/dev-ai/trellis-test/python/bin/python3.11 -u -I -B Scripts/ad4_card.py pilot 0 30"
+	User time (seconds): 0.49
+	System time (seconds): 0.03
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.53
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 43468
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 7222
+	Voluntary context switches: 1
+	Involuntary context switches: 4
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 8
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1
+[run] end rc=1 oom_kill=0 seq=82 cause=child-exit viol=- note=environ-unreadable=3

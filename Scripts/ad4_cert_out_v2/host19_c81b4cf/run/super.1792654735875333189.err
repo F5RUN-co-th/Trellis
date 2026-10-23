@@ -1,0 +1,1 @@
+[run] environ อ่านไม่ได้ (same uid): [(3023548, 'systemd'), (3023549, '(sd-pam)'), (3023658, 'sshd')]

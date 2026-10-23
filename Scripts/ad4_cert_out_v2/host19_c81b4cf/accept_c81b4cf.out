@@ -1,0 +1,9 @@
+[accept] b_start=2026-10-22 07:38:30 (UTC · derived)
+  preflight.1.log: OK (child_class=OK · rc=0)
+  regress.1.log: OK (child_class=OK · rc=0)
+  rg14.1.log: PASS (child_class=PASS · rc=0)
+  pilot.1.log: OK (child_class=OK · rc=0 · chunk h0pilot_0_30.csv)
+  ตรวจครบ: fingerprint คงที่ · card/SPEC/closure · receipt หลัง B start · 50 world มีบรรทัดสดตรง checkpoint
+  post-B c1full/h0pilot/-/0/30: OK → OK
+  B-part PASS · post-B OK 1 key
+[accept] STATE = PASS

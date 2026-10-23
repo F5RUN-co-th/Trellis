@@ -1,0 +1,87 @@
+[run] start mode=rg14 att=1 ts=2026-10-22 07:59:00 run_id=0fa27d92-3e3c-47c0-a313-f7bcc0dfddd7 oom_kill=0 seq=95 ns=1792655937331253662 boot_id=b6d8e87a-426b-434a-9608-eb4131b63eaf sup=3023930:2243484823 bt=22434848354971527
+[venue] {"python": "3.11.7", "executable": "/home/dev-ai/trellis-test/python/bin/python3.11", "isolated": 1, "numpy": "2.3.2", "scipy": "1.17.1", "numpy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/numpy/__init__.py", "scipy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/scipy/__init__.py", "dispatch_found": ["SSSE3", "SSE41", "POPCNT", "SSE42", "AVX", "F16C", "FMA3", "AVX2"], "baseline": ["SSE", "SSE2", "SSE3"], "exp_f64": "AVX2", "openblas": {"numpy": {"lib": "libscipy_openblas64_-8fb3d286.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}, "scipy": {"lib": "libscipy_openblas-6cdc3b4a.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}}, "float_repr": "short", "platform": "Linux-6.8.0-94-generic-x86_64-with-glibc2.39", "machine": "x86_64", "host_sha": "eed4e6252006c1dff1f7548350b70da38bfd1623e5c95b40ee9e3fe646d460ae", "libc": "glibc 2.39", "sha_libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0", "sha_libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"}
+Core: Haswell
+[SETUP] n=1486 NF=19 folds=['2016', '2017', '2018', '2019', '2020'] (ตัด ['2015'] pre-registered) Nemb=2d α=0.0250
+[AD4] v2 · SPEC_SHA 98f2e73b2202… · card_sha_runtime 98f2e73b2202… · closure 9ed0224ca89c… · threads=1 · quarterly-on-real ⛔ (synthetic เท่านั้น)
+[AST] annual_fn call-site ≠ refit_annual = mode_regress เท่านั้น · positional ≤2 · ไม่มี */**args · def refit_annual 1 แห่ง · ไม่มี rebind/alias · self-test 7 mutation caught ✓
+[RG9] tag universe n=5871 · crc32 unique ✓ · birthday P(collision)=0.400% (emit · ไม่ pin)
+Core: Haswell
+  [RG14] identity: v5-local base untouched ทุก fold · local-refit ≡ local-cache (3 draws) ✓
+  [RG14] world 1/50 Δsd=+0.00019 Δq95=+0.00158 · distinct 99/99 atom 1/1 · 424s (checkpoint 1/50)
+  [RG14] world 2/50 Δsd=+0.00357 Δq95=+0.00380 · distinct 99/99 atom 1/1 · 828s (checkpoint 2/50)
+  [RG14] world 3/50 Δsd=+0.00083 Δq95=+0.00631 · distinct 99/99 atom 1/1 · 1231s (checkpoint 3/50)
+  [RG14] world 4/50 Δsd=+0.00146 Δq95=+0.00473 · distinct 77/39 atom 21/46 · 1637s (checkpoint 4/50)
+  [RG14] world 5/50 Δsd=+0.00300 Δq95=+0.00558 · distinct 99/99 atom 1/1 · 2042s (checkpoint 5/50)
+  [RG14] world 6/50 Δsd=+0.00109 Δq95=+0.00462 · distinct 99/99 atom 1/1 · 2447s (checkpoint 6/50)
+  [RG14] world 7/50 Δsd=-0.00060 Δq95=+0.00036 · distinct 80/95 atom 19/2 · 2845s (checkpoint 7/50)
+  [RG14] world 8/50 Δsd=+0.00229 Δq95=+0.00384 · distinct 99/94 atom 1/3 · 3246s (checkpoint 8/50)
+  [RG14] world 9/50 Δsd=+0.00009 Δq95=+0.00188 · distinct 99/99 atom 1/1 · 3646s (checkpoint 9/50)
+  [RG14] world 10/50 Δsd=+0.00019 Δq95=-0.00095 · distinct 99/99 atom 1/1 · 4050s (checkpoint 10/50)
+  [RG14] world 11/50 Δsd=+0.00334 Δq95=+0.00512 · distinct 99/99 atom 1/1 · 4453s (checkpoint 11/50)
+  [RG14] world 12/50 Δsd=-0.00003 Δq95=-0.00111 · distinct 92/97 atom 7/3 · 4861s (checkpoint 12/50)
+  [RG14] world 13/50 Δsd=+0.00017 Δq95=+0.00032 · distinct 92/86 atom 7/7 · 5266s (checkpoint 13/50)
+  [RG14] world 14/50 Δsd=+0.00164 Δq95=+0.00390 · distinct 99/99 atom 1/1 · 5670s (checkpoint 14/50)
+  [RG14] world 15/50 Δsd=+0.00184 Δq95=+0.00486 · distinct 99/97 atom 1/2 · 6074s (checkpoint 15/50)
+  [RG14] world 16/50 Δsd=+0.00161 Δq95=+0.00257 · distinct 99/99 atom 1/1 · 6480s (checkpoint 16/50)
+  [RG14] world 17/50 Δsd=+0.00079 Δq95=-0.00545 · distinct 99/99 atom 1/1 · 6892s (checkpoint 17/50)
+  [RG14] world 18/50 Δsd=+0.00164 Δq95=+0.00101 · distinct 74/54 atom 20/25 · 7303s (checkpoint 18/50)
+  [RG14] world 19/50 Δsd=-0.00011 Δq95=-0.00463 · distinct 99/99 atom 1/1 · 7705s (checkpoint 19/50)
+  [RG14] world 20/50 Δsd=+0.00274 Δq95=+0.00313 · distinct 99/99 atom 1/1 · 8108s (checkpoint 20/50)
+  [RG14] world 21/50 Δsd=+0.00115 Δq95=+0.00164 · distinct 90/62 atom 8/18 · 8518s (checkpoint 21/50)
+  [RG14] world 22/50 Δsd=+0.00250 Δq95=+0.00914 · distinct 99/99 atom 1/1 · 8930s (checkpoint 22/50)
+  [RG14] world 23/50 Δsd=+0.00015 Δq95=-0.00234 · distinct 98/99 atom 2/1 · 9344s (checkpoint 23/50)
+  [RG14] world 24/50 Δsd=+0.00053 Δq95=+0.00117 · distinct 94/98 atom 4/2 · 9763s (checkpoint 24/50)
+  [RG14] world 25/50 Δsd=+0.00056 Δq95=+0.00513 · distinct 99/99 atom 1/1 · 10170s (checkpoint 25/50)
+  [RG14] world 26/50 Δsd=+0.00063 Δq95=+0.00609 · distinct 99/99 atom 1/1 · 10577s (checkpoint 26/50)
+  [RG14] world 27/50 Δsd=+0.00254 Δq95=+0.00308 · distinct 86/32 atom 11/47 · 10981s (checkpoint 27/50)
+  [RG14] world 28/50 Δsd=+0.00099 Δq95=+0.00187 · distinct 96/84 atom 3/9 · 11389s (checkpoint 28/50)
+  [RG14] world 29/50 Δsd=+0.00297 Δq95=+0.00376 · distinct 87/39 atom 12/41 · 11796s (checkpoint 29/50)
+  [RG14] world 30/50 Δsd=+0.00110 Δq95=+0.00138 · distinct 96/98 atom 4/2 · 12207s (checkpoint 30/50)
+  [RG14] world 31/50 Δsd=-0.00078 Δq95=-0.00192 · distinct 99/99 atom 1/1 · 12612s (checkpoint 31/50)
+  [RG14] world 32/50 Δsd=+0.00291 Δq95=-0.00167 · distinct 99/99 atom 1/1 · 13020s (checkpoint 32/50)
+  [RG14] world 33/50 Δsd=+0.00101 Δq95=+0.00278 · distinct 99/99 atom 1/1 · 13428s (checkpoint 33/50)
+  [RG14] world 34/50 Δsd=+0.00131 Δq95=+0.00580 · distinct 99/94 atom 1/2 · 13832s (checkpoint 34/50)
+  [RG14] world 35/50 Δsd=+0.00006 Δq95=+0.00037 · distinct 95/99 atom 4/1 · 14235s (checkpoint 35/50)
+  [RG14] world 36/50 Δsd=+0.00287 Δq95=+0.00143 · distinct 99/99 atom 1/1 · 14646s (checkpoint 36/50)
+  [RG14] world 37/50 Δsd=+0.00030 Δq95=+0.00339 · distinct 99/99 atom 1/1 · 15054s (checkpoint 37/50)
+  [RG14] world 38/50 Δsd=+0.00195 Δq95=+0.00313 · distinct 99/99 atom 1/1 · 15458s (checkpoint 38/50)
+  [RG14] world 39/50 Δsd=+0.00122 Δq95=+0.00274 · distinct 96/94 atom 3/4 · 15863s (checkpoint 39/50)
+  [RG14] world 40/50 Δsd=+0.00176 Δq95=+0.00345 · distinct 99/99 atom 1/1 · 16267s (checkpoint 40/50)
+  [RG14] world 41/50 Δsd=+0.00076 Δq95=+0.00517 · distinct 99/99 atom 1/1 · 16677s (checkpoint 41/50)
+  [RG14] world 42/50 Δsd=+0.00089 Δq95=+0.00048 · distinct 99/99 atom 1/1 · 17082s (checkpoint 42/50)
+  [RG14] world 43/50 Δsd=+0.00234 Δq95=-0.00055 · distinct 99/99 atom 1/1 · 17488s (checkpoint 43/50)
+  [RG14] world 44/50 Δsd=+0.00063 Δq95=-0.00249 · distinct 99/99 atom 1/1 · 17898s (checkpoint 44/50)
+  [RG14] world 45/50 Δsd=+0.00177 Δq95=+0.00090 · distinct 95/91 atom 4/5 · 18299s (checkpoint 45/50)
+  [RG14] world 46/50 Δsd=+0.00138 Δq95=+0.00154 · distinct 99/98 atom 1/2 · 18704s (checkpoint 46/50)
+  [RG14] world 47/50 Δsd=+0.00255 Δq95=+0.01274 · distinct 99/99 atom 1/1 · 19115s (checkpoint 47/50)
+  [RG14] world 48/50 Δsd=+0.00144 Δq95=+0.00650 · distinct 99/99 atom 1/1 · 19514s (checkpoint 48/50)
+  [RG14] world 49/50 Δsd=+0.00105 Δq95=+0.00136 · distinct 89/73 atom 9/20 · 19916s (checkpoint 49/50)
+  [RG14] world 50/50 Δsd=+0.00036 Δq95=-0.00122 · distinct 95/96 atom 5/2 · 20327s (checkpoint 50/50)
+[RG14] Δsd: mean=+0.001292 SE=0.000150 CI±=0.000302 upper=+0.001594 · |mean|/SE=8.61
+[RG14] Δq95: mean=+0.002326 SE=0.000468 CI±=0.000940 upper=+0.003266 · |mean|/SE=4.97
+[RG14] PASS (ไม่ raise) · point flip = report เท่านั้น
+[receipt] rg14 ✓ · closure 9ed0224ca89c… · SPEC_SHA 98f2e73b2202… · regress=True rg14=True
+	Command being timed: "/home/dev-ai/trellis-test/python/bin/python3.11 -u -I -B Scripts/ad4_card.py rg14"
+	User time (seconds): 20348.59
+	System time (seconds): 2.12
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 5:39:12
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1603060
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 368320
+	Voluntary context switches: 3
+	Involuntary context switches: 57496
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 1624
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[run] end rc=0 oom_kill=0 seq=95 cause=child-exit viol=- note=environ-unreadable=3

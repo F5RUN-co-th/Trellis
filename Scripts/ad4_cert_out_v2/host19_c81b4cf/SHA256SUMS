@@ -1,0 +1,31 @@
+# host19_c81b4cf = สำเนา byte-exact ของ R-A บน 172.31.1.19 (S1 c81b4cf · runner r14 · closure 9ed0224c · SPEC_SHA 98f2e73b) · ดึงกลับ 2026-10-23 ผ่าน tar · sha คำนวณบน .19 ก่อนดึง
+# convention: sha256 ของ raw bytes = git blob (.gitattributes `Scripts/ad4_cert_out_v2/** -text`) · layout = <rundir> ของ host19_run.py (run/ + repo/Scripts/ad4_cert_out_v2/) + manifest.json + driver/out + accept out (code r14) · ห้ามวางไฟล์ใดเพิ่มใต้ run/
+# repo/Scripts/ad4_cert_out_v2/c1full/h0pilot_0_30.csv = chunk pilot (card :88 ห้ามลบ · RI-5 card :145: ห้ามคำสั่งที่แสดงเนื้อหาจนกว่า certify จบ) · accept (code r15) บน run_c81b4cf = PASS อยู่ใน host19_smoke_r15/r15_test.out + r15b_test.out
+9d58dcaeb23a83003dc7f05e1e0aa89b2a56eb996b025413f9126e32d498ba2a  accept_c81b4cf.out
+75640d510238fef9a1306873f23815756cebd85b2029dfc8ac05f23c77059a1c  manifest.json
+a89c61e0ec8fbb629037120c71195499320f2063cf0b996b794fe93e7ca1530f  r_c81b4cf.out
+329aa36fd27e3c6028ae2a992abef01f4c13b25db07cdc4cd428643c8f8f7cfd  r_c81b4cf.sh
+223355d950e1c195abe824ada516033b639bbc7f46542b2ee7753e400a704e1e  repo/Scripts/ad4_cert_out_v2/c1full/h0pilot_0_30.csv
+1188b6146a3356857de449bb5820af32f3c67540636bba3f0bf90a6551c96013  repo/Scripts/ad4_cert_out_v2/regress_receipt.json
+9bd34b7734194455d893453840ea6307e0df285b0fd3cc16f471ebf1fc0ce329  repo/Scripts/ad4_cert_out_v2/rg14/checkpoint_v6.json
+a410c6d12d2daccc1b7060c7f2124ec246a4eef7a727a3119e30d38282dada6e  run/current
+dea791528ed9f60b9957f5da95519aaaaa4dcecde9670efc8ad14b0b09b5154b  run/pilot.1.hb
+d049ef39006a8136e99b660af21350cabe69c9965bf2cc7bafb59dd717d91893  run/pilot.1.log
+ef00f96cc2f003576ad69cadda1cc9349e6a1e79d1e78b033a3ea4ecdfedef9c  run/preflight.1.hb
+5d5ac09f1bb33479cb07e81703a3465c4050a3ee484cb7a507ffc92220ba2f04  run/preflight.1.log
+19aabe40f291a9dfcfc8effb206c9356876d8c5545164bc4a6c5be26a2bebf74  run/regress.1.hb
+426560155fbfc07385ff0071f321058517680ff10c035a36efc2846056adec74  run/regress.1.log
+8cdb979eb6fb803ddbbca69c3e915a258336e5dab954ec486979c627e524af76  run/rg14.1.hb
+23e8fa3449e6084ca745cc02d62cf10c48c8182502d910c5a7a3ad0cdf513fb7  run/rg14.1.log
+cec8fc72f06cecf3874ae8020d8cc5944ae8bb1a93ec4f5add9317b28c8ec42a  run/super.1792654706989552631.err
+cec8fc72f06cecf3874ae8020d8cc5944ae8bb1a93ec4f5add9317b28c8ec42a  run/super.1792654735875333189.err
+cec8fc72f06cecf3874ae8020d8cc5944ae8bb1a93ec4f5add9317b28c8ec42a  run/super.1792655937331253662.err
+5db5729b3511f35ac1b791f6d77ce626bdccc04be11281786d6eaee5185fe202  run/super.1792676293738796677.err
+981b895a0e2c6463f1d29f5210a64f6a0451bf7e7e5edc86f86b087f0db72162  run/venue.0fa27d92-3e3c-47c0-a313-f7bcc0dfddd7.json
+7e93d45a0a27cf9db8d985aaf72c0649ae5040d62277065d491a104edd367c5a  run/venue.0fa27d92-3e3c-47c0-a313-f7bcc0dfddd7.out
+5feffa624a543698772e3bba36d70b74176d28d2ecc05a5b98706dfb4677696f  run/venue.0fa37253-b42a-4489-a512-efdf52487278.json
+9ecf79f116d3d25413760243602521ef926e1240c111dce2a331fc02c42718b1  run/venue.0fa37253-b42a-4489-a512-efdf52487278.out
+831ed4d70e33612047e144c33c55075414697cf1685af75c2ab898edc6248871  run/venue.1138316d-4e39-4938-a165-14fabcd1cb94.json
+8717ba4dadb5252f6ed5caf8792f6608f1e958a75b7a14940667163ed116ffba  run/venue.1138316d-4e39-4938-a165-14fabcd1cb94.out
+9c2dec8daaecccac39fc2c04a547a4df5e3b1304010404b08ade00e002cfa27c  run/venue.b069144e-d04f-4e21-9d18-dcbc90ff22d7.json
+8a221bdfbe0ca0efb16b975054b7bb5220434c744a5f4f558ce207778bbbfd60  run/venue.b069144e-d04f-4e21-9d18-dcbc90ff22d7.out

@@ -1,0 +1,1 @@
+{"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22433028263676152, "cause": "state", "left": [], "mode": "cert_v2", "ns0": 1792654117237054026, "pid": 3022814, "rc": 77, "reason": "key c1full/flip/3/0/10 มีประวัติ ['INVALID'] · รันซ้ำได้เฉพาะหลัง INFRA 1 ครั้ง (D-6)", "run_id": null, "seq": 89, "seq_seen": 88, "ts": "2026-10-22 07:28:37", "viol": []}

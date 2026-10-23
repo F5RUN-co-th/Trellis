@@ -1,0 +1,1 @@
+{"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22433028005840215, "cause": "state", "left": [], "mode": "cert_v2", "ns0": 1792654116989976501, "pid": 3022811, "rc": 77, "reason": "ยังไม่มี pilot (c1full/h0pilot/-/0/30) ที่ผ่าน · cert_v2 ต้องตามหลัง pilot (card :144)", "run_id": null, "seq": 88, "seq_seen": 87, "ts": "2026-10-22 07:28:37", "viol": []}

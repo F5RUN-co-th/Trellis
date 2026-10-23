@@ -1,0 +1,60 @@
+[run] start mode=pilot att=1 ts=2026-10-22 13:38:17 run_id=1138316d-4e39-4938-a165-14fabcd1cb94 oom_kill=0 seq=96 ns=1792676293738796677 boot_id=b6d8e87a-426b-434a-9608-eb4131b63eaf sup=3024877:2245520464 bt=22455204749594173 args=c1full/h0pilot/-/0/30
+[venue] {"python": "3.11.7", "executable": "/home/dev-ai/trellis-test/python/bin/python3.11", "isolated": 1, "numpy": "2.3.2", "scipy": "1.17.1", "numpy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/numpy/__init__.py", "scipy_file": "/home/dev-ai/trellis-test/python/lib/python3.11/site-packages/scipy/__init__.py", "dispatch_found": ["SSSE3", "SSE41", "POPCNT", "SSE42", "AVX", "F16C", "FMA3", "AVX2"], "baseline": ["SSE", "SSE2", "SSE3"], "exp_f64": "AVX2", "openblas": {"numpy": {"lib": "libscipy_openblas64_-8fb3d286.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}, "scipy": {"lib": "libscipy_openblas-6cdc3b4a.so", "corename": "Haswell", "threads": 1, "config": "OpenBLAS 0.3.30 DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=64"}}, "float_repr": "short", "platform": "Linux-6.8.0-94-generic-x86_64-with-glibc2.39", "machine": "x86_64", "host_sha": "eed4e6252006c1dff1f7548350b70da38bfd1623e5c95b40ee9e3fe646d460ae", "libc": "glibc 2.39", "sha_libm.so.6": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0", "sha_libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"}
+Core: Haswell
+[SETUP] n=1486 NF=19 folds=['2016', '2017', '2018', '2019', '2020'] (ตัด ['2015'] pre-registered) Nemb=2d α=0.0250
+[AD4] v2 · SPEC_SHA 98f2e73b2202… · card_sha_runtime 98f2e73b2202… · closure 9ed0224ca89c… · threads=1 · quarterly-on-real ⛔ (synthetic เท่านั้น)
+  [c1full/h0pilot] k=0 · 196s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=1 · 392s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=2 · 589s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=3 · 784s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=4 · 976s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=5 · 1174s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=6 · 1368s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=7 · 1565s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=8 · 1763s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=9 · 1957s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=10 · 2154s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=11 · 2346s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=12 · 2539s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=13 · 2734s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=14 · 2933s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=15 · 3125s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=16 · 3321s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=17 · 3518s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=18 · 3713s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=19 · 3907s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=20 · 4103s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=21 · 4297s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=22 · 4489s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=23 · 4690s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=24 · 4893s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=25 · 5099s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=26 · 5305s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=27 · 5515s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=28 · 5720s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+  [c1full/h0pilot] k=29 · 5911s (persist เท่านั้น · ไม่พิมพ์ p/obs — RI-5)
+[cert_v2] c1full/h0pilot cell=None draws 0..29 → /home/dev-ai/trellis-test/run_c81b4cf/repo/Scripts/ad4_cert_out_v2/c1full/h0pilot_0_30.csv · 197.0 s/draw
+	Command being timed: "/home/dev-ai/trellis-test/python/bin/python3.11 -u -I -B Scripts/ad4_card.py pilot 0 30"
+	User time (seconds): 5931.65
+	System time (seconds): 1.99
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:38:54
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1602812
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 356984
+	Voluntary context switches: 5
+	Involuntary context switches: 16302
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 288
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+[run] end rc=0 oom_kill=0 seq=96 cause=child-exit viol=- note=environ-unreadable=2

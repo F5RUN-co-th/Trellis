@@ -1,0 +1,284 @@
+=== selftest
+  OK  None              → PASS         (คาด PASS)
+  OK  raise             → RAISE        (คาด RAISE)
+  OK  collapse          → FAILLOUD     (คาด FAILLOUD)
+  OK  regress_fail      → REGRESS_FAIL (คาด REGRESS_FAIL)
+  OK  abort             → ABORT        (คาด ABORT)
+  OK  oom               → INFRA        (คาด INFRA)
+  OK  memerr            → INFRA        (คาด INFRA)
+  OK  kill_nooom        → INVALID      (คาด INVALID · rg14.1.log: INVALID (child_class=INVALID · rc=137)
+  OK  fp                → NEWDIR       (คาด NEWDIR · fingerprint)
+  OK  drop_live         → NEWDIR       (คาด NEWDIR · unattested)
+  OK  resumed_only      → NEWDIR       (คาด NEWDIR · unattested)
+  OK  live_val          → INVALID      (คาด INVALID · บรรทัดสด)
+  OK  card              → INVALID      (คาด INVALID · SPEC/card/closure)
+  OK  ck_extra          → INVALID      (คาด INVALID · checkpoint key)
+  OK  ck_closure        → INVALID      (คาด INVALID · checkpoint closure)
+  OK  stale_receipt     → INVALID      (คาด INVALID · receipt regress)
+  OK  abort_notaken     → INVALID      (คาด INVALID · abort ไม่ครบ)
+  OK  abort_killfail    → INVALID      (คาด INVALID · viol=killfail)
+  OK  deadline_oom      → INVALID      (คาด INVALID · rg14.1.log: INVALID (child_class=INVALID · cause=deadline-wall)
+  OK  spawnfail         → INVALID      (คาด INVALID · rg14.1.log: INVALID (child_class=INVALID · cause=spawn-fail)
+  OK  raise_leftover    → INVALID      (คาด INVALID · child_class=RAISE)
+  OK  note_signal       → PASS         (คาด PASS)
+  OK  internal_after    → INVALID      (คาด INVALID · viol=internal)
+  OK  noend             → INVALID      (คาด INVALID · supervisor-died)
+  OK  noend_orphan      → INVALID      (คาด INVALID · supervisor-died)
+  OK  nolf              → INVALID      (คาด INVALID · supervisor-died)
+  OK  orphan_after_end  → INVALID      (คาด INVALID · escape-after-end)
+  OK  c3_after_end      → INVALID      (คาด INVALID · escape-after-end)
+  OK  gate75            → PASS         (คาด PASS)
+  OK  seq_order         → INFRA        (คาด INFRA)
+  OK  dup_seq           → TOOL         (คาด TOOL · seq ซ้ำ)
+  OK  bt_rev            → TOOL         (คาด TOOL · bt ไม่มากกว่า)
+  OK  bt_rev_xboot      → INFRA        (คาด INFRA)
+  OK  host_sha          → NEWDIR       (คาด NEWDIR · fingerprint)
+  OK  J1                → REGRESS_FAIL (คาด REGRESS_FAIL)
+  OK  J2                → INFRA        (คาด INFRA)
+  OK  J3                → INVALID      (คาด INVALID · ไม่มี preflight PASS)
+  OK  J4                → INVALID      (คาด INVALID · ไม่มี [venue])
+  OK  J5                → INFRA        (คาด INFRA)
+  OK  J6                → INVALID      (คาด INVALID · ไม่มี log)
+  OK  J7                → INVALID      (คาด INVALID · ไม่มี regress PASS)
+  OK  post_ok           → PASS         (คาด PASS · post-B OK 1 key)
+  OK  post_noline       → POST_FAIL    (คาด POST_FAIL · ต้องมี 1 บรรทัด ได้ 0)
+  OK  post_nofile       → POST_FAIL    (คาด POST_FAIL · ไม่มีไฟล์ chunk)
+  OK  post_fp           → NEWDIR       (คาด NEWDIR · fingerprint)
+  OK  post_infra_retry  → PASS         (คาด PASS · INFRA → OK → OK)
+  OK  post_infra2       → POST_FAIL    (คาด POST_FAIL · INFRA → INFRA → ไม่ผ่าน)
+  OK  post_fail_last    → POST_FAIL    (คาด POST_FAIL · B-part PASS · post-B ไม่ผ่าน)
+  OK  post_cert4        → PASS         (คาด PASS · post-B OK 2 key)
+  OK  post_cert5        → PASS         (คาด PASS · post-B OK 2 key)
+  OK  post_AB           → POST_FAIL    (คาด POST_FAIL · c1full/h0cal/-/0/10: INFRA → ไม่ผ่าน)
+  OK  post_AA           → PASS         (คาด PASS · INFRA → OK → OK)
+  OK  post_nosuffix     → POST_FAIL    (คาด POST_FAIL · path ไม่มี)
+  OK  post_mismatch     → POST_FAIL    (คาด POST_FAIL · ไม่ตรง key)
+  OK  post_before       → INVALID      (คาด INVALID · ก่อน attempt สุดท้ายของ B)
+  OK  post_nopilot      → POST_FAIL    (คาด POST_FAIL · ไม่มี pilot OK ก่อนหน้า)
+  OK  post_cert_first   → POST_FAIL    (คาด POST_FAIL · ไม่มี pilot OK ก่อนหน้า)
+  OK  post_pilot_infra  → POST_FAIL    (คาด POST_FAIL · ไม่มี pilot OK ก่อนหน้า)
+  OK  post_pilot_retry_cert → PASS         (คาด PASS · post-B OK 2 key)
+  OK  post_twolines     → POST_FAIL    (คาด POST_FAIL · ต้องมี 1 บรรทัด ได้ 2)
+  OK  post_abort_retry  → PASS         (คาด PASS · ABORT → OK → OK)
+  OK  post_abort_only   → POST_FAIL    (คาด POST_FAIL · ABORT → ไม่ผ่าน)
+  OK  post_died_retry   → PASS         (คาด PASS · CUT → OK → OK)
+  OK  post_cut_retry    → PASS         (คาด PASS · CUT → OK → OK)
+  OK  post_cut_cut      → POST_FAIL    (คาด POST_FAIL · CUT → CUT → ไม่ผ่าน)
+  OK  post_cut_invalid  → POST_FAIL    (คาด POST_FAIL · CUT → INVALID → ไม่ผ่าน)
+  OK  post_overlap      → POST_FAIL    (คาด POST_FAIL · k ทับ)
+  OK  noend_orphan_reboot → INVALID      (คาด INVALID · rg14.1.log: INVALID (child_class=None · supervisor-died)
+  OK  post1_cut_signal  → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_cut_wall    → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_cut_stall   → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_cut_leaf    → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_cut_spawn   → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_rc129       → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_rc130       → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_rc131       → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_rc137       → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_rc143       → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_rc143oom    → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_died_reboot → POST_FAIL    (คาด POST_FAIL · pilot.1.log: CUT ()
+  OK  post1_rc1         → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_rc2         → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_internal    → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_cut_viol    → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_abortline   → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_sameboot → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_nobootkey → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_notargets → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_targets → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_mixed  → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_noorphan → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_envgate → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_cut_escape  → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_rc143_abortline → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_rc143_taken → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_rc143_escape → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_reboot_taken → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  post1_died_reboot_abortline → POST_FAIL    (คาด POST_FAIL · pilot.1.log: INVALID ()
+  OK  END clean
+  OK  END note=
+  OK  END left=
+  OK  END left+note
+  OK  END ผิดลำดับ suffix
+  OK  END format เก่า
+  OK  END cause นอก enum → ToolError
+  OK  exit log clean
+  OK  exit log rc=1 child-exit
+  OK  exit log leftover → 77
+  OK  exit log signal → 77
+  OK  exit gate 75
+  OK  test_env t-*
+  OK  test_env real mode
+  OK  key cert_v2 4 args
+  OK  key cert_v2 5 args
+  OK  key รูปผิด ['c1full', 'h0cal', '10', '0'] → ValueError
+  OK  key รูปผิด ['c1full', 'h0cal', 'x', '1'] → ValueError
+  OK  key รูปผิด ['c1 full', 'h0cal', '0', '1'] → ValueError
+  OK  key รูปผิด ['c1full', 'h0cal', '0'] → ValueError
+  OK  key รูปผิด ['C1', 'h0cal', '0', '1'] → ValueError
+  OK  post_deadline pilot = (1800, 3600+30·600)
+  OK  post_deadline cert 0..10
+  OK  key_ok OK
+  OK  key_ok INFRA→OK
+  OK  key_ok INFRA→INFRA ✗
+  OK  key_ok INVALID→OK ✗
+  OK  key_ok INFRA→INFRA→OK ✗
+  OK  key_ok [] ✗
+  OK  key_ok ABORT→OK
+  OK  key_ok ABORT→INFRA→OK ✗
+  OK  pilot_ok OK → seq
+  OK  pilot_ok INFRA→OK → seq ตัวท้าย
+  OK  pilot_ok INFRA → None
+  OK  pilot_ok ไม่มี pilot (cert เท่านั้น) → None
+  OK  may_spawn B ก่อน post
+  OK  may_spawn B หลัง post ✗
+  OK  may_spawn preflight หลัง post ✗
+  OK  may_spawn pilot ครั้งแรก
+  OK  may_spawn pilot ซ้ำหลัง OK ✗
+  OK  may_spawn pilot หลัง INFRA
+  OK  may_spawn pilot หลัง INVALID ✗
+  OK  may_spawn pilot หลัง INFRA×2 ✗
+  OK  may_spawn pilot หลัง ABORT
+  OK  may_spawn pilot หลัง ['ABORT', 'ABORT'] ✗
+  OK  may_spawn pilot หลัง ['INFRA', 'ABORT'] ✗
+  OK  may_spawn pilot หลัง ['ABORT', 'INVALID'] ✗
+  OK  may_spawn cert ไม่มี pilot ✗
+  OK  may_spawn cert หลัง pilot OK
+  OK  may_spawn cert h0pilot ✗
+  OK  may_spawn cert key ซ้ำหลัง OK ✗
+  OK  may_spawn cert ทับ [5,15) ✗
+  OK  may_spawn cert ติดกัน [10,20)
+  OK  may_spawn cert ทับกับ INFRA key อื่น ✗
+  OK  may_spawn cert world/cell อื่นไม่ถือว่าทับ
+  OK  may_spawn cert flip cell ต่างกันไม่ทับ
+  OK  may_spawn pilot mode ผ่าน cert_v2 ไม่นับเป็น pilot
+  OK  post_env h0stress c1restr
+  OK  post_env h0stress c1full = {}
+  OK  post_env None = {}
+  OK  post_n = N ที่ลงทะเบียน (literal) ครบทุก world
+  OK  post_n: นิพจน์ที่คาดมี 1 ที่ใน ad4_card (mutation ใช้ได้)
+  OK  post_n mutation 30→31 ตามต้นฉบับ
+  OK  post_n node ต้องห้าม (call) → ToolError
+  OK  post_n CERT_N ซ้ำ → ToolError
+  OK  post_n ไม่มี key N → ToolError
+  OK  post_n CERT_N += (AugAssign) → ToolError
+  OK  post_n CERT_N ซ้อนใน if → ToolError
+  OK  post_n CERT_N_POWER: int (AnnAssign) → ToolError
+  OK  post_n import as CERT_N → ToolError
+  OK  CUT_RC = {129,130,131,137,143} (วัด .19)
+  OK  STOP_SIGNALS = เลขของ OS
+  OK  key_ok CUT→OK
+  OK  key_ok INFRA→CUT→OK ✗
+  OK  key_ok CUT→CUT ✗
+  OK  may_spawn pilot หลัง CUT
+  OK  may_spawn pilot หลัง ['INFRA', 'CUT'] ✗
+  OK  may_spawn pilot หลัง ['CUT', 'CUT'] ✗
+  OK  may_spawn pilot หลัง B ล่าสุด preflight ✗
+  OK  may_spawn pilot หลัง rg14 RAISE ✗
+  OK  may_spawn pilot หลัง rg14 INFRA ✗
+  OK  may_spawn pilot หลัง rg14 INVALID ✗
+  OK  may_spawn pilot ไม่มี B ✗
+  OK  b_cut = attempt สุดท้ายของ B
+  OK  overlap ทับ
+  OK  overlap ติดกัน = None
+  OK  overlap key เดียวกัน = None
+  OK  overlap cell ต่าง = None
+  OK  fp_diff ไม่มี attempt = []
+  OK  fp_diff เท่ากัน = []
+  OK  fp_diff host_sha ต่าง
+  OK  fp_diff attempt แรกไม่มี venue → ToolError
+  OK  check_key pilot
+  OK  check_key cert h0cal 0..10
+  OK  check_key flip 3
+  OK  check_key flip 6 0..50
+  OK  check_key k1 > N ✗
+  OK  check_key variant ✗
+  OK  check_key cell ≥ 7 ✗
+  OK  check_key flip ไม่มี cell ✗
+  OK  check_key non-flip มี cell ✗
+  OK  check_key flip k1 > 50 ✗
+  OK  check_key cert h0pilot ✗
+  OK  check_key world ✗
+  OK  check_key pilot key อื่น ✗
+  OK  check_key h0stress c1restr ไม่มี env ✗
+  OK  check_key h0stress c1restr + env
+  OK  check_key h0stress c1full
+  OK  START_RE r13 (ไม่มี args) match · args=None
+  OK  fmt_start args ใน mode B → assert
+  OK  fmt_start pilot ไม่มี args → assert
+  OK  valid_rundir run_x
+  OK  valid_rundir run_smoke2
+  OK  valid_rundir smoke ✗
+  OK  valid_rundir python ✗
+  OK  valid_rundir ROOT ✗
+  OK  valid_rundir nested ✗
+  OK  label cause นอก enum → ToolError
+  OK  record_of cause นอก enum → log-tool (front: label=TOOL · 77)
+  OK  record_of ns อื่น → None
+  OK  start ไม่มี seq → ToolError format เก่า
+  OK  read: args= ใน mode ที่ไม่ใช่ post → ToolError
+  OK  read: pilot ไม่มี args= → ToolError
+  OK  label t-exit0 = OK
+  OK  record_of ns ตรง → log
+  OK  resolved (end clean)
+  OK  resolved ไม่มี id
+  OK  b_start derived = ts ของ start แรก
+  OK  b_start override UTC
+  OK  b_start override รูปผิด → ToolError
+  OK  kill -9 หลัง end ก่อน current → resolved
+  OK  kill -9 ก่อน end → ไม่ resolved
+[selftest] 230/230 OK
+selftest rc=0
+=== mutation
+  OK  M0 ไม่แก้                          selftest rc=0 · [selftest] 230/230 OK
+  OK  M1 (iii) ถอน guard abort/taken     selftest rc=1 · [selftest] 228/230 OK
+  OK  M2 (ii) ถอน guard abort/taken      selftest rc=1 · [selftest] 228/230 OK
+  OK  M3 (iii) ถอน cc == INVALID         selftest rc=1 · [selftest] 226/230 OK
+  OK  M4 143 ∉ CUT_RC                    selftest rc=1 · [selftest] 227/230 OK
+  OK  M5 died_cut ไม่เทียบ boot          selftest rc=1 · [selftest] 228/230 OK
+  OK  M6 died_cut ไม่ดู gate orphan-env  selftest rc=1 · [selftest] 229/230 OK
+  OK  M7 (i) ใช้กับ B-part               selftest rc=1 · [selftest] 228/230 OK
+  OK  M8 (iii) ใช้กับ B-part             selftest rc=1 · [selftest] 229/230 OK
+  OK  M9 (ii) ใช้กับ B-part              selftest rc=1 · [selftest] 229/230 OK
+  OK  M10 may_spawn ไม่เช็ค B-part       selftest rc=1 · [selftest] 226/230 OK
+  OK  M11 judge ไม่เช็ค overlap          selftest rc=1 · [selftest] 229/230 OK
+  OK  M12 RETRYABLE ไม่มี CUT            selftest rc=1 · [selftest] 226/230 OK
+  OK  M13 card_consts ไม่นับ binding     selftest rc=1 · [selftest] 226/230 OK
+[mutation] 14/14 OK
+mutation rc=0
+=== archive_check self-test
+  OK  clean                        rc=0 (คาด 0)
+  OK  chunk ลบแถว                  rc=1 (คาด 1 · chunk-row-count)
+  OK  chunk เพิ่มแถว               rc=1 (คาด 1 · chunk-row-count)
+  OK  chunk field ไม่ครบ           rc=1 (คาด 1 · chunk-field-count)
+  OK  chunk แถวว่าง                rc=1 (คาด 1 · chunk-empty-row)
+  OK  chunk byte ท้าย ≠ LF         rc=1 (คาด 1 · chunk-no-final-lf)
+  OK  chunk CRLF                   rc=1 (คาด 1 · chunk-cr)
+  OK  chunk header ไม่ใช่ # {      rc=1 (คาด 1 · chunk-header)
+  OK  chunk header json เสีย       rc=1 (คาด 1 · chunk-header-json)
+  OK  chunk schema                 rc=1 (คาด 1 · chunk-schema)
+  OK  chunk variant ∉ VARIANTS     rc=1 (คาด 1 · chunk-variant)
+  OK  (ข) ไฟล์ถูก ignore           rc=1 (คาด 1 · ignored)
+  OK  (ก) sums เกิน                rc=1 (คาด 1 · sums-extra)
+  OK  (ก) sums ขาด                 rc=1 (คาด 1 · sums-missing)
+  OK  (ค) attr ไม่ใช่ -text        rc=1 (คาด 1 · eol-attr)
+  OK  (ง) .gitattributes ≠ HEAD    rc=1 (คาด 1 · attrs-changed)
+  OK  (ง) sha ผิด                  rc=1 (คาด 1 · sha)
+  OK  (ง) working tree ≠ index     rc=1 (คาด 1 · worktree-ne-index)
+  OK  .csv.tmp                     rc=1 (คาด 1 · tmp-file)
+  OK  (ง) unstaged นอก A           rc=1 (คาด 1 · unstaged)
+  OK  untracked ใน A               rc=1 (คาด 1 · untracked)
+  OK  A ไม่มี → 2                  rc=2
+  OK  ไม่ใช่ git repo → 2          rc=2
+[self-test] 23/23 OK
+arc rc=0
+=== accept run_c81b4cf
+  B-part PASS · post-B OK 1 key
+[accept] STATE = PASS
+accept run_c81b4cf rc=0
+=== accept run_958974d
+  ตรวจครบ: fingerprint คงที่ · card/SPEC/closure · receipt หลัง B start · 50 world มีบรรทัดสดตรง checkpoint
+[accept] STATE = PASS
+accept run_958974d rc=0

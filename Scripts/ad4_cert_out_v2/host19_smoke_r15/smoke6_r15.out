@@ -1,0 +1,25 @@
+=== code
+af0b2ece729dd23534050b5dfa198c0e628fde03d04baedf09e8784b8fca9394  run_smoke6/repo/Scripts/host19_state.py
+03f47e6dd73d1898ec86f49a8396d9e5d8d45d1494c529a57f081297cc3d6d6f  run_smoke6/repo/Scripts/host19_run.py
+38b2677430fb2eac19fdc9c06f562b44dcbbd695853bcf3c99bd2e07e4ef831f  run_smoke6/repo/Scripts/host19_accept.py
+=== A t-exit0 2026-10-23 06:21:45
+[run] supervisor pid=3036399 ns=1792736506108711650 mode=t-exit0
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=3', 'no-leaf-check'] log=t-exit0.1.log
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+A rc=0
+=== B t-sleep + kill -9 supervisor
+sup=3036406
+[run] supervisor pid=3036406 ns=1792736509821691149 mode=t-sleep
+[run] ไม่มี record ของ ns=1792736509821691149 (supervisor rc=137) · ดู run/super.1792736509821691149.err
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(3036220, 'systemd'), (3036221, '(sd-pam)'), (3036394, 'sshd')]
+[kill-orphan] b9567b26-ab02-41a8-8e3d-405b46d24318: kill 2 · orphan.rec → /home/dev-ai/trellis-test/run_smoke6
+ko rc=0
+run_smoke6/run/orphan.b9567b26-ab02-41a8-8e3d-405b46d24318.1792736525082974678.rec: {"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "by_rundir": "/home/dev-ai/trellis-test/run_smoke6", "id": "b9567b26-ab02-41a8-8e3d-405b46d24318", "ns": 1792736525082974678, "targets": [[3036410, 2251542420], [3036411, 2251542420]], "ts": "2026-10-23 06:22:05"}
+=== C host_sha mutation (R15-6)
+blob before 7b53d6916b6303d8cdbedbd09ad3688575402f28
+blob after  6ee2d2e0ec91f3362a5af3365804cc0fdef63080
+[run] supervisor pid=3036428 ns=1792736525243717883 mode=t-exit0
+[run] gate rc=77 cause=state reason=env fingerprint ต่างจาก attempt แรกของ RUNDIR: host_sha (R15-6 · series นี้ต่อไม่ได้ = run dir ใหม่) viol=[]
+C rc=77
+LOG count 2 -> 2
+run_smoke6/run/gate.00000102.1792736525243717883.77.rec: {"boot_id": "b6d8e87a-426b-434a-9608-eb4131b63eaf", "boottime_ns": 22515439582255928, "cause": "state", "left": [], "mode": "t-exit0", "ns0": 1792736525243717883, "pid": 3036428, "rc": 77, "reason": "env fingerprint ต่างจาก attempt แรกของ RUNDIR: host_sha (R15-6 · series นี้ต่อไม่ได้ = run dir ใหม่)", "run_id": "4d07a0e3-eff0-4e9e-b563-82c199b8e9a2", "seq": 102, "seq_seen": 101, "ts": "2026-10-23 06:22:08", "viol": []}

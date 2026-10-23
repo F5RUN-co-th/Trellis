@@ -1,0 +1,33 @@
+=== R-A start 2026-10-22 07:38:26 UTC
+=== preflight 2026-10-22 07:38:26
+[run] supervisor pid=3023667 ns=1792654706989552631 mode=preflight
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=3'] log=preflight.1.log
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+preflight exit=0
+=== regress 2026-10-22 07:38:55
+[run] supervisor pid=3023681 ns=1792654735875333189 mode=regress
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=3'] log=regress.1.log
+[run] label verdict=OK child_class=OK (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+regress exit=0
+=== rg14 2026-10-22 07:58:57
+[run] supervisor pid=3023930 ns=1792655937331253662 mode=rg14
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=3'] log=rg14.1.log
+[run] label verdict=PASS child_class=PASS (rc=0) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+rg14 exit=0
+=== pilot 2026-10-22 13:38:13
+[run] supervisor pid=3024877 ns=1792676293738796677 mode=pilot
+[run] end rc=0 cause=child-exit viol=- note=['environ-unreadable=2'] log=pilot.1.log
+[run] label verdict=OK child_class=OK (rc=0 · chunk h0pilot_0_30.csv) · ป้ายชั่วคราว: ใช้ตัดสินไปต่อ/หยุด/รันซ้ำ
+pilot exit=0
+=== kill-orphan sweep
+[kill-orphan] environ อ่านไม่ได้ (same uid · ไม่นับเป็นเป้า): [(3023548, 'systemd'), (3023549, '(sd-pam)')]
+[kill-orphan] ไม่มีเป้า
+sweep exit=0
+=== end lines
+pilot.1.log: [run] end rc=0 oom_kill=0 seq=96 cause=child-exit viol=- note=environ-unreadable=2
+preflight.1.log: [run] end rc=0 oom_kill=0 seq=93 cause=child-exit viol=- note=environ-unreadable=3
+regress.1.log: [run] end rc=0 oom_kill=0 seq=94 cause=child-exit viol=- note=environ-unreadable=3
+rg14.1.log: [run] end rc=0 oom_kill=0 seq=95 cause=child-exit viol=- note=environ-unreadable=3
+=== gates
+none
+=== R-A end 2026-10-22 15:17:11 UTC · driver exit=0
