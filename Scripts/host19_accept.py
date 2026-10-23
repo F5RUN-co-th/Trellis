@@ -5,7 +5,8 @@
 usage
   python Scripts/host19_accept.py <run_dir> [--b-start "YYYY-mm-dd HH:MM:SS" (UTC)] [--local-ck <checkpoint 22 world ของ Windows>]
   b_start default = ts (UTC) ของ start line แรกใน run_dir (B ใช้ RUNDIR สด · receipt ต้องเกิดหลังจุดนี้) · --b-start = override (UTC เท่านั้น)
-  python Scripts/host19_accept.py --selftest
+  python Scripts/host19_accept.py --selftest   (r15: + CUT · b_cut · overlap · fp_diff · post_n AST)
+  python Scripts/host19_accept.py --mutation   (r15: ทุก mutation ที่ลงทะเบียนต้องทำให้ selftest ล้ม · M0 = ไม่แก้ต้องผ่าน · รันบน .19)
 
 <run_dir> = trellis-test/run_<S1short>/ บน .19 หรือ archive ที่ track แล้ว (Scripts/ad4_cert_out_v2/host19_<S1short>/ · layout เดียวกัน: run/ + repo/Scripts/ad4_cert_out_v2/)
 script นี้เป็นเจ้าของ verdict ของ series และตัวเลขเทียบ 22 world (report ไม่ใช่ gate) · classifier/judge/grammar = host19_state.py (ที่เดียว)
@@ -94,8 +95,17 @@ def _log(root, name, mode, seq, body, rc=0, v=VENUE, oom=(0, 0), cause="child-ex
 CHUNK_ROOT_19 = "/home/dev-ai/trellis-test/run_x/repo/Scripts/ad4_cert_out_v2/"   # path ที่ ad4_card.py:578 พิมพ์บน .19 (absolute)
 
 
-def _post(root, name, seq, key, kind="ok", v=VENUE):
-    """post-B attempt (r14 · args=key) · kind: ok · noline · nofile · nosuffix · mismatch · infra · fail · ไฟล์ chunk สร้างใต้ <root>/repo/... (= re-root)"""
+CUT_KW = {"cut_signal": dict(rc=143, cause="signal"), "cut_wall": dict(rc=137, cause="deadline-wall"),   # r15 R15-1 (i) cause ที่ถูกตัดจากภายนอก
+          "cut_stall": dict(rc=137, cause="deadline-stall"), "cut_leaf": dict(rc=77, cause="leaf-missing"),
+          "cut_spawn": dict(rc=77, cause="spawn-fail"), "internal": dict(rc=77, cause="internal-error"),
+          "cut_viol": dict(rc=143, cause="signal", viol=("leftover",)), "rc143oom": dict(rc=143, oom=(0, 1)), "rc2": dict(rc=2)}
+
+
+def _post(root, name, seq, key, kind="ok", v=VENUE, orph=(), envgate=False, taken=False):
+    """post-B attempt (r14 · args=key) · kind: ok · noline · nofile · nosuffix · mismatch · infra · fail · abort · r15: CUT_KW · rc<N> (child-exit rc=N) ·
+    died (ไม่มี end line) · abortline (บรรทัด abort ไม่มี .taken) · rc143_abortline (child-exit + บรรทัด abort) · orph = orphan.rec ของ run_id
+    (dict ไม่รวม id) · envgate = gate orphan-env ชี้ run_id · taken = สร้าง abort.<rid>.5.taken ·
+    ไฟล์ chunk สร้างใต้ <root>/repo/... (= re-root)"""
     var, w, c, k0, k1 = S.parse_key(key)
     fname = f"{w}_{k0}_{k1}.csv" if c is None else f"{w}_c{c}_{k0}_{k1}.csv"     # ชื่อของ fixture เท่านั้น · judge ไม่สร้างชื่อเอง (อ่าน path จากบรรทัด)
     shown = (CHUNK_ROOT_19 if kind != "nosuffix" else "/tmp/elsewhere/") + f"{var}/{fname}"
@@ -105,12 +115,21 @@ def _post(root, name, seq, key, kind="ok", v=VENUE):
     if kind == "infra": body, kw = [], dict(rc=137, oom=(0, 1))
     if kind == "fail": body, kw = ["Traceback (most recent call last):", "AssertionError: chunk มีอยู่แล้ว"], dict(rc=1)
     if kind == "abort": body, kw = [f"{S.ABORT_LINE}erfx ต้องใช้เครื่อง ts=x ns=1"], dict(rc=143, cause="abort")   # honored = บรรทัด + .taken (ด้านล่าง)
+    if kind in CUT_KW: body, kw = [], dict(CUT_KW[kind])
+    if kind in ("rc129", "rc130", "rc131", "rc137", "rc143"): body, kw = [], dict(rc=int(kind[2:]))   # child-exit ด้วย 128+signal (Δoom = 0)
+    if kind == "rc1": body, kw = ["Traceback (most recent call last):", "AssertionError: x"], dict(rc=1)
+    if kind == "abortline": body, kw = [f"{S.ABORT_LINE}erfx ต้องใช้เครื่อง ts=x ns=1"], dict(rc=143, cause="signal")
+    if kind == "died": body, kw = [], dict(end=False)
+    if kind == "rc143_abortline": body, kw = [f"{S.ABORT_LINE}erfx ต้องใช้เครื่อง ts=x ns=1"], dict(rc=143)   # เส้น (iii) child-exit + บรรทัด abort
+    if kind == "died_abortline": body, kw = [f"{S.ABORT_LINE}erfx ต้องใช้เครื่อง ts=x ns=1"], dict(end=False)   # เส้น (ii) + บรรทัด abort
     if kind in ("ok", "noline", "mismatch", "nosuffix", "twolines"):
         d = os.path.join(root, "repo", "Scripts", "ad4_cert_out_v2", var); os.makedirs(d, exist_ok=True)
         io.open(os.path.join(d, fname), "w", encoding="utf-8", newline="\n").write("# x\n# schema: k\n")
     mode = "pilot" if key == S.PILOT_KEY and name.startswith("pilot") else "cert_v2"
     rid = _log(root, name, mode, seq, body, v=v, args=key, **kw)
-    if kind == "abort": io.open(os.path.join(root, "run", f"abort.{rid}.5.taken"), "w").write("{}")
+    if kind == "abort" or taken: io.open(os.path.join(root, "run", f"abort.{rid}.5.taken"), "w").write("{}")
+    for i, o in enumerate(orph): S.write_json_atomic(os.path.join(root, "run", f"orphan.{rid}.{i}.rec"), dict(o, id=rid))
+    if envgate: S.write_json_atomic(os.path.join(root, "run", f"gate.0000{seq}.9.77.rec"), {"rc": 77, "cause": "orphan-env", "target_run_ids": [rid], "ns0": 9})
 
 
 POST = {                                                                    # mut → [(ชื่อ LOG, seq, key, kind, venue)]
@@ -141,7 +160,33 @@ POST = {                                                                    # mu
     "post_abort_retry": [("pilot.1.log", 10, S.PILOT_KEY, "abort", VENUE), ("pilot.2.log", 11, S.PILOT_KEY, "ok", VENUE),
                          ("cert_v2.1.log", 12, "c1full/h0cal/-/0/10", "ok", VENUE)],
     "post_abort_only": [("pilot.1.log", 10, S.PILOT_KEY, "ok", VENUE), ("cert_v2.1.log", 11, "c1full/h0cal/-/0/10", "abort", VENUE)],
+    # r15 R15-1: CUT (ถูกตัดจากภายนอก · รันซ้ำได้ 1 ครั้ง) · ไม่ CUT = INVALID · B-part ไม่เปลี่ยน (noend_orphan_reboot)
+    "post_died_retry": [("pilot.1.log", 10, S.PILOT_KEY, "died", VENUE, dict(orph=[{"targets": [], "boot_id": "b9"}])),
+                        ("pilot.2.log", 11, S.PILOT_KEY, "ok", VENUE), ("cert_v2.1.log", 12, "c1full/h0cal/-/0/10", "ok", VENUE)],
+    "post_cut_retry": [("pilot.1.log", 10, S.PILOT_KEY, "cut_signal", VENUE), ("pilot.2.log", 11, S.PILOT_KEY, "ok", VENUE),
+                       ("cert_v2.1.log", 12, "c1full/h0cal/-/0/10", "ok", VENUE)],
+    "post_cut_cut": [("pilot.1.log", 10, S.PILOT_KEY, "cut_signal", VENUE), ("pilot.2.log", 11, S.PILOT_KEY, "cut_wall", VENUE)],
+    "post_cut_invalid": [("pilot.1.log", 10, S.PILOT_KEY, "cut_signal", VENUE), ("pilot.2.log", 11, S.PILOT_KEY, "rc1", VENUE)],
+    "post_overlap": [("pilot.1.log", 10, S.PILOT_KEY, "ok", VENUE), ("cert_v2.1.log", 11, "c1full/h0cal/-/0/10", "ok", VENUE),
+                     ("cert_v2.2.log", 12, "c1full/h0cal/-/5/15", "ok", VENUE)],
 }
+REBOOT = [{"targets": [], "boot_id": "b9"}]                                   # kill-orphan หลัง reboot (boot ≠ b0 ของ fixture) ไม่มีเป้า
+for _k in ("cut_signal", "cut_wall", "cut_stall", "cut_leaf", "cut_spawn", "rc129", "rc130", "rc131", "rc137", "rc143", "rc143oom",
+           "rc1", "rc2", "internal", "cut_viol", "abortline"):
+    POST[f"post1_{_k}"] = [("pilot.1.log", 10, S.PILOT_KEY, _k, VENUE)]
+for _k, _ex in (("died_reboot", dict(orph=REBOOT)), ("died_sameboot", dict(orph=[{"targets": [], "boot_id": "b0"}])),
+                ("died_nobootkey", dict(orph=[{"targets": []}])), ("died_notargets", dict(orph=[{"boot_id": "b9"}])),
+                ("died_targets", dict(orph=[{"targets": [[1, 2]], "boot_id": "b9"}])),
+                ("died_mixed", dict(orph=REBOOT + [{"targets": [], "boot_id": "b0"}])), ("died_noorphan", {}),
+                ("died_envgate", dict(orph=REBOOT, envgate=True))):
+    POST[f"post1_{_k}"] = [("pilot.1.log", 10, S.PILOT_KEY, "died", VENUE, _ex)]
+POST["post1_cut_escape"] = [("pilot.1.log", 10, S.PILOT_KEY, "cut_signal", VENUE, dict(orph=REBOOT))]   # end line มี + orphan.rec = escape-after-end
+# F1/F3 (code review r15): guard abort/taken/escape ต่อ branch ที่เข้าจริง (iii) child-exit · (ii) died
+POST["post1_rc143_abortline"] = [("pilot.1.log", 10, S.PILOT_KEY, "rc143_abortline", VENUE)]
+POST["post1_rc143_taken"] = [("pilot.1.log", 10, S.PILOT_KEY, "rc143", VENUE, dict(taken=True))]
+POST["post1_rc143_escape"] = [("pilot.1.log", 10, S.PILOT_KEY, "rc143", VENUE, dict(orph=REBOOT))]
+POST["post1_died_reboot_taken"] = [("pilot.1.log", 10, S.PILOT_KEY, "died", VENUE, dict(orph=REBOOT, taken=True))]
+POST["post1_died_reboot_abortline"] = [("pilot.1.log", 10, S.PILOT_KEY, "died_abortline", VENUE, dict(orph=REBOOT))]
 
 
 def _fixture(root, tags, spec, cl, mut=None):
@@ -184,7 +229,7 @@ def _fixture(root, tags, spec, cl, mut=None):
     if mut == "spawnfail": body = []; kw.update(rc=77, cause="spawn-fail")
     if mut == "note_signal": kw["note"] = ("sig15-after-exit",)
     if mut == "internal_after": kw["viol"] = ("internal",)
-    if mut in ("noend", "noend_orphan"): kw["end"] = False
+    if mut in ("noend", "noend_orphan", "noend_orphan_reboot"): kw["end"] = False
     if mut == "nolf": kw["lf"] = False
     if mut == "card": body[0] = body[0].replace(f"card_sha_runtime {spec[:12]}", "card_sha_runtime 000000000000")
     if mut in ("J1", "J3", "J4"): pass                                       # rg14 PASS ปกติ
@@ -193,6 +238,8 @@ def _fixture(root, tags, spec, cl, mut=None):
     if mut == "abort": io.open(os.path.join(root, "run", f"abort.{rid}.5.taken"), "w").write("{}")
     if mut == "abort_killfail": io.open(os.path.join(root, "run", f"abort.{rid}.5.taken"), "w").write("{}")
     if mut in ("orphan_after_end", "noend_orphan"): S.write_json_atomic(os.path.join(root, "run", f"orphan.{rid}.7.rec"), {"id": rid})
+    if mut == "noend_orphan_reboot":                                         # r15: เงื่อนไข CUT (ii) ครบ แต่ mode rg14 (B) → INVALID เดิม
+        S.write_json_atomic(os.path.join(root, "run", f"orphan.{rid}.7.rec"), {"id": rid, "targets": [], "boot_id": "b9"})
     if mut == "c3_after_end":
         S.write_json_atomic(os.path.join(root, "run", "gate.00000010.8.77.rec"), {"rc": 77, "cause": "orphan-env", "target_run_ids": [rid], "ns0": 8})
     if mut == "gate75":
@@ -209,7 +256,7 @@ def _fixture(root, tags, spec, cl, mut=None):
            "regress_at": "2026-10-21 01:30:00", "rg14_at": "2026-10-21 03:00:00"}
     if mut == "stale_receipt": rec["regress_at"] = "2026-09-24 15:54:00"
     json.dump(rec, io.open(os.path.join(root, "repo", "Scripts", "ad4_cert_out_v2", "regress_receipt.json"), "w", encoding="utf-8"))
-    for name, seq, key, kind, v in POST.get(mut, ()): _post(root, name, seq, key, kind, v)
+    for name, seq, key, kind, v, *ex in POST.get(mut, ()): _post(root, name, seq, key, kind, v, **(ex[0] if ex else {}))
 
 
 def _judge_case(tags, spec, cl, mut):
@@ -291,8 +338,50 @@ def _unit_checks():
     # post_env (Y-1) · post_n anti-drift (Z-6) · check_key (Y-2)
     ok("post_env h0stress c1restr", S.post_env("c1restr/h0stress/-/0/200") == {"AD4_CONTINGENCY": "c1restr"})
     ok("post_env h0stress c1full = {}", S.post_env("c1full/h0stress/-/0/200") == {}); ok("post_env None = {}", S.post_env(None) == {})
-    from ad4_card import WORLDS, CERT_N, CERT_N_POWER
-    ok("post_n = ad4_card.py:513 ครบทุก world", all(S.post_n(w) == (CERT_N_POWER if w == "flip" else (30 if w == "h0pilot" else CERT_N)) for w in WORLDS))
+    from ad4_card import WORLDS
+    # r15 R15-4: post_n อ่านนิพจน์ "N" ของ ad4_card เอง · ค่าที่คาด = literal ที่ card ลงทะเบียน (:88 H1 N=50 · pilot 30 · อื่น 200) ไม่ใช่สูตรซ้ำ
+    want_n = {"flip": 50, "h0pilot": 30}
+    ok("post_n = N ที่ลงทะเบียน (literal) ครบทุก world", all(S.post_n(w) == want_n.get(w, 200) for w in WORLDS) and len(WORLDS) == 6)
+    src0 = io.open(os.path.join(HERE, S.CARD_FILE), encoding="utf-8").read()
+    expr0 = '"N": CERT_N_POWER if world == "flip" else (30 if world == "h0pilot" else CERT_N),'
+    ok("post_n: นิพจน์ที่คาดมี 1 ที่ใน ad4_card (mutation ใช้ได้)", src0.count(expr0) == 1)
+    dm = tempfile.mkdtemp(prefix="h19pn_")
+    try:
+        def mut_src(new):
+            pth = os.path.join(dm, S.CARD_FILE); io.open(pth, "w", encoding="utf-8", newline="\n").write(new); return pth
+        ok("post_n mutation 30→31 ตามต้นฉบับ", S.post_n("h0pilot", mut_src(src0.replace(expr0, expr0.replace("(30 if", "(31 if")))) == 31)
+        for nm, new in (("node ต้องห้าม (call)", src0.replace(expr0, '"N": int(CERT_N),')),
+                        ("CERT_N ซ้ำ", src0 + "\nCERT_N = 300\n"), ("ไม่มี key N", src0.replace(expr0, "")),
+                        ("CERT_N += (AugAssign)", src0 + "\nCERT_N += 1\n"), ("CERT_N ซ้อนใน if", src0 + "\nif True:\n    CERT_N = 5\n"),
+                        ("CERT_N_POWER: int (AnnAssign)", src0 + "\nCERT_N_POWER: int = 60\n"), ("import as CERT_N", src0 + "\nfrom os import sep as CERT_N\n")):
+            try: S.post_n("h0cal", mut_src(new)); ok(f"post_n {nm} → ToolError", False)
+            except S.ToolError: ok(f"post_n {nm} → ToolError", True)
+    finally:
+        shutil.rmtree(dm, ignore_errors=True)
+    # r15 R15-1: ชุด rc ของ CUT (iii) = ผลวัด .19 10-23 (literal · กัน test วงกลม) · STOP_SIGNALS ตรง OS (Linux)
+    ok("CUT_RC = {129,130,131,137,143} (วัด .19)", S.CUT_RC == {129, 130, 131, 137, 143})
+    import signal as _sig
+    if hasattr(_sig, "SIGHUP"): ok("STOP_SIGNALS = เลขของ OS", all(int(_sig.Signals[n]) == v for n, v in S.STOP_SIGNALS.items()))
+    ok("key_ok CUT→OK", S.key_ok(["CUT", "OK"])); ok("key_ok INFRA→CUT→OK ✗", not S.key_ok(["INFRA", "CUT", "OK"]))
+    ok("key_ok CUT→CUT ✗", not S.key_ok(["CUT", "CUT"]))
+    ok("may_spawn pilot หลัง CUT", ms("pilot", S.PILOT_KEY, B3 + [A("pilot", 4, "CUT", S.PILOT_KEY)]))
+    for h in (["INFRA", "CUT"], ["CUT", "CUT"]):
+        ok(f"may_spawn pilot หลัง {h} ✗", not ms("pilot", S.PILOT_KEY, B3 + [A("pilot", 4 + i, c, S.PILOT_KEY) for i, c in enumerate(h)]))
+    # R15-2: post ต้องตามหลัง rg14 PASS ที่เป็น attempt สุดท้ายของ B (b_cut ตัวเดียวกับ judge)
+    ok("may_spawn pilot หลัง B ล่าสุด preflight ✗", not ms("pilot", S.PILOT_KEY, B3 + [A("preflight", 4, "OK")]))
+    for c in ("RAISE", "INFRA", "INVALID"):
+        ok(f"may_spawn pilot หลัง rg14 {c} ✗", not ms("pilot", S.PILOT_KEY, B3[:2] + [A("rg14", 3, c)]))
+    ok("may_spawn pilot ไม่มี B ✗", not ms("pilot", S.PILOT_KEY, []))
+    ok("b_cut = attempt สุดท้ายของ B", S.b_cut(B3 + [PL]) == 2 and S.b_cut([PL]) is None)
+    # R15-3: overlap ตัวเดียว (judge + gate)
+    ok("overlap ทับ", S.overlap("c1full/h0cal/-/5/15", [CK]) == CK); ok("overlap ติดกัน = None", S.overlap("c1full/h0cal/-/10/20", [CK]) is None)
+    ok("overlap key เดียวกัน = None", S.overlap(CK, [CK]) is None); ok("overlap cell ต่าง = None", S.overlap("c1full/flip/4/0/10", ["c1full/flip/3/0/10"]) is None)
+    # R15-6: fingerprint gate (fp ตัวเดียวกับ judge)
+    AV = lambda v: {"path": "x.log", "venue": v}
+    ok("fp_diff ไม่มี attempt = []", S.fp_diff(VENUE, []) == []); ok("fp_diff เท่ากัน = []", S.fp_diff(dict(VENUE, pid=1, run_id="r"), [AV(VENUE)]) == [])
+    ok("fp_diff host_sha ต่าง", S.fp_diff(dict(VENUE, host_sha="h9"), [AV(VENUE)]) == ["host_sha"])
+    try: S.fp_diff(VENUE, [AV(None)]); ok("fp_diff attempt แรกไม่มี venue → ToolError", False)
+    except S.ToolError: ok("fp_diff attempt แรกไม่มี venue → ToolError", True)
     ck = lambda key, mode, env=None: not S.check_key(key, mode, {"AD4_CONTINGENCY": env} if env else {})
     ok("check_key pilot", ck(S.PILOT_KEY, "pilot")); ok("check_key cert h0cal 0..10", ck(CK, "cert_v2"))
     ok("check_key flip 3", ck("c1full/flip/3/0/10", "cert_v2")); ok("check_key flip 6 0..50", ck("c1full/flip/6/0/50", "cert_v2"))
@@ -366,13 +455,14 @@ def selftest():
     from ad4_card import RG14_TAGS, SPEC_SHA, closure_sha
     tags, cl = list(RG14_TAGS), closure_sha()
     cases = [(None, "PASS", None), ("raise", "RAISE", None), ("collapse", "FAILLOUD", None), ("regress_fail", "REGRESS_FAIL", None),
-             ("abort", "ABORT", None), ("oom", "INFRA", None), ("memerr", "INFRA", None), ("kill_nooom", "INVALID", "rc=137"),
+             ("abort", "ABORT", None), ("oom", "INFRA", None), ("memerr", "INFRA", None), ("kill_nooom", "INVALID", "rg14.1.log: INVALID (child_class=INVALID · rc=137"),
              ("fp", "NEWDIR", "fingerprint"), ("drop_live", "NEWDIR", "unattested"), ("resumed_only", "NEWDIR", "unattested"),
              ("live_val", "INVALID", "บรรทัดสด"), ("card", "INVALID", "SPEC/card/closure"), ("ck_extra", "INVALID", "checkpoint key"),
              ("ck_closure", "INVALID", "checkpoint closure"), ("stale_receipt", "INVALID", "receipt regress"),
              # r12: cause/viol · end line grammar · abort ครบ · escape-after-end · seq · gate = note
              ("abort_notaken", "INVALID", "abort ไม่ครบ"), ("abort_killfail", "INVALID", "viol=killfail"),
-             ("deadline_oom", "INVALID", "cause=deadline-wall"), ("spawnfail", "INVALID", "cause=spawn-fail"),
+             ("deadline_oom", "INVALID", "rg14.1.log: INVALID (child_class=INVALID · cause=deadline-wall"),
+             ("spawnfail", "INVALID", "rg14.1.log: INVALID (child_class=INVALID · cause=spawn-fail"),
              ("raise_leftover", "INVALID", "child_class=RAISE"), ("note_signal", "PASS", None), ("internal_after", "INVALID", "viol=internal"),
              ("noend", "INVALID", "supervisor-died"), ("noend_orphan", "INVALID", "supervisor-died"), ("nolf", "INVALID", "supervisor-died"),
              ("orphan_after_end", "INVALID", "escape-after-end"), ("c3_after_end", "INVALID", "escape-after-end"),
@@ -393,7 +483,19 @@ def selftest():
              ("post_nopilot", "POST_FAIL", "ไม่มี pilot OK ก่อนหน้า"), ("post_cert_first", "POST_FAIL", "ไม่มี pilot OK ก่อนหน้า"),
              ("post_pilot_infra", "POST_FAIL", "ไม่มี pilot OK ก่อนหน้า"), ("post_pilot_retry_cert", "PASS", "post-B OK 2 key"),
              ("post_twolines", "POST_FAIL", "ต้องมี 1 บรรทัด ได้ 2"),
-             ("post_abort_retry", "PASS", "ABORT → OK → OK"), ("post_abort_only", "POST_FAIL", "ABORT → ไม่ผ่าน")]
+             ("post_abort_retry", "PASS", "ABORT → OK → OK"), ("post_abort_only", "POST_FAIL", "ABORT → ไม่ผ่าน"),
+             # r15 R15-1/R15-3: CUT รันซ้ำได้ 1 ครั้ง · ไม่ CUT = INVALID · judge ตรวจ k ทับ · B-part ไม่เปลี่ยน
+             ("post_died_retry", "PASS", "CUT → OK → OK"), ("post_cut_retry", "PASS", "CUT → OK → OK"),
+             ("post_cut_cut", "POST_FAIL", "CUT → CUT → ไม่ผ่าน"), ("post_cut_invalid", "POST_FAIL", "CUT → INVALID → ไม่ผ่าน"),
+             ("post_overlap", "POST_FAIL", "k ทับ"), ("noend_orphan_reboot", "INVALID", "rg14.1.log: INVALID (child_class=None · supervisor-died")]
+    cases += [(f"post1_{k}", "POST_FAIL", f"pilot.1.log: {want} (")
+              for k, want in (("cut_signal", "CUT"), ("cut_wall", "CUT"), ("cut_stall", "CUT"), ("cut_leaf", "CUT"), ("cut_spawn", "CUT"),
+                              ("rc129", "CUT"), ("rc130", "CUT"), ("rc131", "CUT"), ("rc137", "CUT"), ("rc143", "CUT"), ("rc143oom", "CUT"),
+                              ("died_reboot", "CUT"), ("rc1", "INVALID"), ("rc2", "INVALID"), ("internal", "INVALID"), ("cut_viol", "INVALID"),
+                              ("abortline", "INVALID"), ("died_sameboot", "INVALID"), ("died_nobootkey", "INVALID"), ("died_notargets", "INVALID"),
+                              ("died_targets", "INVALID"), ("died_mixed", "INVALID"), ("died_noorphan", "INVALID"), ("died_envgate", "INVALID"),
+                              ("cut_escape", "INVALID"), ("rc143_abortline", "INVALID"), ("rc143_taken", "INVALID"), ("rc143_escape", "INVALID"),
+                              ("died_reboot_taken", "INVALID"), ("died_reboot_abortline", "INVALID"))]
     bad = 0
     for mut, want, why in cases:
         got, notes = _judge_case(tags, SPEC_SHA, cl, mut)
@@ -409,5 +511,49 @@ def selftest():
     return 0 if bad == 0 else 1
 
 
+# ============================ mutation (r15 · code review F1/F3 class-fix: test ต้องจับการถอน predicate ทุกตัวที่ลงทะเบียน) ============================
+MUTATIONS = [                                                               # (ชื่อ, ไฟล์, ข้อความเดิม (ต้องมี 1 ที่), ข้อความใหม่)
+    ("M1 (iii) ถอน guard abort/taken", "host19_state.py", 'if e["cause"] == "child-exit" and not abort_line and not taken:', 'if e["cause"] == "child-exit":'),
+    ("M2 (ii) ถอน guard abort/taken", "host19_state.py", "if post and not abort_line and not taken and died_cut(", "if post and died_cut("),
+    ("M3 (iii) ถอน cc == INVALID", "host19_state.py", 'if post and cc == "INVALID" and e["rc"] in CUT_RC:', 'if post and e["rc"] in CUT_RC:'),
+    ("M4 143 ∉ CUT_RC", "host19_state.py", "[128 + n for n in STOP_SIGNALS.values()]", "[128 + n for n in STOP_SIGNALS.values() if n != 15]"),
+    ("M5 died_cut ไม่เทียบ boot", "host19_state.py", 'and o["boot_id"] != a["boot_id"] for o in recs)', "for o in recs)"),
+    ("M6 died_cut ไม่ดู gate orphan-env", "host19_state.py", 'return bool(recs) and not env_gate_hit(a["run_id"], gates) and', "return bool(recs) and"),
+    ("M7 (i) ใช้กับ B-part", "host19_state.py", 'elif post and e["cause"] in CUT_CAUSES:', 'elif e["cause"] in CUT_CAUSES:'),
+    ("M8 (iii) ใช้กับ B-part", "host19_state.py", 'if post and cc == "INVALID" and e["rc"] in CUT_RC:', 'if cc == "INVALID" and e["rc"] in CUT_RC:'),
+    ("M9 (ii) ใช้กับ B-part", "host19_state.py", "if post and not abort_line and not taken and died_cut(", "if not abort_line and not taken and died_cut("),
+    ("M10 may_spawn ไม่เช็ค B-part", "host19_state.py", 'if i is None or atts[i]["mode"] != "rg14" or atts[i]["cls"] != "PASS":', "if i is None:"),
+    ("M11 judge ไม่เช็ค overlap", "host19_state.py", 'if o: ok, why = False, why + f" (k ทับ {o})"', "pass"),
+    ("M12 RETRYABLE ไม่มี CUT", "host19_state.py", 'RETRYABLE = ("INFRA", "ABORT", "CUT")', 'RETRYABLE = ("INFRA", "ABORT")'),
+    ("M13 card_consts ไม่นับ binding", "host19_state.py", "if binds[nm] != 1 or len(tops[nm]) != 1:", "if len(tops[nm]) != 1:"),
+]
+
+
+def mutation():
+    """M0 (ไม่แก้) ต้องผ่าน · ทุก mutation ต้องทำให้ selftest exit ≠ 0 · copy Scripts ไป tmp (ไม่แตะต้นฉบับ) · รันบน .19 (สนามรัน)"""
+    import subprocess
+    bad = 0
+    for name, rel, old, new in [("M0 ไม่แก้", None, None, None)] + MUTATIONS:
+        d = tempfile.mkdtemp(prefix="h19mut_")
+        try:
+            s = os.path.join(d, "Scripts")
+            shutil.copytree(HERE, s, ignore=shutil.ignore_patterns("ad4_cert_out*", "__pycache__", "*.log", "*.csv"))
+            if rel:
+                p = os.path.join(s, rel); src = io.open(p, encoding="utf-8").read()
+                if src.count(old) != 1: print(f"  TOOL {name}: ข้อความเดิมพบ {src.count(old)} ที่ (ต้อง 1)"); bad += 1; continue
+                io.open(p, "w", encoding="utf-8", newline="\n").write(src.replace(old, new))
+            r = subprocess.run([sys.executable, "-I", "-B", os.path.join(s, "host19_accept.py"), "--selftest"], capture_output=True, text=True)
+            tail = (r.stdout.strip().splitlines() or [""])[-1]
+            ok = (r.returncode == 0) if rel is None else (r.returncode != 0)
+            bad += not ok
+            print(f"  {'OK ' if ok else 'BAD'} {name:34s} selftest rc={r.returncode} · {tail}")
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+    n = len(MUTATIONS) + 1
+    print(f"[mutation] {n - bad}/{n} OK")
+    return 0 if bad == 0 else 1
+
+
 if __name__ == "__main__":
+    if "--mutation" in sys.argv: sys.exit(mutation())
     sys.exit(main(sys.argv))

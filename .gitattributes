@@ -1,1 +1,3 @@
 Scripts/ad4_cert_out_v2/** -text
+# RI-5 (card :145 · spec host19_supervisor §13 r15): chunk h0pilot = แหล่งของ q05_pilot · git diff/show ไม่แสดงเนื้อหา
+Scripts/ad4_cert_out_v2/**/h0pilot_*.csv -text -diff

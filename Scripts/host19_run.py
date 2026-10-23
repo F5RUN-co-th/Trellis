@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""host19_run — ทางเข้าเดียวของ workload บน 172.31.1.19 (แทน host19_run.sh · spec = Plan/TRELLIS-010_host19_supervisor.md r13 + §13 (r14))
+"""host19_run — ทางเข้าเดียวของ workload บน 172.31.1.19 (แทน host19_run.sh · spec = Plan/TRELLIS-010_host19_supervisor.md r13 + §13 (r14 · r15))
 
 usage   PY -I -B Scripts/host19_run.py <rundir> <mode> [...]
   mode  preflight | regress | rg14            series B (front → supervisor แยก session → child chain)
@@ -17,8 +17,9 @@ sys.path.insert(0, HERE)                                                    # -I
 import host19_state as S
 
 SELF = os.path.abspath(__file__)
-SIGS = (signal.SIGTERM, signal.SIGHUP, signal.SIGINT, signal.SIGQUIT, signal.SIGCHLD, signal.SIGTSTP)
-STOP_SIGS = (signal.SIGTERM, signal.SIGHUP, signal.SIGINT, signal.SIGQUIT)
+STOP_SIGS = tuple(signal.Signals[n] for n in S.STOP_SIGNALS)             # r15: แหล่งเดียว = host19_state.STOP_SIGNALS (CUT_RC สร้างจากชุดเดียวกัน)
+assert all(int(signal.Signals[n]) == v for n, v in S.STOP_SIGNALS.items()) and int(signal.SIGKILL) == S.SIGKILL_NUM, "เลข signal ≠ Linux ABI ของ record"
+SIGS = STOP_SIGS + (signal.SIGCHLD, signal.SIGTSTP)
 TICK = 0.2
 def _cert_argv(key):
     v, w, c, k0, k1 = S.parse_key(key)
@@ -392,6 +393,9 @@ class Supervisor:
             raise Gate(77, "venue-fail", f"venue rc={venue.returncode} · {tail[:300]}", venue_rc=venue.returncode, venue_out=vout)   # Z-3
         if S.descendants(self.pid):
             self.kill_all(); self.viol.add("leftover"); raise Gate(77, "venue-exit", "descendant ค้างหลัง venue")
+        try: diff = S.fp_diff(vj, S.read_attempts(self.rundir))             # R15-6 (§13 r15): fingerprint เดียวต่อ RUNDIR · ทุก mode · ก่อน LOG (ไม่กินโควตารันซ้ำ)
+        except (S.ToolError, ValueError, OSError) as e: raise Gate(77, "state", f"อ่าน LOG ของ RUNDIR ไม่ได้ (R15-6): {type(e).__name__}: {e}")
+        if diff: raise Gate(77, "state", f"env fingerprint ต่างจาก attempt แรกของ RUNDIR: {','.join(diff)} (R15-6 · series นี้ต่อไม่ได้ = run dir ใหม่)")
         self.drain()
         # child หลัก: LOG ⟺ พยายาม spawn · LOG ปรากฏพร้อม start + [venue] ครบ (tmp → link) หรือไม่ปรากฏเลย
         att = self.next_att()
@@ -622,7 +626,7 @@ def front_kill_orphan(rd):
         if live: print(f"[kill-orphan] 77 ยังเหลือ {sorted(live)} ของ {rid} · ไม่เขียน marker"); rc = 77; continue
         ns = time.time_ns()
         S.write_json_atomic(S.run_path(g["rundir"], f"orphan.{rid}.{ns}.rec"),
-                            {"id": rid, "targets": g["targets"], "ns": ns, "ts": ts(), "by_rundir": rd})
+                            {"id": rid, "targets": g["targets"], "ns": ns, "ts": ts(), "by_rundir": rd, "boot_id": S.boot_id()})   # r15: boot ของ kill-orphan (CUT ii)
         cp = S.run_path(g["rundir"], "current")
         if os.path.exists(cp):
             cur = S.read_json(cp)
